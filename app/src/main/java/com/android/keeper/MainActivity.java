@@ -12,6 +12,7 @@ import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.Toast;
 
 public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
     private DrawerLayout drawer;
@@ -59,6 +60,10 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             case R.id.nav_reminders:
                 getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container,new RemindersFragment()).commit();
                 break;
+            case R.id.nav_settings:
+                Intent intent=new Intent(MainActivity.this,SettingsActivity.class);
+                startActivity(intent);
+                break;
         }
         drawer.closeDrawer(GravityCompat.START); //After select item, automatically it closes the drawer
         return true;
@@ -75,9 +80,10 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     public boolean onOptionsItemSelected(MenuItem item) {
         /* Listener for items in ToolBar  */
         switch(item.getItemId()){
-            case R.id.toolbar_settings:
-                Intent intent=new Intent(MainActivity.this,SettingsActivity.class);
-                startActivity(intent);
+            case R.id.toolbar_account:
+                Toast.makeText(getApplicationContext(),"Account",Toast.LENGTH_SHORT).show();
+                //Intent intent=new Intent(MainActivity.this,SettingsActivity.class);
+                //startActivity(intent);
                 break;
         }
         return true;
