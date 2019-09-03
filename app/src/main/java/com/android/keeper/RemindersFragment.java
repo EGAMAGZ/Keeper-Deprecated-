@@ -1,4 +1,4 @@
-package com.android.notepad;
+package com.android.keeper;
 
 import android.os.Bundle;
 import android.support.annotation.NonNull;

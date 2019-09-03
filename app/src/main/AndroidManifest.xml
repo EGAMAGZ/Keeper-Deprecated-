@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.android.notepad">
+    package="com.android.keeper">
 
     <application
         android:allowBackup="true"
@@ -9,10 +9,10 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".SettingsActivity"
-            android:theme="@style/AppTheme.NoActionBar" android:parentActivityName=".MainActivity"></activity>
+        <activity android:name="com.android.keeper.SettingsActivity"
+            android:theme="@style/AppTheme.NoActionBar" android:parentActivityName="com.android.keeper.MainActivity"></activity>
         <activity
-            android:name=".MainActivity"
+            android:name="com.android.keeper.MainActivity"
             android:theme="@style/AppTheme.NoActionBar">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

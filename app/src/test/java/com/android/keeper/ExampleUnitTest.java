@@ -1,4 +1,4 @@
-package com.android.notepad;
+package com.android.keeper;
 
 import org.junit.Test;
 

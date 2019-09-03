@@ -1,4 +1,4 @@
-package com.android.notepad;
+package com.android.keeper;
 
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;

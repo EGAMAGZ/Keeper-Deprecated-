@@ -1,4 +1,4 @@
-package com.android.notepad;
+package com.android.keeper;
 
 import android.content.Context;
 import android.support.test.InstrumentationRegistry;
