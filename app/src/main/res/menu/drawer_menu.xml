@@ -4,13 +4,14 @@
     tools:showIn="navigation_view">
     <group android:checkableBehavior="single">
         <item android:id="@+id/nav_reminders" android:title="Reminders" android:icon="@drawable/ic_notifications_black_24dp"></item>
-        <item android:id="@+id/nav_notes" android:title="Notes"></item>
+        <item android:id="@+id/nav_notes" android:title="Notes" android:icon="@drawable/ic_label_black_24dp"></item>
         <item android:id="@+id/nav_tasks" android:title="Tasks" android:icon="@drawable/ic_check_black_24dp"></item>
     </group>
     <item android:title="Categories">
         <menu>
-            <item android:title="HOLA" android:id="@+id/nav_tag"></item>
+            <item android:title="Coming soon" android:id="@+id/nav_tag"></item>
         </menu>
     </item>
     <item android:title="Settings" android:id="@+id/nav_settings" android:icon="@drawable/ic_settings_black_24dp"></item>
+    <item android:title="Help" android:id="@+id/nav_help" android:icon="@drawable/ic_help_black_24dp"></item>
 </menu>

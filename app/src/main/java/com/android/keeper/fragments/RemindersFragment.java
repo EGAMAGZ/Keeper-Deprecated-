@@ -1,4 +1,4 @@
-package com.android.keeper;
+package com.android.keeper.fragments;
 
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -8,10 +8,12 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-public class NotesFragment extends Fragment {
+import com.android.keeper.R;
+
+public class RemindersFragment extends Fragment {
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        return inflater.inflate(R.layout.fragment_notes,container,false);
+        return inflater.inflate(R.layout.fragment_reminders,container,false);
     }
 }
