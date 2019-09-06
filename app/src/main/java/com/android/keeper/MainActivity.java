@@ -22,18 +22,21 @@ import android.widget.Toast;
 
 import com.android.keeper.fragments.NotesFragment;
 import com.android.keeper.fragments.RemindersFragment;
+import com.android.keeper.fragments.TasksFragment;
 
 public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
     private DrawerLayout drawer;
+    private Toolbar toolbar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
         NavigationView navigationView=findViewById(R.id.nav_view); //Gets Navigation View (Lateral Menu)
         navigationView.setNavigationItemSelectedListener(this); //Sets Item Listener to Navigation View
 
-        Toolbar toolbar=findViewById(R.id.toolbar); //Gets Toolbar
+        toolbar=findViewById(R.id.toolbar); //Gets Toolbar
         setSupportActionBar(toolbar);
 
         drawer=findViewById(R.id.drawer_layout); //Gets Drawer Layout (Root Container)
@@ -44,9 +47,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         toogle.syncState();
 
         /* Replace default fragment content*/
-        getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container,new NotesFragment()).commit();
+        getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container,new RemindersFragment()).commit();
         navigationView.setCheckedItem(R.id.nav_reminders);
-
     }
 
     @Override
@@ -65,9 +67,15 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         switch(menuItem.getItemId()){
             case R.id.nav_notes:
                 getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container,new NotesFragment()).commit();
+                toolbar.setTitle("Keeper: Notes");
                 break;
             case R.id.nav_reminders:
                 getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container,new RemindersFragment()).commit();
+                toolbar.setTitle("Keeper: Reminders");
+                break;
+            case R.id.nav_tasks:
+                getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container,new TasksFragment()).commit();
+                toolbar.setTitle("Keeper: Tasks");
                 break;
             case R.id.nav_settings:
                 Intent intent=new Intent(MainActivity.this,SettingsActivity.class);
@@ -101,12 +109,4 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         return true;
     }
 
-    public static class TasksFragment extends Fragment {
-
-        @Nullable
-        @Override
-        public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-            return inflater.inflate(R.layout.fragment_tasks,container,false);
-        }
-    }
 }
