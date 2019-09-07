@@ -23,6 +23,7 @@ import android.widget.Toast;
 import com.android.keeper.fragments.NotesFragment;
 import com.android.keeper.fragments.RemindersFragment;
 import com.android.keeper.fragments.TasksFragment;
+import com.android.keeper.localdb.SQLiteConnection;
 
 public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
     private DrawerLayout drawer;
@@ -32,6 +33,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        SQLiteConnection conn=new SQLiteConnection(this,"keeper_db",null,1);//Creation of Database(SQLite)
 
         NavigationView navigationView=findViewById(R.id.nav_view); //Gets Navigation View (Lateral Menu)
         navigationView.setNavigationItemSelectedListener(this); //Sets Item Listener to Navigation View

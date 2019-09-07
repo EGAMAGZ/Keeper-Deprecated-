@@ -9,10 +9,13 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name="com.android.keeper.SettingsActivity"
-            android:theme="@style/AppTheme.NoActionBar" android:parentActivityName="com.android.keeper.MainActivity"></activity>
+        <activity android:name=".AddTaskActivity"></activity>
         <activity
-            android:name="com.android.keeper.MainActivity"
+            android:name=".SettingsActivity"
+            android:parentActivityName=".MainActivity"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity
+            android:name=".MainActivity"
             android:theme="@style/AppTheme.NoActionBar">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
