@@ -19,6 +19,8 @@ public class AddTaskActivity extends AppCompatActivity {
 
     private EditText TaskTitle,TaskDescription;
 
+    private String task_title,task_description;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -31,7 +33,8 @@ public class AddTaskActivity extends AppCompatActivity {
         setSupportActionBar(toolbar);
 
         getSupportActionBar().setDisplayShowTitleEnabled(false);//Unables toolbar's title
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);//Add return button
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        //getSupportActionBar().setDisplayHomeAsUpEnabled(true);//Add return button
 
         getWindow().setStatusBarColor(ContextCompat.getColor(this,R.color.thirdColor));
     }
@@ -46,26 +49,36 @@ public class AddTaskActivity extends AppCompatActivity {
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
+        task_title=TaskTitle.getText().toString();
+        task_description=TaskDescription.getText().toString();
 
         switch(item.getItemId()){
             case R.id.toolbar_save:
-                StoreNewTask();
-                Toast.makeText(getApplicationContext(),"Saved2",Toast.LENGTH_SHORT).show();
+                if(task_title.isEmpty() && task_description.isEmpty()){
+                    Toast.makeText(getApplicationContext(),"Empty",Toast.LENGTH_SHORT).show();
+                }else{
+                    StoreNewTask(task_title,task_description);
+                    Toast.makeText(getApplicationContext(),"Saved2:"+task_title+"/"+task_description,Toast.LENGTH_SHORT).show();
+                }
                 Intent intent=new Intent(this,MainActivity.class);
                 startActivity(intent);
+                break;
+            default:
+                //TODO: Fix the return button from toolbar, doesn't work
+                startActivity(new Intent(this,MainActivity.class));
                 break;
         }
 
         return true;
     }
 
-    private void StoreNewTask(){
+    private void StoreNewTask(String title,String description){
         SQLiteConnection conn=new SQLiteConnection(this,"keeper_db",null,1);
         SQLiteDatabase db=conn.getWritableDatabase();
 
         ContentValues values=new ContentValues();
-        values.put(TasksUtilities.COLUMN_TASK_TITLE,TaskTitle.getText().toString());
-        values.put(TasksUtilities.COLUMN_TASK_DESCRIPTION,TaskDescription.getText().toString());
+        values.put(TasksUtilities.COLUMN_TASK_TITLE,title);
+        values.put(TasksUtilities.COLUMN_TASK_DESCRIPTION,description);
 
         Long resultId=db.insert(TasksUtilities.TABLE_NAME,TasksUtilities.COLUMN_TASK_ID,values);
         //Toast.makeText(getApplicationContext(),"ID:"+resultId,Toast.LENGTH_SHORT);

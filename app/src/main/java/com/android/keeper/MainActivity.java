@@ -13,6 +13,7 @@ import android.support.v7.widget.SearchView;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.Toast;
 
 import com.android.keeper.fragments.NotesFragment;
 import com.android.keeper.fragments.RemindersFragment;
@@ -20,8 +21,12 @@ import com.android.keeper.fragments.TasksFragment;
 import com.android.keeper.localdb.SQLiteConnection;
 
 public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
+
     private DrawerLayout drawer;
     private Toolbar toolbar;
+    private Toast backToast;
+
+    private long backPressedTime;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -53,7 +58,15 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         if(drawer.isDrawerOpen(GravityCompat.START)){
             drawer.closeDrawer(GravityCompat.START); //Closes the drawer on back pressed
         }else{
-            super.onBackPressed();
+            if(backPressedTime + 2000 > System.currentTimeMillis()){
+                backToast.cancel();
+                super.onBackPressed();
+                return ;
+            } else{
+                backToast=Toast.makeText(getApplicationContext(),"Press again to exit",Toast.LENGTH_SHORT);
+                backToast.show();
+            }
+            backPressedTime=System.currentTimeMillis();
         }
     }
 
