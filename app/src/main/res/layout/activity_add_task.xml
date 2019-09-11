@@ -14,8 +14,27 @@
         app:popupTheme="@style/ThemeOverlay.AppCompat.Light"
         android:background="@color/thirdColor"
         android:elevation="4dp"></android.support.v7.widget.Toolbar>
-    <TextView
+    <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content" android:text="TASKS"></TextView>
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+
+        <EditText
+            android:id="@+id/task_title"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:ems="10"
+            android:hint="Title"
+            android:inputType="textPersonName" />
+
+        <EditText
+            android:id="@+id/task_description"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:ems="10"
+            android:gravity="start|top"
+            android:inputType="textMultiLine"
+            android:hint="Description"/>
+    </LinearLayout>
 
 </LinearLayout>
