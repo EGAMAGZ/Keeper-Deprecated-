@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.support.annotation.NonNull;
 import android.support.design.internal.NavigationMenuItemView;
 import android.support.design.widget.NavigationView;
+import android.support.v4.content.ContextCompat;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
@@ -51,6 +52,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         /* Replace default fragment content*/
         getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container,new RemindersFragment()).commit();
         navigationView.setCheckedItem(R.id.nav_reminders);
+
+        getWindow().setStatusBarColor(ContextCompat.getColor(this,R.color.thirdColor));
     }
 
     @Override
@@ -77,15 +80,15 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         switch(menuItem.getItemId()){
             case R.id.nav_notes:
                 getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container,new NotesFragment()).commit();
-                toolbar.setTitle("Keeper: Notes");
+                //toolbar.setTitle("Keeper: Notes");
                 break;
             case R.id.nav_reminders:
                 getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container,new RemindersFragment()).commit();
-                toolbar.setTitle("Keeper: Reminders");
+                //toolbar.setTitle("Keeper: Reminders");
                 break;
             case R.id.nav_tasks:
                 getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container,new TasksFragment()).commit();
-                toolbar.setTitle("Keeper: Tasks");
+                //toolbar.setTitle("Keeper: Tasks");
                 break;
             case R.id.nav_settings:
                 Intent intent=new Intent(MainActivity.this,SettingsActivity.class);
