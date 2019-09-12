@@ -57,7 +57,7 @@ public class AddTaskActivity extends AppCompatActivity {
                 if(task_title.isEmpty() && task_description.isEmpty()){
                     Toast.makeText(getApplicationContext(),"Empty",Toast.LENGTH_SHORT).show();
                 }else{
-                    StoreNewTask(task_title,task_description);
+                    storeNewTask(task_title,task_description);
                     Toast.makeText(getApplicationContext(),"Saved2:"+task_title+"/"+task_description,Toast.LENGTH_SHORT).show();
                 }
                 Intent intent=new Intent(this,MainActivity.class);
@@ -72,15 +72,21 @@ public class AddTaskActivity extends AppCompatActivity {
         return true;
     }
 
-    private void StoreNewTask(String title,String description){
+    private void storeNewTask(String title,String description){
         SQLiteConnection conn=new SQLiteConnection(this,"keeper_db",null,1);
         SQLiteDatabase db=conn.getWritableDatabase();
 
-        ContentValues values=new ContentValues();
+        String sql="INSERT INTO "+TasksUtilities.TABLE_NAME+"("+TasksUtilities.COLUMN_TASK_TITLE+","+TasksUtilities.COLUMN_TASK_DESCRIPTION+")"+
+                "VALUES('"+title+"','"+description+"')";
+
+        db.execSQL(sql);
+        db.close();
+        /*ContentValues values=new ContentValues();
         values.put(TasksUtilities.COLUMN_TASK_TITLE,title);
         values.put(TasksUtilities.COLUMN_TASK_DESCRIPTION,description);
 
         Long resultId=db.insert(TasksUtilities.TABLE_NAME,TasksUtilities.COLUMN_TASK_ID,values);
         //Toast.makeText(getApplicationContext(),"ID:"+resultId,Toast.LENGTH_SHORT);
+        db.close();*/
     }
 }
