@@ -50,8 +50,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         toogle.syncState();
 
         /* Replace default fragment content*/
-        getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container,new RemindersFragment()).commit();
-        navigationView.setCheckedItem(R.id.nav_reminders);
+        getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container,new NotesFragment()).commit();
+        navigationView.setCheckedItem(R.id.nav_notes);
 
         getWindow().setStatusBarColor(ContextCompat.getColor(this,R.color.thirdColor));
     }

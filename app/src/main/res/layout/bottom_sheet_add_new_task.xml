@@ -3,8 +3,60 @@
     xmlns:android="http://schemas.android.com/apk/res/android" android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical">
+
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="Add New Task"/>
+
+    <EditText
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="15dp"
+        android:layout_marginRight="15dp"
+        android:layout_marginTop="5dp"
+        android:layout_marginBottom="5dp"
+        android:background="@android:color/transparent"
+        android:hint="Title"
+        android:singleLine="false"
+        android:textSize="20sp"
+        android:textStyle="bold" />
+
+    <EditText
+        android:id="@+id/task_description"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="15dp"
+        android:layout_marginRight="15dp"
+        android:layout_marginTop="5dp"
+        android:layout_marginBottom="5dp"
+        android:background="@android:color/transparent"
+        android:ems="10"
+        android:hint="Description"
+        android:gravity="start|top"
+        android:inputType="textMultiLine"
+        android:visibility="invisible"/>
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="end"
+        android:background="@drawable/bg_menu_rectangle_one_rounded"
+        android:paddingRight="10dp"
+        android:paddingLeft="10dp"
+        android:paddingBottom="5dp"
+        android:paddingTop="5dp">
+
+        <ImageButton
+            android:id="@+id/task_add_description"
+            android:layout_width="36dp"
+            android:layout_height="36dp"
+            android:src="@drawable/ic_short_text_veish_24dp"
+            android:background="@android:color/transparent"/>
+        <ImageButton
+            android:layout_width="36dp"
+            android:layout_height="36dp"
+            android:src="@drawable/ic_done_veish_24dp"
+            android:background="@android:color/transparent"/>
+    </LinearLayout>
 </LinearLayout>
