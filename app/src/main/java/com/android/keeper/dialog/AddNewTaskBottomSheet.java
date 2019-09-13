@@ -9,24 +9,31 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
 import android.widget.ImageButton;
+import android.widget.Toast;
 
 import com.android.keeper.R;
 
 public class AddNewTaskBottomSheet extends BottomSheetDialogFragment {
 
     private View bottomSheetView;
-    private ImageButton addDescriptionButton;
-    private EditText descriptionEditText;
+    private ImageButton addDetailsButton,saveTaskButton;
+    private EditText titleEditText,descriptionEditText;
+
+    private String task_title,task_description;
 
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         bottomSheetView=inflater.inflate(R.layout.bottom_sheet_add_new_task,container,false);
+        Toast.makeText(getContext(),"Add New Task",Toast.LENGTH_SHORT).show();
 
-        addDescriptionButton=bottomSheetView.findViewById(R.id.task_add_description);
-        descriptionEditText=bottomSheetView.findViewById(R.id.task_description);
+        addDetailsButton=bottomSheetView.findViewById(R.id.task_add_description);
+        saveTaskButton=bottomSheetView.findViewById(R.id.task_save);
 
-        addDescriptionButton.setOnClickListener(new View.OnClickListener() {
+        descriptionEditText=bottomSheetView.findViewById(R.id.task_details);
+        titleEditText=bottomSheetView.findViewById(R.id.task_title);
+
+        addDetailsButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 if(descriptionEditText.getVisibility()==View.INVISIBLE){
@@ -37,6 +44,24 @@ public class AddNewTaskBottomSheet extends BottomSheetDialogFragment {
                 }
             }
         });
+
+        saveTaskButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                task_title=titleEditText.getText().toString();
+                if(descriptionEditText.getVisibility()== View.VISIBLE){
+                    task_description=descriptionEditText.getText().toString();
+                }else{ task_description="";}
+
+                if(task_title.isEmpty()){
+                    Toast.makeText(getContext(),"Task Title is Empty",Toast.LENGTH_SHORT).show();
+                }else{
+                    Toast.makeText(getContext(),"Task will be saved",Toast.LENGTH_SHORT).show();
+                    dismiss();
+                }
+            }
+        });
+
 
         return bottomSheetView;
     }

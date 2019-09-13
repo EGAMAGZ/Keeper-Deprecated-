@@ -4,7 +4,7 @@ public class TasksEntities {
 
     private Integer task_id;
     private String task_title;
-    private String task_description;
+    private String task_details;
 
     public String getTask_title() {
         return task_title;
@@ -14,12 +14,12 @@ public class TasksEntities {
         this.task_title = task_title;
     }
 
-    public String getTask_description() {
-        return task_description;
+    public String getTask_details() {
+        return task_details;
     }
 
-    public void setTask_description(String task_description) {
-        this.task_description = task_description;
+    public void setTask_details(String task_details) {
+        this.task_details = task_details;
     }
 
     public Integer getTask_id() {
