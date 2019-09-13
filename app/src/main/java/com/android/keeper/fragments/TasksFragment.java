@@ -13,6 +13,7 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.android.keeper.R;
+import com.android.keeper.dialog.AddNewTaskBottomSheet;
 import com.android.keeper.localdb.SQLiteConnection;
 
 public class TasksFragment extends Fragment {
@@ -36,7 +37,8 @@ public class TasksFragment extends Fragment {
         AddTaskBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                return ;
+                AddNewTaskBottomSheet addNewTaskBottomSheet=new AddNewTaskBottomSheet();
+                addNewTaskBottomSheet.show(getFragmentManager(),"addNewTaskBottomSheet");
             }
         });
 
