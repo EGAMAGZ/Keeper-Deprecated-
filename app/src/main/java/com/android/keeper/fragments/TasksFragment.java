@@ -12,7 +12,6 @@ import android.view.ViewGroup;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
-import com.android.keeper.AddTaskActivity;
 import com.android.keeper.R;
 import com.android.keeper.localdb.SQLiteConnection;
 
@@ -37,8 +36,7 @@ public class TasksFragment extends Fragment {
         AddTaskBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent=new Intent(getActivity(), AddTaskActivity.class);
-                startActivity(intent);
+                return ;
             }
         });
 
