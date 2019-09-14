@@ -1,6 +1,7 @@
 package com.android.keeper.fragments;
 
 import android.database.Cursor;
+import android.database.DatabaseUtils;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -58,10 +59,38 @@ public class TasksFragment extends Fragment {
         try {
             Cursor cursor = database.query(TasksUtilities.TABLE_NAME, columns, selection, null, null, null, null, null);
             cursor.moveToFirst();
+            long count= DatabaseUtils.queryNumEntries(database,TasksUtilities.TABLE_NAME);
+            percentageTasks(count,database);
+            Toast.makeText(getContext(),"Number:"+ count,Toast.LENGTH_SHORT).show();
         }
         catch(Exception e){
             Toast.makeText(getContext(),"Error Consulta",Toast.LENGTH_SHORT).show();
         }
+        finally {
+            database.close();
+        }
     }
+
+    public void percentageTasks(long count,SQLiteDatabase database){
+        //TODO: Make test when someone of them are done
+        int tasksTotal=(int) count;
+        int tasksDoneCount=(int) tasksDone(database);
+        int percentage=(int) ((100*tasksDoneCount)/tasksTotal);
+        TaskProgressBar.setProgress(percentage);
+        TaskPercentage.setText(percentage+"%");
+    }
+    private long tasksDone(SQLiteDatabase database){
+        long count=0;
+        try{
+            Cursor cursor=database.rawQuery("SELECT * FROM "+TasksUtilities.TABLE_NAME+" WHERE "+TasksUtilities.COLUMN_TASK_DONE+" = 1",null);
+            cursor.moveToFirst();
+            count=cursor.getCount();
+            return count;
+        }catch(Exception e){
+            return count;
+        }
+
+    }
+
 
 }

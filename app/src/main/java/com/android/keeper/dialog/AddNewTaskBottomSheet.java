@@ -61,7 +61,8 @@ public class AddNewTaskBottomSheet extends BottomSheetDialogFragment {
                     Toast.makeText(getContext(),"Task Title is Empty",Toast.LENGTH_SHORT).show();
                 }else{
                     saveTask();
-                    Toast.makeText(getContext(),"Task will be saved",Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getContext(),"Task saved",Toast.LENGTH_SHORT).show();
+                    //TODO: Call TaskFragment to add a new element to RecycleView and upgrade the percentage at the moment
                     dismiss();
                 }
             }
