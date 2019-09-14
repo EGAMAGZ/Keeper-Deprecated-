@@ -1,6 +1,7 @@
 package com.android.keeper.fragments;
 
-import android.content.Intent;
+import android.database.Cursor;
+import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -11,10 +12,12 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ProgressBar;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.android.keeper.R;
 import com.android.keeper.dialog.AddNewTaskBottomSheet;
 import com.android.keeper.localdb.SQLiteConnection;
+import com.android.keeper.localdb.utilities.TasksUtilities;
 
 public class TasksFragment extends Fragment {
 
@@ -42,7 +45,23 @@ public class TasksFragment extends Fragment {
             }
         });
 
+        loadTasks();
+
         return FragmentView;
+    }
+
+    private void loadTasks(){
+        SQLiteDatabase database=conn.getReadableDatabase();
+        //String[] parameters=[];
+        String[] columns={TasksUtilities.COLUMN_TASK_TITLE,TasksUtilities.COLUMN_TASK_DETAILS};
+        String selection=null; //This will select all rows
+        try {
+            Cursor cursor = database.query(TasksUtilities.TABLE_NAME, columns, selection, null, null, null, null, null);
+            cursor.moveToFirst();
+        }
+        catch(Exception e){
+            Toast.makeText(getContext(),"Error Consulta",Toast.LENGTH_SHORT).show();
+        }
     }
 
 }

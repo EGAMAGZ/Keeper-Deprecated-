@@ -5,6 +5,22 @@ public class TasksEntities {
     private Integer task_id;
     private String task_title;
     private String task_details;
+    private Boolean task_done;
+
+    public TasksEntities(Integer task_id, String task_title, String task_details, Boolean task_done) {
+        this.task_id = task_id;
+        this.task_title = task_title;
+        this.task_details = task_details;
+        this.task_done = task_done;
+    }
+
+    public Boolean getTask_done() {
+        return task_done;
+    }
+
+    public void setTask_done(Boolean task_done) {
+        this.task_done = task_done;
+    }
 
     public String getTask_title() {
         return task_title;

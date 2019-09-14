@@ -5,6 +5,8 @@ public class TasksUtilities {
     public static final String COLUMN_TASK_ID="task_id";
     public static final String COLUMN_TASK_TITLE="task_title";
     public static final String COLUMN_TASK_DETAILS="task_details";
+    public static final String COLUMN_TASK_DONE="task_done";
 
-    public static final String CREATE_TASKS_TABLE="CREATE TABLE "+TABLE_NAME+"("+COLUMN_TASK_ID+" INTEGER PRIMARY KEY NULL,"+COLUMN_TASK_TITLE+" TEXT NOT NULL,"+COLUMN_TASK_DETAILS+" TEXT NOT NULL)";
+    public static final String CREATE_TASKS_TABLE="CREATE TABLE "+TABLE_NAME+"("+COLUMN_TASK_ID+" INTEGER PRIMARY KEY AUTOINCREMENT NULL,"+COLUMN_TASK_TITLE+" TEXT NOT NULL,"+
+            COLUMN_TASK_DETAILS+" TEXT NOT NULL,"+COLUMN_TASK_DONE+" INTEGER DEFAULT 0)";
 }
