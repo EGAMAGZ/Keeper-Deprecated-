@@ -1,10 +1,12 @@
 package com.android.keeper.dialog;
 
+import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.design.widget.BottomSheetDialogFragment;
+import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -18,6 +20,7 @@ import com.android.keeper.localdb.utilities.TasksUtilities;
 
 public class AddNewTaskBottomSheet extends BottomSheetDialogFragment {
 
+    public BottomSheetListener bottomSheetListener;
     private View bottomSheetView;
     private ImageButton addDetailsButton,saveTaskButton;
     private EditText titleEditText,descriptionEditText;
@@ -61,8 +64,8 @@ public class AddNewTaskBottomSheet extends BottomSheetDialogFragment {
                     Toast.makeText(getContext(),"Task Title is Empty",Toast.LENGTH_SHORT).show();
                 }else{
                     saveTask();
-                    Toast.makeText(getContext(),"Task saved",Toast.LENGTH_SHORT).show();
                     //TODO: Call TaskFragment to add a new element to RecycleView and upgrade the percentage at the moment
+                    bottomSheetListener.OnAddTask(task_title,task_details);
                     dismiss();
                 }
             }
@@ -77,5 +80,20 @@ public class AddNewTaskBottomSheet extends BottomSheetDialogFragment {
 
         database.execSQL(sql);
         database.close();
+    }
+
+    /*
+    * Methods with the porpouse to create communication
+    * between fragments
+    * */
+    public interface BottomSheetListener{
+        void OnAddTask(String task_title,String task_details);
+    }
+
+    @Override
+    public void onAttach(Context context) {
+        super.onAttach(context);
+        //context: MainActivity
+        bottomSheetListener=(BottomSheetListener) context;
     }
 }

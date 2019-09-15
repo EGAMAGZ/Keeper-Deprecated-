@@ -16,13 +16,15 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.Toast;
 
+import com.android.keeper.dialog.AddNewTaskBottomSheet;
 import com.android.keeper.fragments.NotesFragment;
 import com.android.keeper.fragments.RemindersFragment;
 import com.android.keeper.fragments.TasksFragment;
 import com.android.keeper.localdb.SQLiteConnection;
 
-public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
+public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener, AddNewTaskBottomSheet.BottomSheetListener {
 
+    private TasksFragment tasksFragment;
     private DrawerLayout drawer;
     private Toolbar toolbar;
     private Toast backToast;
@@ -87,7 +89,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 //toolbar.setTitle("Keeper: Reminders");
                 break;
             case R.id.nav_tasks:
-                getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container,new TasksFragment()).commit();
+                tasksFragment=new TasksFragment();
+                getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container,tasksFragment).commit();
                 //toolbar.setTitle("Keeper: Tasks");
                 break;
             case R.id.nav_settings:
@@ -114,12 +117,17 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         /* Listener for items in ToolBar  */
         switch(item.getItemId()){
             case R.id.toolbar_search:
-                //Toast.makeText(getApplicationContext(),"Search",Toast.LENGTH_SHORT).show();
-                //Intent intent=new Intent(MainActivity.this,SettingsActivity.class);
-                //startActivity(intent);
                 break;
         }
         return true;
     }
 
+    /*
+    * BottomSheetListeners
+    * */
+    @Override
+    public void OnAddTask(String task_title, String task_details) {
+        tasksFragment.OnSavedTask();
+        tasksFragment.loadTasks();
+    }
 }

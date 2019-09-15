@@ -1,5 +1,6 @@
 package com.android.keeper.fragments;
 
+import android.content.Context;
 import android.database.Cursor;
 import android.database.DatabaseUtils;
 import android.database.sqlite.SQLiteDatabase;
@@ -50,8 +51,8 @@ public class TasksFragment extends Fragment {
 
         return FragmentView;
     }
-
-    private void loadTasks(){
+    //Remember: All the methods that will be called from MainActivity must be public
+    public void loadTasks(){
         SQLiteDatabase database=conn.getReadableDatabase();
         //String[] parameters=[];
         String[] columns={TasksUtilities.COLUMN_TASK_TITLE,TasksUtilities.COLUMN_TASK_DETAILS};
@@ -71,7 +72,7 @@ public class TasksFragment extends Fragment {
         }
     }
 
-    public void percentageTasks(long count,SQLiteDatabase database){
+    private void percentageTasks(long count,SQLiteDatabase database){
         //TODO: Make test when someone of them are done
         int tasksTotal=(int) count;
         int tasksDoneCount=(int) tasksDone(database);
@@ -91,6 +92,7 @@ public class TasksFragment extends Fragment {
         }
 
     }
-
+    public void OnSavedTask(){
+    }
 
 }
