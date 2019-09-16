@@ -1,6 +1,6 @@
 package com.android.keeper.fragments;
 
-import android.content.Context;
+import java.util.ArrayList;
 import android.database.Cursor;
 import android.database.DatabaseUtils;
 import android.database.sqlite.SQLiteDatabase;
@@ -9,6 +9,8 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -17,22 +19,35 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.android.keeper.R;
+import com.android.keeper.adapters.TasksAdapter;
 import com.android.keeper.dialog.AddNewTaskBottomSheet;
 import com.android.keeper.localdb.SQLiteConnection;
 import com.android.keeper.localdb.utilities.TasksUtilities;
+import com.android.keeper.recycle_items.TaskItem;
 
 public class TasksFragment extends Fragment {
 
+    private ArrayList<TaskItem> tasksList;
+
+    private SQLiteConnection conn;
     private View FragmentView;
     private FloatingActionButton AddTaskBtn;
-    private SQLiteConnection conn;
     private ProgressBar TaskProgressBar;
     private TextView TaskPercentage;
+    private RecyclerView tasksRecyclerView;
+    private RecyclerView.Adapter tasksRecAdapter;
+    private RecyclerView.LayoutManager tasksLayoutManager;
 
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         FragmentView=inflater.inflate(R.layout.fragment_tasks,container,false);
+
+        tasksRecyclerView=FragmentView.findViewById(R.id.tasks_recyclerview);
+        //tasksRecyclerView.setHasFixedSize(true);
+        tasksLayoutManager=new LinearLayoutManager(getContext());
+
+        tasksList=new ArrayList<TaskItem>();
         TaskProgressBar=(ProgressBar) FragmentView.findViewById(R.id.task_progress_bar);
         TaskPercentage=(TextView) FragmentView.findViewById(R.id.task_progress_percentage);
 
@@ -53,15 +68,25 @@ public class TasksFragment extends Fragment {
     }
     //Remember: All the methods that will be called from MainActivity must be public
     public void loadTasks(){
-        SQLiteDatabase database=conn.getReadableDatabase();
-        //String[] parameters=[];
+        long count;
         String[] columns={TasksUtilities.COLUMN_TASK_TITLE,TasksUtilities.COLUMN_TASK_DETAILS};
         String selection=null; //This will select all rows
+
+        SQLiteDatabase database=conn.getReadableDatabase();
+
         try {
             Cursor cursor = database.query(TasksUtilities.TABLE_NAME, columns, selection, null, null, null, null, null);
             cursor.moveToFirst();
-            long count= DatabaseUtils.queryNumEntries(database,TasksUtilities.TABLE_NAME);
+            count= DatabaseUtils.queryNumEntries(database,TasksUtilities.TABLE_NAME);
             percentageTasks(count,database);
+            while(cursor.moveToNext()){
+                tasksList.add(new TaskItem(cursor.getString(0),cursor.getString(1)));
+            }
+            tasksRecAdapter=new TasksAdapter(tasksList);
+
+            tasksRecyclerView.setLayoutManager(tasksLayoutManager);
+            tasksRecyclerView.setAdapter(tasksRecAdapter);
+
             Toast.makeText(getContext(),"Number:"+ count,Toast.LENGTH_SHORT).show();
         }
         catch(Exception e){
@@ -77,11 +102,13 @@ public class TasksFragment extends Fragment {
         int tasksTotal=(int) count;
         int tasksDoneCount=(int) tasksDone(database);
         int percentage=(int) ((100*tasksDoneCount)/tasksTotal);
+
         TaskProgressBar.setProgress(percentage);
         TaskPercentage.setText(percentage+"%");
     }
     private long tasksDone(SQLiteDatabase database){
         long count=0;
+
         try{
             Cursor cursor=database.rawQuery("SELECT * FROM "+TasksUtilities.TABLE_NAME+" WHERE "+TasksUtilities.COLUMN_TASK_DONE+" = 1",null);
             cursor.moveToFirst();
@@ -92,7 +119,8 @@ public class TasksFragment extends Fragment {
         }
 
     }
-    public void OnSavedTask(){
+    public void OnSavedTask(String task_title, String task_details){
+        Toast.makeText(getContext(),"Task Saved",Toast.LENGTH_SHORT).show();
     }
 
 }

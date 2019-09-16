@@ -127,7 +127,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     * */
     @Override
     public void OnAddTask(String task_title, String task_details) {
-        tasksFragment.OnSavedTask();
-        tasksFragment.loadTasks();
+        tasksFragment.OnSavedTask(task_title,task_details);
     }
 }
