@@ -26,7 +26,9 @@ public class TasksAdapter extends RecyclerView.Adapter<TasksAdapter.TasksViewHol
     }
 
     public static class TasksViewHolder extends RecyclerView.ViewHolder{
-
+        /*This class will get all the elements from layout, and allow us to acces to them(in this case define them)
+        * and also add them listeners
+        * */
         public TextView taskTitleTextView,taskDetailsTextView;
         public ImageView taskImage;
 
@@ -41,7 +43,7 @@ public class TasksAdapter extends RecyclerView.Adapter<TasksAdapter.TasksViewHol
                 @Override
                 public void onClick(View view) {
                     if(listener !=null){
-                        int position=getAdapterPosition();
+                        int position=getAdapterPosition();//Get Adapter Position (ItemPosition)
                         if(position!=RecyclerView.NO_POSITION){
                             listener.onItemClick(position);
                         }
@@ -58,6 +60,7 @@ public class TasksAdapter extends RecyclerView.Adapter<TasksAdapter.TasksViewHol
     @NonNull
     @Override
     public TasksViewHolder onCreateViewHolder(@NonNull ViewGroup viewGroup, int i) {
+        //This method will directly access to the layout
         //viewgroup = parent
         View view= LayoutInflater.from(viewGroup.getContext()).inflate(R.layout.task_item,viewGroup,false);
         TasksViewHolder  tvh=new TasksViewHolder(view,itemClickListener);
@@ -66,7 +69,10 @@ public class TasksAdapter extends RecyclerView.Adapter<TasksAdapter.TasksViewHol
 
     @Override
     public void onBindViewHolder(@NonNull TasksViewHolder tasksViewHolder, int i) {
-        //i=position
+        /*At the moment that each item is inserted, this method will be executed
+        *
+        * i=position from the item
+        * */
         TaskItem currentItem = tasksList.get(i);
 
         tasksViewHolder.taskTitleTextView.setText(currentItem.getTaskTitle());
@@ -76,6 +82,7 @@ public class TasksAdapter extends RecyclerView.Adapter<TasksAdapter.TasksViewHol
 
     @Override
     public int getItemCount() {
+        //Length of items that will be added to the recyclerview
         return tasksList.size();
     }
 

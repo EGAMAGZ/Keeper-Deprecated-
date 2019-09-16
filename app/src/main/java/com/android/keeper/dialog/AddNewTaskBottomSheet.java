@@ -20,7 +20,7 @@ import com.android.keeper.localdb.utilities.TasksUtilities;
 
 public class AddNewTaskBottomSheet extends BottomSheetDialogFragment {
 
-    public BottomSheetListener bottomSheetListener;
+    public AddNewTaskBottomSheetListener bottomSheetListener;
     private View bottomSheetView;
     private ImageButton addDetailsButton,saveTaskButton;
     private EditText titleEditText,descriptionEditText;
@@ -86,7 +86,7 @@ public class AddNewTaskBottomSheet extends BottomSheetDialogFragment {
     * Methods with the porpouse to create communication
     * between fragments
     * */
-    public interface BottomSheetListener{
+    public interface AddNewTaskBottomSheetListener{
         void OnAddTask(String task_title,String task_details);
     }
 
@@ -94,6 +94,6 @@ public class AddNewTaskBottomSheet extends BottomSheetDialogFragment {
     public void onAttach(Context context) {
         super.onAttach(context);
         //context: MainActivity
-        bottomSheetListener=(BottomSheetListener) context;
+        bottomSheetListener=(AddNewTaskBottomSheetListener) context;
     }
 }

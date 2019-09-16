@@ -22,6 +22,7 @@ import android.widget.Toast;
 import com.android.keeper.R;
 import com.android.keeper.adapters.TasksAdapter;
 import com.android.keeper.dialog.AddNewTaskBottomSheet;
+import com.android.keeper.dialog.EditTaskBottomSheet;
 import com.android.keeper.localdb.SQLiteConnection;
 import com.android.keeper.localdb.utilities.TasksUtilities;
 import com.android.keeper.recycle_items.TaskItem;
@@ -107,7 +108,10 @@ public class TasksFragment extends Fragment {
             tasksRecAdapter.setOnItemClickListener(new TasksAdapter.OnItemClickListener() {
                 @Override
                 public void onItemClick(int position) {
-                    tasksList.get(position);
+                    EditTaskBottomSheet editTaskBottomSheet=new EditTaskBottomSheet();
+                    editTaskBottomSheet.setContent(tasksList.get(position).getTaskTitle(),tasksList.get(position).getTaskDetails());
+                    editTaskBottomSheet.show(getFragmentManager(),"ediTaskBottomSheet");
+
                 }
             });
             database.close();

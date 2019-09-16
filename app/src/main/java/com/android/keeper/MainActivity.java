@@ -22,7 +22,7 @@ import com.android.keeper.fragments.RemindersFragment;
 import com.android.keeper.fragments.TasksFragment;
 import com.android.keeper.localdb.SQLiteConnection;
 
-public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener, AddNewTaskBottomSheet.BottomSheetListener {
+public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener, AddNewTaskBottomSheet.AddNewTaskBottomSheetListener{
 
     private TasksFragment tasksFragment;
     private DrawerLayout drawer;
@@ -123,8 +123,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     }
 
     /*
-    * BottomSheetListeners
-    * */
+     * BottomSheetListeners
+     * */
     @Override
     public void OnAddTask(String task_title, String task_details) {
         tasksFragment.OnSavedTask(task_title,task_details);
