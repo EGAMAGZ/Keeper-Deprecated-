@@ -53,4 +53,5 @@ public class TasksAdapter extends RecyclerView.Adapter<TasksAdapter.TasksViewHol
     public int getItemCount() {
         return tasksList.size();
     }
+
 }

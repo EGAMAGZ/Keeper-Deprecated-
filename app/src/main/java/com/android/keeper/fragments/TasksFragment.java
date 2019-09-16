@@ -76,23 +76,23 @@ public class TasksFragment extends Fragment {
 
         try {
             Cursor cursor = database.query(TasksUtilities.TABLE_NAME, columns, selection, null, null, null, null, null);
-            cursor.moveToFirst();
             count= DatabaseUtils.queryNumEntries(database,TasksUtilities.TABLE_NAME);
             percentageTasks(count,database);
             while(cursor.moveToNext()){
                 tasksList.add(new TaskItem(cursor.getString(0),cursor.getString(1)));
             }
-            tasksRecAdapter=new TasksAdapter(tasksList);
-
-            tasksRecyclerView.setLayoutManager(tasksLayoutManager);
-            tasksRecyclerView.setAdapter(tasksRecAdapter);
 
             Toast.makeText(getContext(),"Number:"+ count,Toast.LENGTH_SHORT).show();
         }
         catch(Exception e){
-            Toast.makeText(getContext(),"Error Consulta",Toast.LENGTH_SHORT).show();
+            TaskProgressBar.setProgress(0);
+            TaskPercentage.setText(0+"%");
+            Toast.makeText(getContext(),"No Tasks Added",Toast.LENGTH_SHORT).show();
         }
         finally {
+            tasksRecAdapter=new TasksAdapter(tasksList);
+            tasksRecyclerView.setLayoutManager(tasksLayoutManager);
+            tasksRecyclerView.setAdapter(tasksRecAdapter);
             database.close();
         }
     }
@@ -111,7 +111,6 @@ public class TasksFragment extends Fragment {
 
         try{
             Cursor cursor=database.rawQuery("SELECT * FROM "+TasksUtilities.TABLE_NAME+" WHERE "+TasksUtilities.COLUMN_TASK_DONE+" = 1",null);
-            cursor.moveToFirst();
             count=cursor.getCount();
             return count;
         }catch(Exception e){
@@ -120,6 +119,9 @@ public class TasksFragment extends Fragment {
 
     }
     public void OnSavedTask(String task_title, String task_details){
+            tasksList.add(new TaskItem(task_title,task_details));
+            tasksRecAdapter.notifyItemInserted(0);
+        //notifyItemChanged(0) will change the item content
         Toast.makeText(getContext(),"Task Saved",Toast.LENGTH_SHORT).show();
     }
 
