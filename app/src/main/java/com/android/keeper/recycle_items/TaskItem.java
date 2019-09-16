@@ -5,8 +5,8 @@ public class TaskItem {
     private String taskTitle;
     private String taskDetails;
 
-    public TaskItem( String taskTitle, String taskDetails) {
-        //this.imageResource = imageResource;
+    public TaskItem(int imageResource, String taskTitle, String taskDetails) {
+        this.imageResource = imageResource;
         this.taskTitle = taskTitle;
         this.taskDetails = taskDetails;
     }

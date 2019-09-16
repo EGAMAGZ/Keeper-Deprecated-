@@ -7,6 +7,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
+import android.widget.ImageView;
 
 import com.android.keeper.R;
 import com.android.keeper.recycle_items.TaskItem;
@@ -18,12 +19,14 @@ public class TasksAdapter extends RecyclerView.Adapter<TasksAdapter.TasksViewHol
     public static class TasksViewHolder extends RecyclerView.ViewHolder{
 
         public TextView taskTitleTextView,taskDetailsTextView;
+        public ImageView taskImage;
 
         public TasksViewHolder(@NonNull View itemView) {
             super(itemView);
 
             taskTitleTextView=itemView.findViewById(R.id.task_item_title);
             taskDetailsTextView=itemView.findViewById(R.id.task_item_details);
+            taskImage=itemView.findViewById(R.id.task_item_image);
         }
     }
 
@@ -47,6 +50,7 @@ public class TasksAdapter extends RecyclerView.Adapter<TasksAdapter.TasksViewHol
 
         tasksViewHolder.taskTitleTextView.setText(currentItem.getTaskTitle());
         tasksViewHolder.taskDetailsTextView.setText(currentItem.getTaskDetails());
+        tasksViewHolder.taskImage.setImageResource(currentItem.getImageResource());
     }
 
     @Override

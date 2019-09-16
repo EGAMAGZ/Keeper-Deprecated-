@@ -11,6 +11,7 @@ import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -69,25 +70,35 @@ public class TasksFragment extends Fragment {
     //Remember: All the methods that will be called from MainActivity must be public
     public void loadTasks(){
         long count;
-        String[] columns={TasksUtilities.COLUMN_TASK_TITLE,TasksUtilities.COLUMN_TASK_DETAILS};
+        String[] columns={TasksUtilities.COLUMN_TASK_TITLE,TasksUtilities.COLUMN_TASK_DETAILS,TasksUtilities.COLUMN_TASK_DONE};
         String selection=null; //This will select all rows
 
         SQLiteDatabase database=conn.getReadableDatabase();
 
         try {
-            Cursor cursor = database.query(TasksUtilities.TABLE_NAME, columns, selection, null, null, null, null, null);
+            Cursor cursor = database.query(TasksUtilities.TABLE_NAME, columns, selection, null, null, null, TasksUtilities.COLUMN_TASK_ID+" DESC", null);
             count= DatabaseUtils.queryNumEntries(database,TasksUtilities.TABLE_NAME);
             percentageTasks(count,database);
             while(cursor.moveToNext()){
-                tasksList.add(new TaskItem(cursor.getString(0),cursor.getString(1)));
+                if(cursor.getInt(2)==0){
+                    tasksList.add(new TaskItem(R.drawable.ic_check_box_outline_blank_black_24dp,cursor.getString(0),cursor.getString(1)));
+                }else if(cursor.getInt(2)==1){
+                    tasksList.add(new TaskItem(R.drawable.ic_check_box_black_24dp,cursor.getString(0),cursor.getString(1)));
+                }
             }
 
             Toast.makeText(getContext(),"Number:"+ count,Toast.LENGTH_SHORT).show();
         }
-        catch(Exception e){
+        catch(IllegalStateException e){
             TaskProgressBar.setProgress(0);
             TaskPercentage.setText(0+"%");
-            Toast.makeText(getContext(),"No Tasks Added",Toast.LENGTH_SHORT).show();
+            Toast.makeText(getContext(),"Error while reading database",Toast.LENGTH_SHORT).show();
+        }
+        catch(Exception e){
+            Log.e("Keeper Error Logger","ERROR:",e);
+            TaskProgressBar.setProgress(0);
+            TaskPercentage.setText(0+"%");
+            Toast.makeText(getContext(),"Internal Error",Toast.LENGTH_SHORT).show();
         }
         finally {
             tasksRecAdapter=new TasksAdapter(tasksList);
@@ -99,9 +110,14 @@ public class TasksFragment extends Fragment {
 
     private void percentageTasks(long count,SQLiteDatabase database){
         //TODO: Make test when someone of them are done
-        int tasksTotal=(int) count;
-        int tasksDoneCount=(int) tasksDone(database);
-        int percentage=(int) ((100*tasksDoneCount)/tasksTotal);
+        int percentage;
+        try{
+            int tasksTotal=(int) count;
+            int tasksDoneCount=(int) tasksDone(database);
+            percentage=(int) ((100*tasksDoneCount)/tasksTotal);
+        }catch(ArithmeticException e){
+            percentage=0;
+        }
 
         TaskProgressBar.setProgress(percentage);
         TaskPercentage.setText(percentage+"%");
@@ -119,9 +135,8 @@ public class TasksFragment extends Fragment {
 
     }
     public void OnSavedTask(String task_title, String task_details){
-            tasksList.add(new TaskItem(task_title,task_details));
-            tasksRecAdapter.notifyItemInserted(0);
-        //notifyItemChanged(0) will change the item content
+        tasksList.add(0,new TaskItem(R.drawable.ic_check_box_outline_blank_black_24dp,task_title,task_details));
+        tasksRecAdapter.notifyItemInserted(0);
         Toast.makeText(getContext(),"Task Saved",Toast.LENGTH_SHORT).show();
     }
 
