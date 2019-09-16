@@ -36,7 +36,8 @@ public class TasksFragment extends Fragment {
     private ProgressBar TaskProgressBar;
     private TextView TaskPercentage;
     private RecyclerView tasksRecyclerView;
-    private RecyclerView.Adapter tasksRecAdapter;
+    private TasksAdapter tasksRecAdapter;
+    //private RecyclerView.Adapter tasksRecAdapter;
     private RecyclerView.LayoutManager tasksLayoutManager;
 
     @Nullable
@@ -87,7 +88,6 @@ public class TasksFragment extends Fragment {
                 }
             }
 
-            Toast.makeText(getContext(),"Number:"+ count,Toast.LENGTH_SHORT).show();
         }
         catch(IllegalStateException e){
             TaskProgressBar.setProgress(0);
@@ -104,6 +104,12 @@ public class TasksFragment extends Fragment {
             tasksRecAdapter=new TasksAdapter(tasksList);
             tasksRecyclerView.setLayoutManager(tasksLayoutManager);
             tasksRecyclerView.setAdapter(tasksRecAdapter);
+            tasksRecAdapter.setOnItemClickListener(new TasksAdapter.OnItemClickListener() {
+                @Override
+                public void onItemClick(int position) {
+                    tasksList.get(position);
+                }
+            });
             database.close();
         }
     }

@@ -51,6 +51,13 @@
             android:src="@drawable/ic_short_text_veish_24dp"
             android:background="@android:color/transparent"/>
         <ImageButton
+            android:id="@+id/task_add_date"
+            android:layout_width="36dp"
+            android:layout_height="36dp"
+            android:src="@drawable/ic_event_available_black_24dp"
+            android:background="@android:color/transparent">
+        </ImageButton>
+        <ImageButton
             android:id="@+id/task_save"
             android:layout_width="36dp"
             android:layout_height="36dp"
