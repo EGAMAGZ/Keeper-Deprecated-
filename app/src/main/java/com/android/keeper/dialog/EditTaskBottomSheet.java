@@ -10,15 +10,16 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
 import android.widget.ImageButton;
+import android.widget.Toast;
 
 import com.android.keeper.R;
 
 public class EditTaskBottomSheet extends BottomSheetDialogFragment {
 
-    private EditTaskBottomSheetListener bottomSheetListener;
+    //private EditTaskBottomSheetListener bottomSheetListener;
     private View fragmentView;
     private EditText taskTitleEditText,taskDetailsEditText;
-    private ImageButton addDetailsButton;
+    private ImageButton saveTaskButton;
 
     private String old_task_title,old_task_details;
 
@@ -29,13 +30,19 @@ public class EditTaskBottomSheet extends BottomSheetDialogFragment {
 
         taskTitleEditText=fragmentView.findViewById(R.id.task_title);
         taskDetailsEditText=fragmentView.findViewById(R.id.task_details);
+        saveTaskButton=fragmentView.findViewById(R.id.task_save);
 
         taskTitleEditText.setText(old_task_title);
-
         if(!old_task_details.isEmpty()){
-            taskDetailsEditText.setVisibility(View.VISIBLE);
             taskDetailsEditText.setText(old_task_details);
         }
+
+        saveTaskButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Toast.makeText(getContext(),"Task will be saved",Toast.LENGTH_SHORT).show();
+            }
+        });
 
         return fragmentView;
     }
@@ -45,7 +52,7 @@ public class EditTaskBottomSheet extends BottomSheetDialogFragment {
         old_task_details=task_details;
     }
 
-    public interface EditTaskBottomSheetListener{
+/*    public interface EditTaskBottomSheetListener{
         void OnSaveEditedTask();
     }
 
@@ -54,5 +61,5 @@ public class EditTaskBottomSheet extends BottomSheetDialogFragment {
         super.onAttach(context);
 
         bottomSheetListener=(EditTaskBottomSheetListener) context;
-    }
+    }*/
 }

@@ -54,7 +54,7 @@
             android:id="@+id/task_add_date"
             android:layout_width="36dp"
             android:layout_height="36dp"
-            android:src="@drawable/ic_event_available_black_24dp"
+            android:src="@drawable/ic_event_available_veish_24dp"
             android:background="@android:color/transparent">
         </ImageButton>
         <ImageButton
