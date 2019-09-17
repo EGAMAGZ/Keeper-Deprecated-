@@ -34,7 +34,7 @@ public class AddNewTaskBottomSheet extends BottomSheetDialogFragment {
         bottomSheetView=inflater.inflate(R.layout.bottom_sheet_add_new_task,container,false);
         conn=new SQLiteConnection(getContext(),"keeper_db",null,1);
 
-        addDetailsButton=bottomSheetView.findViewById(R.id.task_add_description);
+        addDetailsButton=bottomSheetView.findViewById(R.id.task_add_details);
         saveTaskButton=bottomSheetView.findViewById(R.id.task_save);
 
         descriptionEditText=bottomSheetView.findViewById(R.id.task_details);
@@ -71,6 +71,7 @@ public class AddNewTaskBottomSheet extends BottomSheetDialogFragment {
             }
         });
 
+        //TODO: Add onClickListener when date is added, and also the storage of the date in the database
 
         return bottomSheetView;
     }
