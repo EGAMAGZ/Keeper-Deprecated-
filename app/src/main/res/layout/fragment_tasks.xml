@@ -2,6 +2,7 @@
 <android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/task_fragment_container"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
@@ -35,9 +36,8 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:padding="8dp"
-            android:scrollbars="vertical">
+            android:scrollbars="vertical"/>
 
-        </android.support.v7.widget.RecyclerView>
 
     </LinearLayout>
         <android.support.design.bottomappbar.BottomAppBar
@@ -51,12 +51,12 @@
             android:id="@+id/addtask_flt_btn"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            app:fabSize="normal"
             android:layout_marginEnd="9dp"
             android:layout_marginBottom="0dp"
             app:layout_anchor="@id/botombar"
-            android:clickable="true"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:srcCompat="@drawable/ic_add_white_24dp" />
+            app:fabSize="normal"
+            android:clickable="true"
+            app:srcCompat="@drawable/ic_add_white_24dp"/>
 </android.support.design.widget.CoordinatorLayout>

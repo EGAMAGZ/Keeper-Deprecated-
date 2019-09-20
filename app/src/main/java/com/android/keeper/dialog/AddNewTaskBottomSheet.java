@@ -45,10 +45,11 @@ public class AddNewTaskBottomSheet extends BottomSheetDialogFragment {
             public void onClick(View view) {
                 if(descriptionEditText.getVisibility()==View.INVISIBLE){
                     descriptionEditText.setVisibility(View.VISIBLE);
-                }else if(descriptionEditText.getVisibility()==View.VISIBLE){
+                }
+                /*else if(descriptionEditText.getVisibility()==View.VISIBLE){
                     descriptionEditText.setText("");
                     descriptionEditText.setVisibility(View.INVISIBLE);
-                }
+                }*/
             }
         });
 
@@ -70,6 +71,7 @@ public class AddNewTaskBottomSheet extends BottomSheetDialogFragment {
                 }
             }
         });
+
 
         //TODO: Add onClickListener when date is added, and also the storage of the date in the database
 

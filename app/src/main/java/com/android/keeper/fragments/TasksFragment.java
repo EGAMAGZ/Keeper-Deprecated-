@@ -7,7 +7,9 @@ import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.FloatingActionButton;
+import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -31,6 +33,7 @@ public class TasksFragment extends Fragment {
 
     private ArrayList<TaskItem> tasksList;
 
+    private CoordinatorLayout coordinatorLayout;
     private SQLiteConnection conn;
     private View FragmentView;
     private FloatingActionButton AddTaskBtn;
@@ -45,6 +48,8 @@ public class TasksFragment extends Fragment {
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         FragmentView=inflater.inflate(R.layout.fragment_tasks,container,false);
+
+        coordinatorLayout=FragmentView.findViewById(R.id.task_fragment_container);
 
         tasksRecyclerView=FragmentView.findViewById(R.id.tasks_recyclerview);
         //tasksRecyclerView.setHasFixedSize(true);
@@ -144,10 +149,17 @@ public class TasksFragment extends Fragment {
         }
 
     }
-    public void OnSavedTask(String task_title, String task_details){
+    public void OnAddTask(String task_title, String task_details){
         tasksList.add(0,new TaskItem(R.drawable.ic_check_box_outline_blank_black_24dp,task_title,task_details));
         tasksRecAdapter.notifyItemInserted(0);
-        Toast.makeText(getContext(),"Task Saved",Toast.LENGTH_SHORT).show();
+        Snackbar.make(coordinatorLayout,"Task Saved",Snackbar.LENGTH_LONG).show();
     }
 
+    public void OnSaveEditedTask(){
+        Snackbar.make(coordinatorLayout,"Task Saved",Snackbar.LENGTH_SHORT).show();
+    }
+
+    public void OnDeleteSavedTask(){
+        Snackbar.make(coordinatorLayout,"Task Deleted",Snackbar.LENGTH_SHORT).show();
+    }
 }

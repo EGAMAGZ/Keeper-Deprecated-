@@ -17,12 +17,13 @@ import android.view.MenuItem;
 import android.widget.Toast;
 
 import com.android.keeper.dialog.AddNewTaskBottomSheet;
+import com.android.keeper.dialog.EditTaskBottomSheet;
 import com.android.keeper.fragments.NotesFragment;
 import com.android.keeper.fragments.RemindersFragment;
 import com.android.keeper.fragments.TasksFragment;
 import com.android.keeper.localdb.SQLiteConnection;
 
-public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener, AddNewTaskBottomSheet.AddNewTaskBottomSheetListener{
+public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener, AddNewTaskBottomSheet.AddNewTaskBottomSheetListener, EditTaskBottomSheet.EditTaskBottomSheetListener {
 
     private TasksFragment tasksFragment;
     private DrawerLayout drawer;
@@ -123,10 +124,21 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     }
 
     /*
-     * BottomSheetListeners
+     * Fragment Listeners
      * */
+    //AddNewTaskBottomSheet
     @Override
     public void OnAddTask(String task_title, String task_details) {
-        tasksFragment.OnSavedTask(task_title,task_details);
+        tasksFragment.OnAddTask(task_title,task_details);
+    }
+    //EdiTaskBottomSheet
+    @Override
+    public void OnSaveEditedTask() {
+        tasksFragment.OnSaveEditedTask();
+    }
+
+    @Override
+    public void OnDeleteSavedTask() {
+        tasksFragment.OnDeleteSavedTask();
     }
 }

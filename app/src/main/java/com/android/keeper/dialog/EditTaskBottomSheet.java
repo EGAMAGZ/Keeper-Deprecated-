@@ -16,10 +16,10 @@ import com.android.keeper.R;
 
 public class EditTaskBottomSheet extends BottomSheetDialogFragment {
 
-    //private EditTaskBottomSheetListener bottomSheetListener;
+    private EditTaskBottomSheetListener bottomSheetListener;
     private View fragmentView;
     private EditText taskTitleEditText,taskDetailsEditText;
-    private ImageButton saveTaskButton;
+    private ImageButton saveTaskButton,deleteTaskButton;
 
     private String old_task_title,old_task_details;
 
@@ -31,6 +31,7 @@ public class EditTaskBottomSheet extends BottomSheetDialogFragment {
         taskTitleEditText=fragmentView.findViewById(R.id.task_title);
         taskDetailsEditText=fragmentView.findViewById(R.id.task_details);
         saveTaskButton=fragmentView.findViewById(R.id.task_save);
+        deleteTaskButton=fragmentView.findViewById(R.id.task_delete);
 
         taskTitleEditText.setText(old_task_title);
         if(!old_task_details.isEmpty()){
@@ -40,10 +41,18 @@ public class EditTaskBottomSheet extends BottomSheetDialogFragment {
         saveTaskButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Toast.makeText(getContext(),"Task will be saved",Toast.LENGTH_SHORT).show();
+                bottomSheetListener.OnSaveEditedTask();
+                dismiss();
             }
         });
 
+        deleteTaskButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                bottomSheetListener.OnDeleteSavedTask();
+                dismiss();
+            }
+        });
         return fragmentView;
     }
 
@@ -52,8 +61,9 @@ public class EditTaskBottomSheet extends BottomSheetDialogFragment {
         old_task_details=task_details;
     }
 
-/*    public interface EditTaskBottomSheetListener{
+    public interface EditTaskBottomSheetListener{
         void OnSaveEditedTask();
+        void OnDeleteSavedTask();
     }
 
     @Override
@@ -61,5 +71,5 @@ public class EditTaskBottomSheet extends BottomSheetDialogFragment {
         super.onAttach(context);
 
         bottomSheetListener=(EditTaskBottomSheetListener) context;
-    }*/
+    }
 }
