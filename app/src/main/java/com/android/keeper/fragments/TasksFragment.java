@@ -1,6 +1,8 @@
 package com.android.keeper.fragments;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 
 import android.content.ContentValues;
 import android.database.Cursor;
@@ -77,7 +79,6 @@ public class TasksFragment extends Fragment {
     }
 
     public void loadTasks(){
-        long count;
         String[] columns={TasksUtilities.COLUMN_TASK_ID,TasksUtilities.COLUMN_TASK_TITLE,TasksUtilities.COLUMN_TASK_DETAILS,TasksUtilities.COLUMN_TASK_DONE};
         String selection=null; //This will select all rows
 
@@ -86,8 +87,6 @@ public class TasksFragment extends Fragment {
         try {
             Cursor cursor = database.query(TasksUtilities.TABLE_NAME, columns, selection, null, null, null,
                     TasksUtilities.COLUMN_TASK_ID+" DESC, "+TasksUtilities.COLUMN_TASK_ID+" ASC", null);
-            count= DatabaseUtils.queryNumEntries(database,TasksUtilities.TABLE_NAME);
-
             while(cursor.moveToNext()){
                 if(cursor.getInt(3)==0){
                     tasksList.add(new TaskItem(R.drawable.ic_check_box_outline_blank_black_24dp,cursor.getInt(0),cursor.getString(1),cursor.getString(2),false));
@@ -124,17 +123,16 @@ public class TasksFragment extends Fragment {
                 public void onDoneTaskClick(int position) {
                     //FIXME: the value that is returned is completely opposite that the if are comparing
                     if(tasksList.get(position).isTaskDone()){
-                        //Toast.makeText(getContext(),"WILL BE UNDONE",Toast.LENGTH_SHORT).show();
                         setTaskUndone(tasksList.get(position).getTaskId());
                         tasksRecAdapter.notifyItemChanged(position);
                     }else{
-                        //Toast.makeText(getContext(),"WILL BE DONE",Toast.LENGTH_SHORT).show();
                         setTaskDone(tasksList.get(position).getTaskId());
                         tasksRecAdapter.notifyItemChanged(position);
                     }
                 }
             });
             percentageTasks();
+            sortTaskArrayList();
             database.close();
         }
     }
@@ -220,6 +218,7 @@ public class TasksFragment extends Fragment {
             }
         }
         percentageTasks();
+        sortTaskArrayList();
         database.close();
 
     }
@@ -239,7 +238,18 @@ public class TasksFragment extends Fragment {
             }
         }
         percentageTasks();
+        sortTaskArrayList();
         database.close();
+    }
+
+    private void sortTaskArrayList(){
+        Collections.sort(tasksList, new Comparator<TaskItem>() {
+            @Override
+            public int compare(TaskItem taskItem, TaskItem taskItem2) {
+                return Boolean.compare(taskItem.isTaskDone(),taskItem2.isTaskDone());
+            }
+        });
+        tasksRecAdapter.notifyDataSetChanged();
     }
 
     public void OnAddTask(int task_id,String task_title, String task_details){
