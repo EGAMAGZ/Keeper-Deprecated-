@@ -85,7 +85,7 @@ public class TasksFragment extends Fragment {
         try {
             Cursor cursor = database.query(TasksUtilities.TABLE_NAME, columns, selection, null, null, null, TasksUtilities.COLUMN_TASK_ID+" DESC", null);
             count= DatabaseUtils.queryNumEntries(database,TasksUtilities.TABLE_NAME);
-            percentageTasks(count,database);
+
             while(cursor.moveToNext()){
                 if(cursor.getInt(3)==0){
                     tasksList.add(new TaskItem(R.drawable.ic_check_box_outline_blank_black_24dp,cursor.getInt(0),cursor.getString(1),cursor.getString(2)));
@@ -118,35 +118,47 @@ public class TasksFragment extends Fragment {
                     editTaskBottomSheet.show(getFragmentManager(),"ediTaskBottomSheet");
                 }
             });
+            percentageTasks();
             database.close();
         }
     }
 
-    private void percentageTasks(long count,SQLiteDatabase database){
+    private void percentageTasks(){
         //TODO: Make test when someone of them are done
+        SQLiteDatabase database=conn.getReadableDatabase();
         int percentage;
         try{
-            int tasksTotal=(int) count;
-            int tasksDoneCount=(int) tasksDone(database);
+            int tasksTotal=(int) numberTasksTotal(database);
+            int tasksDoneCount=(int) numberTasksDone(database);
             percentage=(int) ((100*tasksDoneCount)/tasksTotal);
         }catch(ArithmeticException e){
             percentage=0;
         }
-
         TaskProgressBar.setProgress(percentage);
         TaskPercentage.setText(percentage+"%");
+        database.close();
     }
-    private long tasksDone(SQLiteDatabase database){
-        long count=0;
 
+    private long numberTasksTotal(SQLiteDatabase database){
+        long count=0;
+        try {
+            Cursor cursor=database.rawQuery("SELECT "+TasksUtilities.COLUMN_TASK_ID+" FROM "+ TasksUtilities.TABLE_NAME,null);
+            count=cursor.getCount();
+            return count;
+        }catch (Exception e){
+            return count;
+        }
+    }
+
+    private long numberTasksDone(SQLiteDatabase database){
+        long count=0;
         try{
-            Cursor cursor=database.rawQuery("SELECT * FROM "+TasksUtilities.TABLE_NAME+" WHERE "+TasksUtilities.COLUMN_TASK_DONE+" = 1",null);
+            Cursor cursor=database.rawQuery("SELECT "+TasksUtilities.COLUMN_TASK_ID+" FROM "+TasksUtilities.TABLE_NAME+" WHERE "+TasksUtilities.COLUMN_TASK_DONE+" = 1",null);
             count=cursor.getCount();
             return count;
         }catch(Exception e){
             return count;
         }
-
     }
 
     private void deleteTask(int task_id){
@@ -157,13 +169,14 @@ public class TasksFragment extends Fragment {
                 tasksList.remove(i);
             }
         }
-
-    };
+        database.close();
+    }
 
     public void OnAddTask(int task_id,String task_title, String task_details){
         tasksList.add(0,new TaskItem(R.drawable.ic_check_box_outline_blank_black_24dp,task_id,task_title,task_details));
         tasksRecAdapter.notifyItemInserted(0);
         //Toast.makeText(getContext(),"ID"+task_id,Toast.LENGTH_SHORT).show();
+        percentageTasks();
         Snackbar.make(coordinatorLayout,"Task Saved",Snackbar.LENGTH_LONG).show();
     }
 
@@ -174,6 +187,7 @@ public class TasksFragment extends Fragment {
     public void OnDeleteSavedTask(int task_position, int task_id){
         deleteTask(task_id);
         tasksRecAdapter.notifyItemRemoved(task_position);
-        Snackbar.make(coordinatorLayout,"Task Deleted POs:"+task_position + "ID: "+task_id,Snackbar.LENGTH_SHORT).show();
+        percentageTasks();
+        Snackbar.make(coordinatorLayout,"Task Deleted",Snackbar.LENGTH_SHORT).show();
     }
 }
