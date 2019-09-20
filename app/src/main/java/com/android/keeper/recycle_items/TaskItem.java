@@ -28,4 +28,12 @@ public class TaskItem {
     public int getTaskId() {
         return taskId;
     }
+
+    public void setTaskTitle(String taskTitle) {
+        this.taskTitle = taskTitle;
+    }
+
+    public void setTaskDetails(String taskDetails) {
+        this.taskDetails = taskDetails;
+    }
 }

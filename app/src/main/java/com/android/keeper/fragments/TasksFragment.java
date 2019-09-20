@@ -1,6 +1,8 @@
 package com.android.keeper.fragments;
 
 import java.util.ArrayList;
+
+import android.content.ContentValues;
 import android.database.Cursor;
 import android.database.DatabaseUtils;
 import android.database.sqlite.SQLiteDatabase;
@@ -52,7 +54,6 @@ public class TasksFragment extends Fragment {
         coordinatorLayout=FragmentView.findViewById(R.id.task_fragment_container);
 
         tasksRecyclerView=FragmentView.findViewById(R.id.tasks_recyclerview);
-        //tasksRecyclerView.setHasFixedSize(true);
         tasksLayoutManager=new LinearLayoutManager(getContext());
 
         tasksList=new ArrayList<TaskItem>();
@@ -74,7 +75,7 @@ public class TasksFragment extends Fragment {
 
         return FragmentView;
     }
-    //Remember: All the methods that will be called from MainActivity must be public
+
     public void loadTasks(){
         long count;
         String[] columns={TasksUtilities.COLUMN_TASK_ID,TasksUtilities.COLUMN_TASK_TITLE,TasksUtilities.COLUMN_TASK_DETAILS,TasksUtilities.COLUMN_TASK_DONE};
@@ -171,6 +172,22 @@ public class TasksFragment extends Fragment {
         }
         database.close();
     }
+    private void editTask(int task_id,String task_title,String task_details){
+        SQLiteDatabase database=conn.getReadableDatabase();
+
+        String sql="UPDATE "+TasksUtilities.TABLE_NAME+" SET "+TasksUtilities.COLUMN_TASK_TITLE+"='"+task_title+"',"+TasksUtilities.COLUMN_TASK_DETAILS+"= '"+task_details+
+                "' WHERE "+TasksUtilities.COLUMN_TASK_ID+" = "+task_id;
+        database.execSQL(sql);
+
+        for (int i=0;i<tasksList.size();++i){
+            if(tasksList.get(i).getTaskId()==task_id){
+                tasksList.get(i).setTaskTitle(task_title);
+                tasksList.get(i).setTaskDetails(task_details);
+            }
+        }
+
+        database.close();
+    }
 
     public void OnAddTask(int task_id,String task_title, String task_details){
         tasksList.add(0,new TaskItem(R.drawable.ic_check_box_outline_blank_black_24dp,task_id,task_title,task_details));
@@ -180,7 +197,9 @@ public class TasksFragment extends Fragment {
         Snackbar.make(coordinatorLayout,"Task Saved",Snackbar.LENGTH_LONG).show();
     }
 
-    public void OnSaveEditedTask(){
+    public void OnSaveEditedTask(int task_position, int task_id,String task_title,String task_details){
+        editTask(task_id,task_title,task_details);
+        tasksRecAdapter.notifyItemChanged(task_position);
         Snackbar.make(coordinatorLayout,"Task Saved",Snackbar.LENGTH_SHORT).show();
     }
 

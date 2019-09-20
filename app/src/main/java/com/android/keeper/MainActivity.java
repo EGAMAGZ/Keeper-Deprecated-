@@ -133,8 +133,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     }
     //EdiTaskBottomSheet
     @Override
-    public void OnSaveEditedTask(int task_id) {
-        tasksFragment.OnSaveEditedTask();
+    public void OnSaveEditedTask(int task_position,int task_id,String task_title,String task_details) {
+        tasksFragment.OnSaveEditedTask(task_position,task_id,task_title,task_details);
     }
 
     @Override
