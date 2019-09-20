@@ -2,11 +2,13 @@ package com.android.keeper.recycle_items;
 
 public class TaskItem {
     private int imageResource;
+    private int taskId;
     private String taskTitle;
     private String taskDetails;
 
-    public TaskItem(int imageResource, String taskTitle, String taskDetails) {
+    public TaskItem(int imageResource,int taskId, String taskTitle, String taskDetails) {
         this.imageResource = imageResource;
+        this.taskId=taskId;
         this.taskTitle = taskTitle;
         this.taskDetails = taskDetails;
     }
@@ -21,5 +23,9 @@ public class TaskItem {
 
     public String getTaskDetails() {
         return taskDetails;
+    }
+
+    public int getTaskId() {
+        return taskId;
     }
 }

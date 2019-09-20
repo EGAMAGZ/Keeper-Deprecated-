@@ -77,7 +77,7 @@ public class TasksFragment extends Fragment {
     //Remember: All the methods that will be called from MainActivity must be public
     public void loadTasks(){
         long count;
-        String[] columns={TasksUtilities.COLUMN_TASK_TITLE,TasksUtilities.COLUMN_TASK_DETAILS,TasksUtilities.COLUMN_TASK_DONE};
+        String[] columns={TasksUtilities.COLUMN_TASK_ID,TasksUtilities.COLUMN_TASK_TITLE,TasksUtilities.COLUMN_TASK_DETAILS,TasksUtilities.COLUMN_TASK_DONE};
         String selection=null; //This will select all rows
 
         SQLiteDatabase database=conn.getReadableDatabase();
@@ -87,10 +87,10 @@ public class TasksFragment extends Fragment {
             count= DatabaseUtils.queryNumEntries(database,TasksUtilities.TABLE_NAME);
             percentageTasks(count,database);
             while(cursor.moveToNext()){
-                if(cursor.getInt(2)==0){
-                    tasksList.add(new TaskItem(R.drawable.ic_check_box_outline_blank_black_24dp,cursor.getString(0),cursor.getString(1)));
-                }else if(cursor.getInt(2)==1){
-                    tasksList.add(new TaskItem(R.drawable.ic_check_box_black_24dp,cursor.getString(0),cursor.getString(1)));
+                if(cursor.getInt(3)==0){
+                    tasksList.add(new TaskItem(R.drawable.ic_check_box_outline_blank_black_24dp,cursor.getInt(0),cursor.getString(1),cursor.getString(2)));
+                }else if(cursor.getInt(3)==1){
+                    tasksList.add(new TaskItem(R.drawable.ic_check_box_black_24dp,cursor.getInt(0),cursor.getString(1),cursor.getString(2)));
                 }
             }
 
@@ -149,10 +149,11 @@ public class TasksFragment extends Fragment {
         }
 
     }
-    public void OnAddTask(String task_title, String task_details){
-        tasksList.add(0,new TaskItem(R.drawable.ic_check_box_outline_blank_black_24dp,task_title,task_details));
+    public void OnAddTask(int task_id,String task_title, String task_details){
+        tasksList.add(0,new TaskItem(R.drawable.ic_check_box_outline_blank_black_24dp,task_id,task_title,task_details));
         tasksRecAdapter.notifyItemInserted(0);
-        Snackbar.make(coordinatorLayout,"Task Saved",Snackbar.LENGTH_LONG).show();
+        Toast.makeText(getContext(),"ID"+task_id,Toast.LENGTH_SHORT).show();
+        //Snackbar.make(coordinatorLayout,"Task Saved",Snackbar.LENGTH_LONG).show();
     }
 
     public void OnSaveEditedTask(){

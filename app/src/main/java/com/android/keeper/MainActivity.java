@@ -128,8 +128,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
      * */
     //AddNewTaskBottomSheet
     @Override
-    public void OnAddTask(String task_title, String task_details) {
-        tasksFragment.OnAddTask(task_title,task_details);
+    public void OnAddTask(int task_id,String task_title, String task_details) {
+        tasksFragment.OnAddTask(task_id,task_title,task_details);
     }
     //EdiTaskBottomSheet
     @Override

@@ -1,5 +1,6 @@
 package com.android.keeper.dialog;
 
+import android.content.ContentValues;
 import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
@@ -64,9 +65,8 @@ public class AddNewTaskBottomSheet extends BottomSheetDialogFragment {
                 if(task_title.isEmpty()){
                     Toast.makeText(getContext(),"Task Title is Empty",Toast.LENGTH_SHORT).show();
                 }else{
-                    saveTask();
-                    //TODO: Call TaskFragment to add a new element to RecycleView and upgrade the percentage at the moment
-                    bottomSheetListener.OnAddTask(task_title,task_details);
+                    int task_id=saveTask();
+                    bottomSheetListener.OnAddTask(task_id,task_title,task_details);
                     dismiss();
                 }
             }
@@ -77,12 +77,21 @@ public class AddNewTaskBottomSheet extends BottomSheetDialogFragment {
 
         return bottomSheetView;
     }
-    private void saveTask(){
+    private int saveTask(){
+        int id;
+        long returnedId;
         SQLiteDatabase database=conn.getWritableDatabase();
-        String sql="INSERT INTO "+ TasksUtilities.TABLE_NAME +"("+TasksUtilities.COLUMN_TASK_TITLE+","+TasksUtilities.COLUMN_TASK_DETAILS+") VALUES ('"+task_title+"','"+task_details+"')";
+        ContentValues values=new ContentValues();
 
-        database.execSQL(sql);
+        //String sql="INSERT INTO "+ TasksUtilities.TABLE_NAME +"("+TasksUtilities.COLUMN_TASK_TITLE+","+TasksUtilities.COLUMN_TASK_DETAILS+") VALUES ('"+task_title+"','"+task_details+"')";
+        values.put(TasksUtilities.COLUMN_TASK_TITLE,task_title);
+        values.put(TasksUtilities.COLUMN_TASK_DETAILS,task_details);
+
+        returnedId=database.insert(TasksUtilities.TABLE_NAME,TasksUtilities.COLUMN_TASK_ID,values);
+        id=(int) returnedId;
+
         database.close();
+        return id;
     }
 
     /*
@@ -90,7 +99,7 @@ public class AddNewTaskBottomSheet extends BottomSheetDialogFragment {
     * between fragments
     * */
     public interface AddNewTaskBottomSheetListener{
-        void OnAddTask(String task_title,String task_details);
+        void OnAddTask(int task_id,String task_title,String task_details);
     }
 
     @Override
