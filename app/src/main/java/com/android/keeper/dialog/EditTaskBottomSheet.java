@@ -22,6 +22,7 @@ public class EditTaskBottomSheet extends BottomSheetDialogFragment {
     private ImageButton saveTaskButton,deleteTaskButton;
 
     private String old_task_title,old_task_details;
+    private int old_task_id,old_task_position;
 
     @Nullable
     @Override
@@ -41,7 +42,7 @@ public class EditTaskBottomSheet extends BottomSheetDialogFragment {
         saveTaskButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                bottomSheetListener.OnSaveEditedTask();
+                bottomSheetListener.OnSaveEditedTask(old_task_id);
                 dismiss();
             }
         });
@@ -49,21 +50,23 @@ public class EditTaskBottomSheet extends BottomSheetDialogFragment {
         deleteTaskButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                bottomSheetListener.OnDeleteSavedTask();
+                bottomSheetListener.OnDeleteSavedTask(old_task_position,old_task_id);
                 dismiss();
             }
         });
         return fragmentView;
     }
 
-    public void setContent(String task_title,String task_details){
+    public void setContent(int position,int task_id,String task_title,String task_details){
+        old_task_position=position;
+        old_task_id=task_id;
         old_task_title=task_title;
         old_task_details=task_details;
     }
 
     public interface EditTaskBottomSheetListener{
-        void OnSaveEditedTask();
-        void OnDeleteSavedTask();
+        void OnSaveEditedTask(int task_id);
+        void OnDeleteSavedTask(int task_position,int task_id);
     }
 
     @Override

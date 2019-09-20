@@ -114,9 +114,8 @@ public class TasksFragment extends Fragment {
                 @Override
                 public void onItemClick(int position) {
                     EditTaskBottomSheet editTaskBottomSheet=new EditTaskBottomSheet();
-                    editTaskBottomSheet.setContent(tasksList.get(position).getTaskTitle(),tasksList.get(position).getTaskDetails());
+                    editTaskBottomSheet.setContent(position,tasksList.get(position).getTaskId(),tasksList.get(position).getTaskTitle(),tasksList.get(position).getTaskDetails());
                     editTaskBottomSheet.show(getFragmentManager(),"ediTaskBottomSheet");
-
                 }
             });
             database.close();
@@ -149,18 +148,32 @@ public class TasksFragment extends Fragment {
         }
 
     }
+
+    private void deleteTask(int task_id){
+        SQLiteDatabase database=conn.getReadableDatabase();
+        database.delete(TasksUtilities.TABLE_NAME,TasksUtilities.COLUMN_TASK_ID+"="+task_id,null);
+        for(int i=0;i<tasksList.size();++i){
+            if(tasksList.get(i).getTaskId()==task_id){
+                tasksList.remove(i);
+            }
+        }
+
+    };
+
     public void OnAddTask(int task_id,String task_title, String task_details){
         tasksList.add(0,new TaskItem(R.drawable.ic_check_box_outline_blank_black_24dp,task_id,task_title,task_details));
         tasksRecAdapter.notifyItemInserted(0);
-        Toast.makeText(getContext(),"ID"+task_id,Toast.LENGTH_SHORT).show();
-        //Snackbar.make(coordinatorLayout,"Task Saved",Snackbar.LENGTH_LONG).show();
+        //Toast.makeText(getContext(),"ID"+task_id,Toast.LENGTH_SHORT).show();
+        Snackbar.make(coordinatorLayout,"Task Saved",Snackbar.LENGTH_LONG).show();
     }
 
     public void OnSaveEditedTask(){
         Snackbar.make(coordinatorLayout,"Task Saved",Snackbar.LENGTH_SHORT).show();
     }
 
-    public void OnDeleteSavedTask(){
-        Snackbar.make(coordinatorLayout,"Task Deleted",Snackbar.LENGTH_SHORT).show();
+    public void OnDeleteSavedTask(int task_position, int task_id){
+        deleteTask(task_id);
+        tasksRecAdapter.notifyItemRemoved(task_position);
+        Snackbar.make(coordinatorLayout,"Task Deleted POs:"+task_position + "ID: "+task_id,Snackbar.LENGTH_SHORT).show();
     }
 }
