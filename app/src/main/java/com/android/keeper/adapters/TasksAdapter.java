@@ -19,6 +19,7 @@ public class TasksAdapter extends RecyclerView.Adapter<TasksAdapter.TasksViewHol
 
     public interface OnItemClickListener{
         void onItemClick(int position);
+        void onDoneTaskClick(int position);
     }
 
     public void setOnItemClickListener(OnItemClickListener listener){
@@ -46,6 +47,17 @@ public class TasksAdapter extends RecyclerView.Adapter<TasksAdapter.TasksViewHol
                         int position=getAdapterPosition();//Get Adapter Position (ItemPosition)
                         if(position!=RecyclerView.NO_POSITION){
                             listener.onItemClick(position);
+                        }
+                    }
+                }
+            });
+            taskImage.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    if(listener !=null){
+                        int position=getAdapterPosition();//Get Adapter Position (ItemPosition)
+                        if(position!=RecyclerView.NO_POSITION){
+                            listener.onDoneTaskClick(position);
                         }
                     }
                 }

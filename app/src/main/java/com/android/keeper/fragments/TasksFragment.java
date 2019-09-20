@@ -84,14 +84,15 @@ public class TasksFragment extends Fragment {
         SQLiteDatabase database=conn.getReadableDatabase();
 
         try {
-            Cursor cursor = database.query(TasksUtilities.TABLE_NAME, columns, selection, null, null, null, TasksUtilities.COLUMN_TASK_ID+" DESC", null);
+            Cursor cursor = database.query(TasksUtilities.TABLE_NAME, columns, selection, null, null, null,
+                    TasksUtilities.COLUMN_TASK_ID+" DESC, "+TasksUtilities.COLUMN_TASK_ID+" ASC", null);
             count= DatabaseUtils.queryNumEntries(database,TasksUtilities.TABLE_NAME);
 
             while(cursor.moveToNext()){
                 if(cursor.getInt(3)==0){
-                    tasksList.add(new TaskItem(R.drawable.ic_check_box_outline_blank_black_24dp,cursor.getInt(0),cursor.getString(1),cursor.getString(2)));
+                    tasksList.add(new TaskItem(R.drawable.ic_check_box_outline_blank_black_24dp,cursor.getInt(0),cursor.getString(1),cursor.getString(2),false));
                 }else if(cursor.getInt(3)==1){
-                    tasksList.add(new TaskItem(R.drawable.ic_check_box_black_24dp,cursor.getInt(0),cursor.getString(1),cursor.getString(2)));
+                    tasksList.add(new TaskItem(R.drawable.ic_check_box_black_24dp,cursor.getInt(0),cursor.getString(1),cursor.getString(2),true));
                 }
             }
 
@@ -117,6 +118,20 @@ public class TasksFragment extends Fragment {
                     EditTaskBottomSheet editTaskBottomSheet=new EditTaskBottomSheet();
                     editTaskBottomSheet.setContent(position,tasksList.get(position).getTaskId(),tasksList.get(position).getTaskTitle(),tasksList.get(position).getTaskDetails());
                     editTaskBottomSheet.show(getFragmentManager(),"ediTaskBottomSheet");
+                }
+
+                @Override
+                public void onDoneTaskClick(int position) {
+                    //FIXME: the value that is returned is completely opposite that the if are comparing
+                    if(tasksList.get(position).isTaskDone()){
+                        //Toast.makeText(getContext(),"WILL BE UNDONE",Toast.LENGTH_SHORT).show();
+                        setTaskUndone(tasksList.get(position).getTaskId());
+                        tasksRecAdapter.notifyItemChanged(position);
+                    }else{
+                        //Toast.makeText(getContext(),"WILL BE DONE",Toast.LENGTH_SHORT).show();
+                        setTaskDone(tasksList.get(position).getTaskId());
+                        tasksRecAdapter.notifyItemChanged(position);
+                    }
                 }
             });
             percentageTasks();
@@ -190,9 +205,45 @@ public class TasksFragment extends Fragment {
 
         database.close();
     }
+    private void setTaskDone(int task_id){
+        SQLiteDatabase database=conn.getWritableDatabase();
+
+        ContentValues values=new ContentValues();
+        values.put(TasksUtilities.COLUMN_TASK_DONE,1);
+
+        database.update(TasksUtilities.TABLE_NAME,values,TasksUtilities.COLUMN_TASK_ID+"="+task_id,null);
+
+        for(int i=0;i<tasksList.size();++i){
+            if(tasksList.get(i).getTaskId()==task_id){
+                tasksList.get(i).setImageResource(R.drawable.ic_check_box_black_24dp);
+                tasksList.get(i).setTaskDone(true);
+            }
+        }
+        percentageTasks();
+        database.close();
+
+    }
+
+    private void setTaskUndone(int task_id){
+        SQLiteDatabase database=conn.getWritableDatabase();
+
+        ContentValues values=new ContentValues();
+        values.put(TasksUtilities.COLUMN_TASK_DONE,0);
+
+        database.update(TasksUtilities.TABLE_NAME,values,TasksUtilities.COLUMN_TASK_ID+"="+task_id,null);
+
+        for(int i=0;i<tasksList.size();++i){
+            if(tasksList.get(i).getTaskId()==task_id){
+                tasksList.get(i).setImageResource(R.drawable.ic_check_box_outline_blank_black_24dp);
+                tasksList.get(i).setTaskDone(false);
+            }
+        }
+        percentageTasks();
+        database.close();
+    }
 
     public void OnAddTask(int task_id,String task_title, String task_details){
-        tasksList.add(0,new TaskItem(R.drawable.ic_check_box_outline_blank_black_24dp,task_id,task_title,task_details));
+        tasksList.add(0,new TaskItem(R.drawable.ic_check_box_outline_blank_black_24dp,task_id,task_title,task_details,false));
         tasksRecAdapter.notifyItemInserted(0);
         //Toast.makeText(getContext(),"ID"+task_id,Toast.LENGTH_SHORT).show();
         percentageTasks();
