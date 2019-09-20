@@ -175,9 +175,11 @@ public class TasksFragment extends Fragment {
     private void editTask(int task_id,String task_title,String task_details){
         SQLiteDatabase database=conn.getReadableDatabase();
 
-        String sql="UPDATE "+TasksUtilities.TABLE_NAME+" SET "+TasksUtilities.COLUMN_TASK_TITLE+"='"+task_title+"',"+TasksUtilities.COLUMN_TASK_DETAILS+"= '"+task_details+
-                "' WHERE "+TasksUtilities.COLUMN_TASK_ID+" = "+task_id;
-        database.execSQL(sql);
+        ContentValues values=new ContentValues();
+        values.put(TasksUtilities.COLUMN_TASK_TITLE,task_title);
+        values.put(TasksUtilities.COLUMN_TASK_DETAILS,task_details);
+
+        database.update(TasksUtilities.TABLE_NAME,values,TasksUtilities.COLUMN_TASK_ID+"="+task_id,null);
 
         for (int i=0;i<tasksList.size();++i){
             if(tasksList.get(i).getTaskId()==task_id){
