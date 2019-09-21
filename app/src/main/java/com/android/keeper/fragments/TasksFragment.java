@@ -257,11 +257,8 @@ public class TasksFragment extends Fragment {
     public void OnAddTask(int task_id,String task_title, String task_details){
         tasksList.add(0,new TaskItem(R.drawable.ic_check_box_outline_blank_black_24dp,task_id,task_title,task_details,false));
         tasksRecAdapter.notifyItemInserted(0);
-        //Toast.makeText(getContext(),"ID"+task_id,Toast.LENGTH_SHORT).show();
         percentageTasks();
         snackbar=Snackbar.make(coordinatorLayout,"Task Saved",Snackbar.LENGTH_LONG);
-        View v=snackbar.getView();
-        v.setBackgroundColor(getResources().getColor(R.color.colorGreen));
         snackbar.show();
     }
 
@@ -269,8 +266,6 @@ public class TasksFragment extends Fragment {
         editTask(task_id,task_title,task_details);
         tasksRecAdapter.notifyItemChanged(task_position);
         snackbar=Snackbar.make(coordinatorLayout,"Task Saved",Snackbar.LENGTH_LONG);
-        /*View v=snackbar.getView();
-        v.setBackgroundColor(getResources().getColor(R.color.colorGreen));*/
         snackbar.show();
     }
 
@@ -279,8 +274,6 @@ public class TasksFragment extends Fragment {
         tasksRecAdapter.notifyItemRemoved(task_position);
         percentageTasks();
         snackbar=Snackbar.make(coordinatorLayout,"Task Deleted",Snackbar.LENGTH_SHORT);
-        /*View v=snackbar.getView();
-        v.setBackgroundColor(getResources().getColor(R.color.colorRed));*/
         snackbar.show();
     }
 }
