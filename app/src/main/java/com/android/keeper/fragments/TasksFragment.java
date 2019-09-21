@@ -269,8 +269,8 @@ public class TasksFragment extends Fragment {
         editTask(task_id,task_title,task_details);
         tasksRecAdapter.notifyItemChanged(task_position);
         snackbar=Snackbar.make(coordinatorLayout,"Task Saved",Snackbar.LENGTH_LONG);
-        View v=snackbar.getView();
-        v.setBackgroundColor(getResources().getColor(R.color.colorGreen));
+        /*View v=snackbar.getView();
+        v.setBackgroundColor(getResources().getColor(R.color.colorGreen));*/
         snackbar.show();
     }
 
@@ -279,8 +279,8 @@ public class TasksFragment extends Fragment {
         tasksRecAdapter.notifyItemRemoved(task_position);
         percentageTasks();
         snackbar=Snackbar.make(coordinatorLayout,"Task Deleted",Snackbar.LENGTH_SHORT);
-        View v=snackbar.getView();
-        v.setBackgroundColor(getResources().getColor(R.color.colorRed));
+        /*View v=snackbar.getView();
+        v.setBackgroundColor(getResources().getColor(R.color.colorRed));*/
         snackbar.show();
     }
 }
