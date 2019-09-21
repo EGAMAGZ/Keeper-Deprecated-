@@ -1,5 +1,6 @@
 package com.android.keeper;
 
+import android.app.DatePickerDialog;
 import android.content.Intent;
 import android.support.annotation.NonNull;
 import android.support.design.internal.NavigationMenuItemView;
@@ -14,6 +15,7 @@ import android.support.v7.widget.SearchView;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.DatePicker;
 import android.widget.Toast;
 
 import com.android.keeper.dialog.AddNewTaskBottomSheet;
@@ -23,7 +25,8 @@ import com.android.keeper.fragments.RemindersFragment;
 import com.android.keeper.fragments.TasksFragment;
 import com.android.keeper.localdb.SQLiteConnection;
 
-public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener, AddNewTaskBottomSheet.AddNewTaskBottomSheetListener, EditTaskBottomSheet.EditTaskBottomSheetListener {
+public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener, AddNewTaskBottomSheet.AddNewTaskBottomSheetListener, EditTaskBottomSheet.EditTaskBottomSheetListener,
+        DatePickerDialog.OnDateSetListener {
 
     private TasksFragment tasksFragment;
     private DrawerLayout drawer;
@@ -126,6 +129,12 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     /*
      * Fragment Listeners
      * */
+
+    @Override
+    public void onDateSet(DatePicker datePicker, int year, int month, int dayOfMonth) {
+        Toast.makeText(getApplicationContext(),"year:"+year,Toast.LENGTH_SHORT).show();
+    }
+
     //AddNewTaskBottomSheet
     @Override
     public void OnAddTask(int task_id,String task_title, String task_details) {

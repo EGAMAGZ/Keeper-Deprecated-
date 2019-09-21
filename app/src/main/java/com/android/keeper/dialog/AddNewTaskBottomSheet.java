@@ -7,6 +7,7 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.design.widget.BottomSheetDialogFragment;
+import android.support.v4.app.DialogFragment;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -23,7 +24,7 @@ public class AddNewTaskBottomSheet extends BottomSheetDialogFragment {
 
     public AddNewTaskBottomSheetListener bottomSheetListener;
     private View bottomSheetView;
-    private ImageButton addDetailsButton,saveTaskButton;
+    private ImageButton addDetailsButton,addDateButton,saveTaskButton;
     private EditText titleEditText,descriptionEditText;
     private SQLiteConnection conn;
 
@@ -36,6 +37,7 @@ public class AddNewTaskBottomSheet extends BottomSheetDialogFragment {
         conn=new SQLiteConnection(getContext(),"keeper_db",null,1);
 
         addDetailsButton=bottomSheetView.findViewById(R.id.task_add_details);
+        addDateButton=bottomSheetView.findViewById(R.id.task_add_date);
         saveTaskButton=bottomSheetView.findViewById(R.id.task_save);
 
         descriptionEditText=bottomSheetView.findViewById(R.id.task_details);
@@ -47,13 +49,17 @@ public class AddNewTaskBottomSheet extends BottomSheetDialogFragment {
                 if(descriptionEditText.getVisibility()==View.INVISIBLE){
                     descriptionEditText.setVisibility(View.VISIBLE);
                 }
-                /*else if(descriptionEditText.getVisibility()==View.VISIBLE){
-                    descriptionEditText.setText("");
-                    descriptionEditText.setVisibility(View.INVISIBLE);
-                }*/
             }
         });
 
+
+        addDateButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                DialogFragment datePicker=new DatePickerDialogFragment();
+                datePicker.show(getFragmentManager(),"date picker");
+            }
+        });
         saveTaskButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -71,7 +77,6 @@ public class AddNewTaskBottomSheet extends BottomSheetDialogFragment {
                 }
             }
         });
-
 
         //TODO: Add onClickListener when date is added, and also the storage of the date in the database
 
