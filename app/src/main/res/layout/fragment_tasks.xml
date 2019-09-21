@@ -5,7 +5,6 @@
     android:id="@+id/task_fragment_container"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
-
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
@@ -17,8 +16,8 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             style="?android:attr/progressBarStyleHorizontal"
-            android:paddingLeft="10dp"
-            android:paddingRight="10dp"/>
+            android:paddingLeft="15dp"
+            android:paddingRight="15dp"/>
 
         <TextView
             android:id="@+id/task_progress_percentage"
@@ -38,8 +37,13 @@
             android:padding="8dp"
             android:scrollbars="vertical"/>
 
-
     </LinearLayout>
+
+    <android.support.design.widget.CoordinatorLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/task_snackbar_container"/>
+
         <android.support.design.bottomappbar.BottomAppBar
             android:layout_width="match_parent"
             android:layout_height="56dp"
@@ -59,4 +63,5 @@
             app:fabSize="normal"
             android:clickable="true"
             app:srcCompat="@drawable/ic_add_white_24dp"/>
+
 </android.support.design.widget.CoordinatorLayout>

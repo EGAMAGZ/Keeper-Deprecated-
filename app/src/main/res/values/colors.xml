@@ -8,4 +8,8 @@
     <color name="secondaryColor">#C9D4C5</color>
     <color name="thirdColor">#062639</color>
     <color name="extraColor">#E7301C</color>
+
+    <color name="colorRed">#AA2447</color>
+    <color name="colorGreen">#275A53</color>
+    <!--<color name="colorRed">#F6404F</color>-->
 </resources>

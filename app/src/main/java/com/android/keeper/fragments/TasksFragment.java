@@ -45,6 +45,7 @@ public class TasksFragment extends Fragment {
     private TextView TaskPercentage;
     private RecyclerView tasksRecyclerView;
     private TasksAdapter tasksRecAdapter;
+    private Snackbar snackbar;
     //private RecyclerView.Adapter tasksRecAdapter;
     private RecyclerView.LayoutManager tasksLayoutManager;
 
@@ -54,6 +55,7 @@ public class TasksFragment extends Fragment {
         FragmentView=inflater.inflate(R.layout.fragment_tasks,container,false);
 
         coordinatorLayout=FragmentView.findViewById(R.id.task_fragment_container);
+        //coordinatorLayout=FragmentView.findViewById(R.id.task_snackbar_container);
 
         tasksRecyclerView=FragmentView.findViewById(R.id.tasks_recyclerview);
         tasksLayoutManager=new LinearLayoutManager(getContext());
@@ -121,7 +123,7 @@ public class TasksFragment extends Fragment {
 
                 @Override
                 public void onDoneTaskClick(int position) {
-                    //FIXME: the value that is returned is completely opposite that the if are comparing
+                    //TODO: Show snackbar with undo action for the both status that the task could have(EX: setTaskDone -> setTaskUndone)
                     if(tasksList.get(position).isTaskDone()){
                         setTaskUndone(tasksList.get(position).getTaskId());
                         tasksRecAdapter.notifyItemChanged(position);
@@ -257,19 +259,28 @@ public class TasksFragment extends Fragment {
         tasksRecAdapter.notifyItemInserted(0);
         //Toast.makeText(getContext(),"ID"+task_id,Toast.LENGTH_SHORT).show();
         percentageTasks();
-        Snackbar.make(coordinatorLayout,"Task Saved",Snackbar.LENGTH_LONG).show();
+        snackbar=Snackbar.make(coordinatorLayout,"Task Saved",Snackbar.LENGTH_LONG);
+        View v=snackbar.getView();
+        v.setBackgroundColor(getResources().getColor(R.color.colorGreen));
+        snackbar.show();
     }
 
     public void OnSaveEditedTask(int task_position, int task_id,String task_title,String task_details){
         editTask(task_id,task_title,task_details);
         tasksRecAdapter.notifyItemChanged(task_position);
-        Snackbar.make(coordinatorLayout,"Task Saved",Snackbar.LENGTH_SHORT).show();
+        snackbar=Snackbar.make(coordinatorLayout,"Task Saved",Snackbar.LENGTH_LONG);
+        View v=snackbar.getView();
+        v.setBackgroundColor(getResources().getColor(R.color.colorGreen));
+        snackbar.show();
     }
 
     public void OnDeleteSavedTask(int task_position, int task_id){
         deleteTask(task_id);
         tasksRecAdapter.notifyItemRemoved(task_position);
         percentageTasks();
-        Snackbar.make(coordinatorLayout,"Task Deleted",Snackbar.LENGTH_SHORT).show();
+        snackbar=Snackbar.make(coordinatorLayout,"Task Deleted",Snackbar.LENGTH_SHORT);
+        View v=snackbar.getView();
+        v.setBackgroundColor(getResources().getColor(R.color.colorRed));
+        snackbar.show();
     }
 }
