@@ -1,10 +1,12 @@
 package com.android.keeper;
 
 import android.app.DatePickerDialog;
+import android.app.TimePickerDialog;
 import android.content.Intent;
 import android.support.annotation.NonNull;
 import android.support.design.internal.NavigationMenuItemView;
 import android.support.design.widget.NavigationView;
+import android.support.v4.app.DialogFragment;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
@@ -16,17 +18,19 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.DatePicker;
+import android.widget.TimePicker;
 import android.widget.Toast;
 
 import com.android.keeper.dialog.AddNewTaskBottomSheet;
 import com.android.keeper.dialog.EditTaskBottomSheet;
+import com.android.keeper.dialog.TimePickerDialogFragment;
 import com.android.keeper.fragments.NotesFragment;
 import com.android.keeper.fragments.RemindersFragment;
 import com.android.keeper.fragments.TasksFragment;
 import com.android.keeper.localdb.SQLiteConnection;
 
-public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener, AddNewTaskBottomSheet.AddNewTaskBottomSheetListener, EditTaskBottomSheet.EditTaskBottomSheetListener,
-        DatePickerDialog.OnDateSetListener {
+public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener, AddNewTaskBottomSheet.AddNewTaskBottomSheetListener,
+        EditTaskBottomSheet.EditTaskBottomSheetListener, DatePickerDialog.OnDateSetListener, TimePickerDialog.OnTimeSetListener {
 
     private TasksFragment tasksFragment;
     private DrawerLayout drawer;
@@ -34,6 +38,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     private Toast backToast;
 
     private long backPressedTime;
+    private int selected_year,selected_month,selected_dayOfMonth,selected_hourOfDay,selected_minute;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -132,13 +137,26 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
     @Override
     public void onDateSet(DatePicker datePicker, int year, int month, int dayOfMonth) {
+        selected_year=year;
+        selected_month=month;
+        selected_dayOfMonth=dayOfMonth;
         Toast.makeText(getApplicationContext(),"year:"+year,Toast.LENGTH_SHORT).show();
+        DialogFragment timePicker=new TimePickerDialogFragment();
+        timePicker.show(getSupportFragmentManager(),"time picker");
+    }
+
+    @Override
+    public void onTimeSet(TimePicker timePicker, int hourOfDay, int minute) {
+        selected_hourOfDay=hourOfDay;
+        selected_minute=minute;
+
+        Toast.makeText(getApplicationContext(),"Hour"+hourOfDay,Toast.LENGTH_SHORT).show();
     }
 
     //AddNewTaskBottomSheet
     @Override
     public void OnAddTask(int task_id,String task_title, String task_details) {
-        tasksFragment.OnAddTask(task_id,task_title,task_details);
+        tasksFragment.OnAddTask(task_id,task_title,task_details,selected_year,selected_month,selected_dayOfMonth);
     }
     //EdiTaskBottomSheet
     @Override
