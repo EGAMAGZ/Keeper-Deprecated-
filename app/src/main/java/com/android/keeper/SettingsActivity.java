@@ -1,16 +1,23 @@
 package com.android.keeper;
 
+import android.content.Context;
+import android.content.SharedPreferences;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
+import android.widget.Spinner;
 
 public class SettingsActivity extends AppCompatActivity {
+
+    private Spinner ClockFormat;
+    private SharedPreferences sharedPreferences;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_settings);
+        sharedPreferences=getSharedPreferences("keeper_settings", Context.MODE_PRIVATE);
 
         Toolbar toolbar=findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
@@ -18,5 +25,7 @@ public class SettingsActivity extends AppCompatActivity {
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         getWindow().setStatusBarColor(ContextCompat.getColor(this,R.color.thirdColor));
+
+        ClockFormat=(Spinner) findViewById(R.id.settings_clock_format_spinner);
     }
 }
