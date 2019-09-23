@@ -6,15 +6,18 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Filter;
+import android.widget.Filterable;
 import android.widget.TextView;
 import android.widget.ImageView;
 
 import com.android.keeper.R;
 import com.android.keeper.recycle_items.TaskItem;
 
-public class TasksAdapter extends RecyclerView.Adapter<TasksAdapter.TasksViewHolder> {
+public class TasksAdapter extends RecyclerView.Adapter<TasksAdapter.TasksViewHolder>  implements Filterable {
 
     private ArrayList<TaskItem> tasksList;
+    private ArrayList<TaskItem> taskListFull;
     private OnItemClickListener itemClickListener;
 
     public interface OnItemClickListener{
@@ -67,6 +70,7 @@ public class TasksAdapter extends RecyclerView.Adapter<TasksAdapter.TasksViewHol
 
     public TasksAdapter(ArrayList<TaskItem> tasksList){
         this.tasksList=tasksList;
+        taskListFull=new ArrayList<>(tasksList);
     }
 
     @NonNull
@@ -98,4 +102,40 @@ public class TasksAdapter extends RecyclerView.Adapter<TasksAdapter.TasksViewHol
         return tasksList.size();
     }
 
+    @Override
+    public Filter getFilter() {
+        return taskListFilter;
+    }
+
+    private Filter taskListFilter=new Filter(){
+
+        @Override
+        protected FilterResults performFiltering(CharSequence constraint) {
+            ArrayList<TaskItem> filteredList=new ArrayList<TaskItem>();
+
+            if(constraint == null || constraint.length() == 0){
+                filteredList.addAll(taskListFull);
+            }else{
+                String filterpattern= constraint.toString().toLowerCase().trim();
+
+                for(TaskItem item: taskListFull){
+                    if(item.getTaskTitle().toLowerCase().contains(filterpattern)){
+                        filteredList.add(item);
+                    }
+                }
+            }
+
+            FilterResults results=new FilterResults();
+            results.values= filteredList;
+
+            return results;
+        }
+
+        @Override
+        protected void publishResults(CharSequence constraint, FilterResults results) {
+            tasksList.clear();
+            tasksList.addAll((ArrayList)results.values);
+            notifyDataSetChanged();
+        }
+    };
 }

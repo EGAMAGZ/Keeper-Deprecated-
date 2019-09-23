@@ -7,6 +7,8 @@ import android.support.annotation.NonNull;
 import android.support.design.internal.NavigationMenuItemView;
 import android.support.design.widget.NavigationView;
 import android.support.v4.app.DialogFragment;
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
@@ -17,10 +19,12 @@ import android.support.v7.widget.SearchView;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.inputmethod.EditorInfo;
 import android.widget.DatePicker;
 import android.widget.TimePicker;
 import android.widget.Toast;
 
+import com.android.keeper.adapters.TasksAdapter;
 import com.android.keeper.dialog.AddNewTaskBottomSheet;
 import com.android.keeper.dialog.EditTaskBottomSheet;
 import com.android.keeper.dialog.TimePickerDialogFragment;
@@ -90,16 +94,16 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         NavigationMenuItemView navigationMenuItemView;
         switch(menuItem.getItemId()){
             case R.id.nav_notes:
-                getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container,new NotesFragment()).commit();
+                getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container,new NotesFragment(),"notes_fragment").commit();
                 //toolbar.setTitle("Keeper: Notes");
                 break;
             case R.id.nav_reminders:
-                getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container,new RemindersFragment()).commit();
+                getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container,new RemindersFragment(),"reminders_fragment").commit();
                 //toolbar.setTitle("Keeper: Reminders");
                 break;
             case R.id.nav_tasks:
                 tasksFragment=new TasksFragment();
-                getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container,tasksFragment).commit();
+                getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container,tasksFragment,"tasks_fragment").commit();
                 //toolbar.setTitle("Keeper: Tasks");
                 break;
             case R.id.nav_settings:
@@ -118,6 +122,25 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
         MenuItem searchItem=menu.findItem(R.id.toolbar_search);
         SearchView searchView=(SearchView) searchItem.getActionView();
+
+        searchView.setImeOptions(EditorInfo.IME_ACTION_DONE);
+
+        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+            @Override
+            public boolean onQueryTextSubmit(String s) {
+                return false;
+            }
+
+            @Override
+            public boolean onQueryTextChange(String newText) {
+                FragmentManager fragmentManager=getSupportFragmentManager();
+                Fragment currentFragment=fragmentManager.findFragmentById(R.id.fragment_container);
+                if(currentFragment.getTag().equals("tasks_fragment")){
+                    tasksFragment.OnFilterTask(newText);
+                }
+                return false;
+            }
+        });
         return true;
     }
 
@@ -135,16 +158,17 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
      * Fragment Listeners
      * */
 
+    //DatePicker
     @Override
     public void onDateSet(DatePicker datePicker, int year, int month, int dayOfMonth) {
         selected_year=year;
         selected_month=month;
         selected_dayOfMonth=dayOfMonth;
-        Toast.makeText(getApplicationContext(),"year:"+year,Toast.LENGTH_SHORT).show();
         DialogFragment timePicker=new TimePickerDialogFragment();
         timePicker.show(getSupportFragmentManager(),"time picker");
     }
 
+    //TimePicker
     @Override
     public void onTimeSet(TimePicker timePicker, int hourOfDay, int minute) {
         selected_hourOfDay=hourOfDay;

@@ -255,10 +255,13 @@ public class TasksFragment extends Fragment {
     }
 
     public void OnAddTask(int task_id,String task_title, String task_details,int selected_year, int selected_month, int selected_dayOfMonth){
+        if(selected_year==0 && selected_month==0 && selected_dayOfMonth==0){
+            Toast.makeText(getContext(),"Year:"+selected_year,Toast.LENGTH_SHORT).show();
+        }
         tasksList.add(0,new TaskItem(R.drawable.ic_check_box_outline_blank_black_24dp,task_id,task_title,task_details,false));
         tasksRecAdapter.notifyItemInserted(0);
         percentageTasks();
-        snackbar=Snackbar.make(coordinatorLayout,"Task Saved" + selected_year,Snackbar.LENGTH_LONG);
+        snackbar=Snackbar.make(coordinatorLayout,"Task Saved",Snackbar.LENGTH_LONG);
         snackbar.show();
     }
 
@@ -275,5 +278,9 @@ public class TasksFragment extends Fragment {
         percentageTasks();
         snackbar=Snackbar.make(coordinatorLayout,"Task Deleted",Snackbar.LENGTH_SHORT);
         snackbar.show();
+    }
+
+    public void OnFilterTask(String text){
+        tasksRecAdapter.getFilter().filter(text);
     }
 }
