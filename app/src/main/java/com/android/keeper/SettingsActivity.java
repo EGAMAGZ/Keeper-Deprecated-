@@ -58,7 +58,7 @@ public class SettingsActivity extends AppCompatActivity {
     private void setSettingsOptions(){
         String option;
         clockFormatSpinner=(Spinner) findViewById(R.id.settings_clock_format_spinner);
-        ArrayAdapter<CharSequence> adapter=ArrayAdapter.createFromResource(getApplicationContext(),R.array.clock_format_options,android.R.layout.simple_spinner_item);
+        ArrayAdapter<CharSequence> adapter=ArrayAdapter.createFromResource(getApplicationContext(),R.array.clock_format_options,R.layout.item_spinner);
         clockFormatSpinner.setAdapter(adapter);
         option=sharedPreferences.getString("clock_format","auto");
         switch(option){
