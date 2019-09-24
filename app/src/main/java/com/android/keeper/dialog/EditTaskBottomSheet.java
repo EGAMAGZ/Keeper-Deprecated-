@@ -1,6 +1,7 @@
 package com.android.keeper.dialog;
 
 import android.content.Context;
+import android.content.DialogInterface;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -23,6 +24,7 @@ public class EditTaskBottomSheet extends BottomSheetDialogFragment {
 
     private String old_task_title,old_task_details;
     private int old_task_id,old_task_position;
+    private boolean saveTaskButtonClicked=false;
 
     @Nullable
     @Override
@@ -42,6 +44,7 @@ public class EditTaskBottomSheet extends BottomSheetDialogFragment {
         saveTaskButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                saveTaskButtonClicked=true;
                 if(taskTitleEditText.getText().toString().isEmpty()){
                     Toast.makeText(getContext(),"Task Title is Empty",Toast.LENGTH_SHORT).show();
                 }else{
@@ -61,7 +64,18 @@ public class EditTaskBottomSheet extends BottomSheetDialogFragment {
         return fragmentView;
     }
 
-    public void setContent(int position,int task_id,String task_title,String task_details){
+    @Override
+    public void onDismiss(DialogInterface dialog) {
+        //TODO: MAKE MORE TEST TO THIS METHOD
+        super.onDismiss(dialog);
+        if(taskTitleEditText.getText().toString().isEmpty() || saveTaskButtonClicked){
+            return ;
+        }else{
+            bottomSheetListener.OnSaveEditedTask(old_task_position,old_task_id,taskTitleEditText.getText().toString(),taskDetailsEditText.getText().toString());
+        }
+    }
+
+    public void setContent(int position, int task_id, String task_title, String task_details){
         old_task_position=position;
         old_task_id=task_id;
         old_task_title=task_title;

@@ -2,6 +2,7 @@ package com.android.keeper.dialog;
 
 import android.content.ContentValues;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -29,6 +30,8 @@ public class AddNewTaskBottomSheet extends BottomSheetDialogFragment {
     private SQLiteConnection conn;
 
     private String task_title,task_details;
+    private int task_id;
+    private boolean saveTaskButtonClicked=false;
 
     @Nullable
     @Override
@@ -63,6 +66,7 @@ public class AddNewTaskBottomSheet extends BottomSheetDialogFragment {
         saveTaskButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                saveTaskButtonClicked=true;
                 task_title=titleEditText.getText().toString();
                 if(descriptionEditText.getVisibility()== View.VISIBLE){
                     task_details=descriptionEditText.getText().toString();
@@ -71,7 +75,7 @@ public class AddNewTaskBottomSheet extends BottomSheetDialogFragment {
                 if(task_title.isEmpty()){
                     Toast.makeText(getContext(),"Task Title is Empty",Toast.LENGTH_SHORT).show();
                 }else{
-                    int task_id=saveTask();
+                    task_id=saveTask();
                     bottomSheetListener.OnAddTask(task_id,task_title,task_details);
                     dismiss();
                 }
@@ -82,6 +86,24 @@ public class AddNewTaskBottomSheet extends BottomSheetDialogFragment {
 
         return bottomSheetView;
     }
+
+    @Override
+    public void onDismiss(DialogInterface dialog) {
+        //TODO: MAKE MORE TEST TO THIS METHOD
+        super.onDismiss(dialog);
+        task_title=titleEditText.getText().toString();
+        if(task_title.isEmpty() || saveTaskButtonClicked){
+            return ;
+        }else{
+            if(descriptionEditText.getVisibility()== View.VISIBLE){
+                task_details=descriptionEditText.getText().toString();
+            }else{ task_details="";}
+            task_id=saveTask();
+            bottomSheetListener.OnAddTask(task_id,task_title,task_details);
+            dismiss();
+        }
+    }
+
     private int saveTask(){
         int id;
         long returnedId;

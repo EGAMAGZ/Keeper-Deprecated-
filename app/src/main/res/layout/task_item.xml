@@ -31,18 +31,23 @@
             android:text="Tasks Title"
             android:textColor="@android:color/black"
             android:textSize="20sp"
-            android:textStyle="bold" />
+            android:textStyle="bold"
+            android:maxLength="30"
+            android:ellipsize="marquee"/>
 
         <TextView
             android:id="@+id/task_item_details"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_below="@+id/task_item_title"
+            android:layout_marginStart="8dp"
+            android:layout_toEndOf="@+id/task_item_image"
             android:text="Task Details"
             android:textSize="15sp"
             android:textColor="@android:color/black"
-            android:layout_below="@+id/task_item_title"
-            android:layout_marginStart="8dp"
-            android:layout_toEndOf="@+id/task_item_image"/>
+            android:maxLength="30"
+            android:maxLines="1"
+            android:ellipsize="end"/>
 
     </RelativeLayout>
 
