@@ -18,6 +18,29 @@
         android:textSize="20sp"
         android:textStyle="bold"
         android:inputType="textCapSentences" />
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+        <Button
+            android:id="@+id/task_date"
+            android:layout_width="wrap_content"
+            android:layout_height="36dp"
+            android:layout_marginLeft="15dp"
+            android:text="FECHAs"
+            android:background="@android:color/white"
+            android:visibility="gone"/>
+
+        <ImageButton
+            android:id="@+id/task_delete_date"
+            android:layout_width="36dp"
+            android:layout_height="36dp"
+            android:layout_marginStart="0dp"
+            android:layout_toEndOf="@+id/task_date"
+            android:background="@android:color/white"
+            android:src="@drawable/ic_close_black_24dp"
+            android:visibility="gone"/>
+
+    </RelativeLayout>
 
     <EditText
         android:id="@+id/task_details"
