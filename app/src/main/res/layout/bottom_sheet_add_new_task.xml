@@ -28,6 +28,7 @@
             android:layout_marginLeft="15dp"
             android:text="FECHAs"
             android:background="@android:color/transparent"
+            android:drawableStart="@drawable/ic_event_black_24dp"
             android:visibility="gone"/>
 
         <ImageButton
@@ -47,6 +48,7 @@
             android:layout_below="@+id/task_date"
             android:text="HORA"
             android:background="@android:color/transparent"
+            android:drawableStart="@drawable/ic_alarm_black_24dp"
             android:visibility="gone"/>
 
     </RelativeLayout>
