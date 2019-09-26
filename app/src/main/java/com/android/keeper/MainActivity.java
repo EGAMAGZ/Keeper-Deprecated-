@@ -136,7 +136,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 FragmentManager fragmentManager=getSupportFragmentManager();
                 Fragment currentFragment=fragmentManager.findFragmentById(R.id.fragment_container);
                 if(currentFragment.getTag().equals("tasks_fragment")){
-                    tasksFragment.OnFilterTask(newText);
+                    tasksFragment.FilterTask(newText);
                 }
                 return false;
             }
@@ -174,6 +174,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         selected_hourOfDay=hourOfDay;
         selected_minute=minute;
 
-        Toast.makeText(getApplicationContext(),"Hour"+hourOfDay,Toast.LENGTH_SHORT).show();
+        tasksFragment.setTaskDate(selected_year,selected_month,selected_dayOfMonth,selected_hourOfDay,selected_minute);
     }
 }

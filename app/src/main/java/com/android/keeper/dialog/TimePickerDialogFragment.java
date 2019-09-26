@@ -38,6 +38,5 @@ public class TimePickerDialogFragment extends DialogFragment {
             timePickerDialog= new TimePickerDialog(getActivity(),(TimePickerDialog.OnTimeSetListener) getActivity(),hour,minute,false);
         }
         return timePickerDialog;
-        //return new TimePickerDialog(getActivity(),(TimePickerDialog.OnTimeSetListener) getActivity(),hour,minute, android.text.format.DateFormat.is24HourFormat(getActivity()));
     }
 }

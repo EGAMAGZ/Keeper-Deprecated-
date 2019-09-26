@@ -60,7 +60,8 @@ public class AddNewTaskBottomSheet extends BottomSheetDialogFragment {
         addDateButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-
+                DialogFragment datePicker = new DatePickerDialogFragment();
+                datePicker.show(getFragmentManager(),"date picker");
             }
         });
         saveTaskButton.setOnClickListener(new View.OnClickListener() {
@@ -121,6 +122,10 @@ public class AddNewTaskBottomSheet extends BottomSheetDialogFragment {
         return id;
     }
 
+    public void showTaskDate(int selected_year,int selected_month,int selected_dayOfMonth,int selected_hourOfDay,int selected_minute){
+        Toast.makeText(getContext(),"Task Date Selected",Toast.LENGTH_SHORT).show();
+    }
+
     /*
     * Methods with the porpouse to create communication
     * between fragments
@@ -128,7 +133,6 @@ public class AddNewTaskBottomSheet extends BottomSheetDialogFragment {
     public interface AddNewTaskBottomSheetListener{
         void OnAddTask(int task_id,String task_title,String task_details);
     }
-
 
     public void setBottomSheetListener(AddNewTaskBottomSheetListener listener){
         bottomSheetListener=listener;

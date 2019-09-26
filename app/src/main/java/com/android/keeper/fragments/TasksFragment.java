@@ -279,7 +279,7 @@ public class TasksFragment extends Fragment {
 
     /*
     *
-    * Pseudo-Listeners
+    * Action like Add,Save,Delete tasks
     *
     * */
 
@@ -309,7 +309,15 @@ public class TasksFragment extends Fragment {
         snackbar.show();
     }
 
-    public void OnFilterTask(String text){
+    public void FilterTask(String text){
         tasksRecAdapter.getFilter().filter(text);
+    }
+
+    public void setTaskDate(int selected_year,int selected_month,int selected_dayOfMonth,int selected_hourOfDay,int selected_minute){
+        if(selected_year==0 && selected_month==0 && selected_dayOfMonth==0){
+            Toast.makeText(getContext(),"Year:"+selected_year,Toast.LENGTH_SHORT).show();
+        }else{
+            addNewTaskBottomSheet.showTaskDate(selected_year,selected_month,selected_dayOfMonth,selected_hourOfDay,selected_minute);
+        }
     }
 }
