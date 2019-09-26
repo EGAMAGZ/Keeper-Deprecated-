@@ -27,7 +27,7 @@
             android:layout_height="36dp"
             android:layout_marginLeft="15dp"
             android:text="FECHAs"
-            android:background="@android:color/white"
+            android:background="@android:color/transparent"
             android:visibility="gone"/>
 
         <ImageButton
@@ -36,8 +36,17 @@
             android:layout_height="36dp"
             android:layout_marginStart="0dp"
             android:layout_toEndOf="@+id/task_date"
-            android:background="@android:color/white"
+            android:background="@android:color/transparent"
             android:src="@drawable/ic_close_black_24dp"
+            android:visibility="gone"/>
+        <Button
+            android:id="@+id/task_time"
+            android:layout_width="wrap_content"
+            android:layout_height="36dp"
+            android:layout_marginLeft="15dp"
+            android:layout_below="@+id/task_date"
+            android:text="HORA"
+            android:background="@android:color/transparent"
             android:visibility="gone"/>
 
     </RelativeLayout>

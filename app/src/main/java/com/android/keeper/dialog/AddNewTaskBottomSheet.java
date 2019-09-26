@@ -13,6 +13,7 @@ import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.Toast;
@@ -21,11 +22,15 @@ import com.android.keeper.R;
 import com.android.keeper.localdb.SQLiteConnection;
 import com.android.keeper.localdb.utilities.TasksUtilities;
 
+import java.text.DateFormat;
+import java.util.Calendar;
+
 public class AddNewTaskBottomSheet extends BottomSheetDialogFragment {
 
     public AddNewTaskBottomSheetListener bottomSheetListener;
     private View bottomSheetView;
-    private ImageButton addDetailsButton,addDateButton,saveTaskButton;
+    private ImageButton addDetailsButton,addDateButton,saveTaskButton,deleteTaskDateButton;
+    private Button changeTaskDateButton,changeTaskTimeButton;
     private EditText titleEditText,descriptionEditText;
     private SQLiteConnection conn;
 
@@ -43,6 +48,10 @@ public class AddNewTaskBottomSheet extends BottomSheetDialogFragment {
         addDetailsButton=bottomSheetView.findViewById(R.id.task_add_details);
         addDateButton=bottomSheetView.findViewById(R.id.task_add_date);
         saveTaskButton=bottomSheetView.findViewById(R.id.task_save);
+        deleteTaskDateButton=bottomSheetView.findViewById(R.id.task_delete_date);
+
+        changeTaskDateButton=bottomSheetView.findViewById(R.id.task_date);
+        changeTaskTimeButton=bottomSheetView.findViewById(R.id.task_time);
 
         descriptionEditText=bottomSheetView.findViewById(R.id.task_details);
         titleEditText=bottomSheetView.findViewById(R.id.task_title);
@@ -80,6 +89,16 @@ public class AddNewTaskBottomSheet extends BottomSheetDialogFragment {
                     bottomSheetListener.OnAddTask(task_id,task_title,task_details);
                     dismiss();
                 }
+            }
+        });
+        deleteTaskDateButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                changeTaskDateButton.setText("");
+                changeTaskTimeButton.setText("");
+                deleteTaskDateButton.setVisibility(View.GONE);
+                changeTaskDateButton.setVisibility(View.GONE);
+                changeTaskTimeButton.setVisibility(View.GONE);
             }
         });
 
@@ -122,8 +141,24 @@ public class AddNewTaskBottomSheet extends BottomSheetDialogFragment {
         return id;
     }
 
-    public void showTaskDate(int selected_year,int selected_month,int selected_dayOfMonth,int selected_hourOfDay,int selected_minute){
-        Toast.makeText(getContext(),"Task Date Selected",Toast.LENGTH_SHORT).show();
+    public void showTaskDate(int year,int month,int dayOfMonth,int hourOfDay,int minute){
+        //TODO: Add individual change to date and time
+        //TODO: Create and Assign different methods for each bottom sheet when date and time is chosen
+        if(deleteTaskDateButton.getVisibility()==View.GONE || changeTaskDateButton.getVisibility()==View.GONE){
+            deleteTaskDateButton.setVisibility(View.VISIBLE);
+            changeTaskDateButton.setVisibility(View.VISIBLE);
+            changeTaskTimeButton.setVisibility(View.VISIBLE);
+        }
+
+        Calendar calendar= Calendar.getInstance();
+        calendar.set(Calendar.YEAR,year);
+        calendar.set(Calendar.MONTH,month);
+        calendar.set(Calendar.DAY_OF_MONTH,dayOfMonth);
+
+        String date= DateFormat.getDateInstance(DateFormat.FULL).format(calendar.getTime());
+        changeTaskDateButton.setText(date);
+        changeTaskTimeButton.setText(hourOfDay+":"+minute);
+        Toast.makeText(getContext(),"Task Date Selected"+dayOfMonth,Toast.LENGTH_SHORT).show();
     }
 
     /*

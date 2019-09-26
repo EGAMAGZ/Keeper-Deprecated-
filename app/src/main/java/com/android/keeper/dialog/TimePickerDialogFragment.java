@@ -29,7 +29,6 @@ public class TimePickerDialogFragment extends DialogFragment {
         int hour=calendar.get(Calendar.HOUR_OF_DAY);
         int minute=calendar.get(Calendar.MINUTE);
 
-        //TODO: ADD SETTINGS OPTION THAT WILL ENABLE OR DISABLE MANUALLY(OR AUTOMATIC FROM SYSTEM) THE 24 FORMAT
         if(clockFormat.equals("auto")){
             timePickerDialog= new TimePickerDialog(getActivity(),(TimePickerDialog.OnTimeSetListener) getActivity(),hour,minute,android.text.format.DateFormat.is24HourFormat(getActivity()));
         }else if(clockFormat.equals("24hr")){

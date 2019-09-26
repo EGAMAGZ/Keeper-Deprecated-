@@ -159,7 +159,6 @@ public class TasksFragment extends Fragment {
     }
 
     private void percentageTasks(){
-        //TODO: Make test when someone of them are done
         SQLiteDatabase database=conn.getReadableDatabase();
         int percentage;
         try{
