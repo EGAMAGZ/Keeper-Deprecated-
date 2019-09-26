@@ -26,6 +26,7 @@ import android.widget.Toast;
 
 import com.android.keeper.adapters.TasksAdapter;
 import com.android.keeper.dialog.AddNewTaskBottomSheet;
+import com.android.keeper.dialog.DatePickerDialogFragment;
 import com.android.keeper.dialog.EditTaskBottomSheet;
 import com.android.keeper.dialog.TimePickerDialogFragment;
 import com.android.keeper.fragments.NotesFragment;
@@ -33,8 +34,7 @@ import com.android.keeper.fragments.RemindersFragment;
 import com.android.keeper.fragments.TasksFragment;
 import com.android.keeper.localdb.SQLiteConnection;
 
-public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener, AddNewTaskBottomSheet.AddNewTaskBottomSheetListener,
-        EditTaskBottomSheet.EditTaskBottomSheetListener, DatePickerDialog.OnDateSetListener, TimePickerDialog.OnTimeSetListener {
+public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener, DatePickerDialog.OnDateSetListener, TimePickerDialog.OnTimeSetListener {
 
     private TasksFragment tasksFragment;
     private DrawerLayout drawer;
@@ -175,21 +175,5 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         selected_minute=minute;
 
         Toast.makeText(getApplicationContext(),"Hour"+hourOfDay,Toast.LENGTH_SHORT).show();
-    }
-
-    //AddNewTaskBottomSheet
-    @Override
-    public void OnAddTask(int task_id,String task_title, String task_details) {
-        tasksFragment.OnAddTask(task_id,task_title,task_details,selected_year,selected_month,selected_dayOfMonth);
-    }
-    //EdiTaskBottomSheet
-    @Override
-    public void OnSaveEditedTask(int task_position,int task_id,String task_title,String task_details) {
-        tasksFragment.OnSaveEditedTask(task_position,task_id,task_title,task_details);
-    }
-
-    @Override
-    public void OnDeleteSavedTask(int task_position,int task_id) {
-        tasksFragment.OnDeleteSavedTask(task_position,task_id);
     }
 }

@@ -87,10 +87,7 @@ public class EditTaskBottomSheet extends BottomSheetDialogFragment {
         void OnDeleteSavedTask(int task_position,int task_id);
     }
 
-    @Override
-    public void onAttach(Context context) {
-        super.onAttach(context);
-
-        bottomSheetListener=(EditTaskBottomSheetListener) context;
+    public void setEditTaskBottomSheetListener(EditTaskBottomSheetListener listener){
+        bottomSheetListener=listener;
     }
 }

@@ -33,6 +33,7 @@ public class AddNewTaskBottomSheet extends BottomSheetDialogFragment {
     private int task_id;
     private boolean saveTaskButtonClicked=false;
 
+
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -59,8 +60,7 @@ public class AddNewTaskBottomSheet extends BottomSheetDialogFragment {
         addDateButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                DialogFragment datePicker=new DatePickerDialogFragment();
-                datePicker.show(getFragmentManager(),"date picker");
+
             }
         });
         saveTaskButton.setOnClickListener(new View.OnClickListener() {
@@ -129,10 +129,8 @@ public class AddNewTaskBottomSheet extends BottomSheetDialogFragment {
         void OnAddTask(int task_id,String task_title,String task_details);
     }
 
-    @Override
-    public void onAttach(Context context) {
-        super.onAttach(context);
-        //context: MainActivity
-        bottomSheetListener=(AddNewTaskBottomSheetListener) context;
+
+    public void setBottomSheetListener(AddNewTaskBottomSheetListener listener){
+        bottomSheetListener=listener;
     }
 }

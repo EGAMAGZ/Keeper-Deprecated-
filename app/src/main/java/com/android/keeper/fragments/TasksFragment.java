@@ -48,6 +48,8 @@ public class TasksFragment extends Fragment {
     private Snackbar snackbar;
     //private RecyclerView.Adapter tasksRecAdapter;
     private RecyclerView.LayoutManager tasksLayoutManager;
+    private EditTaskBottomSheet editTaskBottomSheet;
+    private AddNewTaskBottomSheet addNewTaskBottomSheet;
 
     @Nullable
     @Override
@@ -70,7 +72,13 @@ public class TasksFragment extends Fragment {
         AddTaskBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                AddNewTaskBottomSheet addNewTaskBottomSheet=new AddNewTaskBottomSheet();
+                addNewTaskBottomSheet=new AddNewTaskBottomSheet();
+                addNewTaskBottomSheet.setBottomSheetListener(new AddNewTaskBottomSheet.AddNewTaskBottomSheetListener() {
+                    @Override
+                    public void OnAddTask(int task_id, String task_title, String task_details) {
+                        AddTask(task_id,task_title,task_details,1,1,1);
+                    }
+                });
                 addNewTaskBottomSheet.show(getFragmentManager(),"addNewTaskBottomSheet");
             }
         });
@@ -116,8 +124,19 @@ public class TasksFragment extends Fragment {
             tasksRecAdapter.setOnItemClickListener(new TasksAdapter.OnItemClickListener() {
                 @Override
                 public void onItemClick(int position) {
-                    EditTaskBottomSheet editTaskBottomSheet=new EditTaskBottomSheet();
+                    editTaskBottomSheet=new EditTaskBottomSheet();
                     editTaskBottomSheet.setContent(position,tasksList.get(position).getTaskId(),tasksList.get(position).getTaskTitle(),tasksList.get(position).getTaskDetails());
+                    editTaskBottomSheet.setEditTaskBottomSheetListener(new EditTaskBottomSheet.EditTaskBottomSheetListener() {
+                        @Override
+                        public void OnSaveEditedTask(int task_position, int task_id, String task_title, String task_details) {
+                            SaveEditedTask(task_position,task_id,task_title,task_details);
+                        }
+
+                        @Override
+                        public void OnDeleteSavedTask(int task_position, int task_id) {
+                            DeleteSavedTask(task_position,task_id);
+                        }
+                    });
                     editTaskBottomSheet.show(getFragmentManager(),"ediTaskBottomSheet");
                 }
 
@@ -176,6 +195,10 @@ public class TasksFragment extends Fragment {
             return count;
         }
     }
+
+    /*
+    *   Functions related with the interaction with tasks
+    * */
 
     private void deleteTask(int task_id){
         SQLiteDatabase database=conn.getReadableDatabase();
@@ -254,7 +277,13 @@ public class TasksFragment extends Fragment {
         tasksRecAdapter.notifyDataSetChanged();
     }
 
-    public void OnAddTask(int task_id,String task_title, String task_details,int selected_year, int selected_month, int selected_dayOfMonth){
+    /*
+    *
+    * Pseudo-Listeners
+    *
+    * */
+
+    public void AddTask(int task_id,String task_title, String task_details,int selected_year, int selected_month, int selected_dayOfMonth){
         if(selected_year==0 && selected_month==0 && selected_dayOfMonth==0){
             Toast.makeText(getContext(),"Year:"+selected_year,Toast.LENGTH_SHORT).show();
         }
@@ -265,14 +294,14 @@ public class TasksFragment extends Fragment {
         snackbar.show();
     }
 
-    public void OnSaveEditedTask(int task_position, int task_id,String task_title,String task_details){
+    public void SaveEditedTask(int task_position, int task_id,String task_title,String task_details){
         editTask(task_id,task_title,task_details);
         tasksRecAdapter.notifyItemChanged(task_position);
         snackbar=Snackbar.make(coordinatorLayout,"Task Saved",Snackbar.LENGTH_LONG);
         snackbar.show();
     }
 
-    public void OnDeleteSavedTask(int task_position, int task_id){
+    public void DeleteSavedTask(int task_position, int task_id){
         deleteTask(task_id);
         tasksRecAdapter.notifyItemRemoved(task_position);
         percentageTasks();
