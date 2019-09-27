@@ -1,8 +1,11 @@
 package com.android.keeper.dialog;
 
+import android.app.AlarmManager;
+import android.app.PendingIntent;
 import android.content.ContentValues;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -22,6 +25,7 @@ import android.widget.Toast;
 import com.android.keeper.R;
 import com.android.keeper.localdb.SQLiteConnection;
 import com.android.keeper.localdb.utilities.TasksUtilities;
+import com.android.keeper.notifications.AlertReceiver;
 import com.android.keeper.notifications.NotificationHelper;
 
 import java.text.DateFormat;
@@ -38,7 +42,7 @@ public class AddNewTaskBottomSheet extends BottomSheetDialogFragment {
     private NotificationHelper notificationHelper;
 
     private String task_title,task_details;
-    private int task_id;
+    private int task_id,selected_year,selected_month,selected_dayOfMonth,selected_hourOfDay,selected_minute;
     private boolean saveTaskButtonClicked=false;
 
     @Nullable
@@ -47,6 +51,8 @@ public class AddNewTaskBottomSheet extends BottomSheetDialogFragment {
         bottomSheetView=inflater.inflate(R.layout.bottom_sheet_add_new_task,container,false);
         conn=new SQLiteConnection(getContext(),"keeper_db",null,1);
         notificationHelper=new NotificationHelper(getContext());
+
+        selected_year=0;selected_month=0;selected_dayOfMonth=0;selected_hourOfDay=0;selected_minute=0;
 
         addDetailsButton=bottomSheetView.findViewById(R.id.task_add_details);
         addDateButton=bottomSheetView.findViewById(R.id.task_add_date);
@@ -68,7 +74,6 @@ public class AddNewTaskBottomSheet extends BottomSheetDialogFragment {
             }
         });
 
-
         addDateButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -89,7 +94,8 @@ public class AddNewTaskBottomSheet extends BottomSheetDialogFragment {
                     Toast.makeText(getContext(),"Task Title is Empty",Toast.LENGTH_SHORT).show();
                 }else{
                     task_id=saveTask();
-                    showNotifications(task_title,task_details);
+                    //showNotifications(task_title,task_details);
+                    setNotificationAlarm();
                     bottomSheetListener.OnAddTask(task_id,task_title,task_details);
                     dismiss();
                 }
@@ -145,7 +151,7 @@ public class AddNewTaskBottomSheet extends BottomSheetDialogFragment {
         return id;
     }
 
-    public void showTaskDate(int year,int month,int dayOfMonth,int hourOfDay,int minute){
+    public void setTaskDate(int year,int month,int dayOfMonth,int hourOfDay,int minute){
         //TODO: Add individual change to date and time
         //TODO: Create and Assign different methods for each bottom sheet when date and time is chosen
         if(deleteTaskDateButton.getVisibility()==View.GONE || changeTaskDateButton.getVisibility()==View.GONE){
@@ -162,12 +168,36 @@ public class AddNewTaskBottomSheet extends BottomSheetDialogFragment {
         String date= DateFormat.getDateInstance(DateFormat.FULL).format(calendar.getTime());
         changeTaskDateButton.setText(date);
         changeTaskTimeButton.setText(hourOfDay+":"+minute);
-        Toast.makeText(getContext(),"Task Date Selected"+dayOfMonth,Toast.LENGTH_SHORT).show();
+        Toast.makeText(getContext(),"Task Date Selected",Toast.LENGTH_SHORT).show();
+
+        selected_year=year;
+        selected_month=month;
+        selected_dayOfMonth=dayOfMonth;
+        selected_hourOfDay=hourOfDay;
+        selected_minute=minute;
     }
 
-    public void showNotifications(String title, String message){
+    /*public void showNotifications(String title, String message){
         NotificationCompat.Builder nb=notificationHelper.getTaskChannelNotification(title,message);
         notificationHelper.getManager().notify(1,nb.build());
+    }*/
+
+    public void setNotificationAlarm(){
+        if(selected_year==0 && selected_month==0 && selected_dayOfMonth==0){
+            return ;
+        }else{
+            Calendar c=Calendar.getInstance();
+            c.set(Calendar.YEAR,selected_year);
+            c.set(Calendar.MONTH,selected_month);
+            c.set(Calendar.DAY_OF_MONTH,selected_dayOfMonth);
+            c.set(Calendar.HOUR_OF_DAY,selected_hourOfDay);
+            c.set(Calendar.MINUTE,selected_minute);
+            c.set(Calendar.SECOND,0);
+            AlarmManager alarmManager=(AlarmManager) bottomSheetView.getContext().getSystemService(Context.ALARM_SERVICE);
+            Intent intent=new Intent(getContext(), AlertReceiver.class);
+            PendingIntent pendingIntent=PendingIntent.getBroadcast(getContext(),1,intent,0);
+            alarmManager.setExact(AlarmManager.RTC_WAKEUP,c.getTimeInMillis(),pendingIntent);
+        }
     }
 
     /*

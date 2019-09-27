@@ -276,6 +276,14 @@ public class TasksFragment extends Fragment {
         tasksRecAdapter.notifyDataSetChanged();
     }
 
+    public void setTaskDate(int selected_year,int selected_month,int selected_dayOfMonth,int selected_hourOfDay,int selected_minute){
+        if(selected_year==0 && selected_month==0 && selected_dayOfMonth==0){
+            Toast.makeText(getContext(),"Year:"+selected_year,Toast.LENGTH_SHORT).show();
+        }else{
+            addNewTaskBottomSheet.setTaskDate(selected_year,selected_month,selected_dayOfMonth,selected_hourOfDay,selected_minute);
+        }
+    }
+
     /*
     *
     * Action like Add,Save,Delete tasks
@@ -283,14 +291,16 @@ public class TasksFragment extends Fragment {
     * */
 
     public void AddTask(int task_id,String task_title, String task_details,int selected_year, int selected_month, int selected_dayOfMonth){
-        if(selected_year==0 && selected_month==0 && selected_dayOfMonth==0){
-            Toast.makeText(getContext(),"Year:"+selected_year,Toast.LENGTH_SHORT).show();
-        }
         tasksList.add(0,new TaskItem(R.drawable.ic_check_box_outline_blank_black_24dp,task_id,task_title,task_details,false));
         tasksRecAdapter.notifyItemInserted(0);
         percentageTasks();
         snackbar=Snackbar.make(coordinatorLayout,"Task Saved",Snackbar.LENGTH_LONG);
         snackbar.show();
+        if(selected_year==0 && selected_month==0 && selected_dayOfMonth==0){
+            Toast.makeText(getContext(),"Year:"+selected_year,Toast.LENGTH_SHORT).show();
+        }else{
+
+        }
     }
 
     public void SaveEditedTask(int task_position, int task_id,String task_title,String task_details){
@@ -312,11 +322,4 @@ public class TasksFragment extends Fragment {
         tasksRecAdapter.getFilter().filter(text);
     }
 
-    public void setTaskDate(int selected_year,int selected_month,int selected_dayOfMonth,int selected_hourOfDay,int selected_minute){
-        if(selected_year==0 && selected_month==0 && selected_dayOfMonth==0){
-            Toast.makeText(getContext(),"Year:"+selected_year,Toast.LENGTH_SHORT).show();
-        }else{
-            addNewTaskBottomSheet.showTaskDate(selected_year,selected_month,selected_dayOfMonth,selected_hourOfDay,selected_minute);
-        }
-    }
 }

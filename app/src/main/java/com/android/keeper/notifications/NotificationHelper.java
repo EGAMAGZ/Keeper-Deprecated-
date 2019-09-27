@@ -45,10 +45,16 @@ public class NotificationHelper extends ContextWrapper {
         return manager;
     }
 
-    public NotificationCompat.Builder getTaskChannelNotification(String title,String message){
+    /*public NotificationCompat.Builder getTaskChannelNotification(String title,String message){
         return new NotificationCompat.Builder(getApplicationContext(),channelTaskID)
                 .setContentTitle(title)
                 .setContentText(message)
+                .setSmallIcon(R.drawable.ic_check_black_24dp);
+    }*/
+    public NotificationCompat.Builder getTaskChannelNotification() {
+        return new NotificationCompat.Builder(getApplicationContext(), channelTaskID)
+                .setContentTitle("EXAMPLE")
+                .setContentText("THIS IS AN EXAMPLE OF A NOTIFICATION WITH ALERT")
                 .setSmallIcon(R.drawable.ic_check_black_24dp);
     }
 }
