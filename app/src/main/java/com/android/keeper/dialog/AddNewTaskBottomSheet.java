@@ -44,6 +44,7 @@ public class AddNewTaskBottomSheet extends BottomSheetDialogFragment {
     private String task_title,task_details;
     private int task_id,selected_year,selected_month,selected_dayOfMonth,selected_hourOfDay,selected_minute;
     private boolean saveTaskButtonClicked=false;
+    private Calendar calendar;
 
     @Nullable
     @Override
@@ -104,11 +105,7 @@ public class AddNewTaskBottomSheet extends BottomSheetDialogFragment {
         deleteTaskDateButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                changeTaskDateButton.setText("");
-                changeTaskTimeButton.setText("");
-                deleteTaskDateButton.setVisibility(View.GONE);
-                changeTaskDateButton.setVisibility(View.GONE);
-                changeTaskTimeButton.setVisibility(View.GONE);
+                deleteDateFields();
             }
         });
 
@@ -155,12 +152,10 @@ public class AddNewTaskBottomSheet extends BottomSheetDialogFragment {
         //TODO: Add individual change to date and time
         //TODO: Create and Assign different methods for each bottom sheet when date and time is chosen
         if(deleteTaskDateButton.getVisibility()==View.GONE || changeTaskDateButton.getVisibility()==View.GONE){
-            deleteTaskDateButton.setVisibility(View.VISIBLE);
-            changeTaskDateButton.setVisibility(View.VISIBLE);
-            changeTaskTimeButton.setVisibility(View.VISIBLE);
+            showDateFields();
         }
 
-        Calendar calendar= Calendar.getInstance();
+        calendar= Calendar.getInstance();
         calendar.set(Calendar.YEAR,year);
         calendar.set(Calendar.MONTH,month);
         calendar.set(Calendar.DAY_OF_MONTH,dayOfMonth);
@@ -186,18 +181,33 @@ public class AddNewTaskBottomSheet extends BottomSheetDialogFragment {
         if(selected_year==0 && selected_month==0 && selected_dayOfMonth==0){
             return ;
         }else{
-            Calendar c=Calendar.getInstance();
-            c.set(Calendar.YEAR,selected_year);
-            c.set(Calendar.MONTH,selected_month);
-            c.set(Calendar.DAY_OF_MONTH,selected_dayOfMonth);
-            c.set(Calendar.HOUR_OF_DAY,selected_hourOfDay);
-            c.set(Calendar.MINUTE,selected_minute);
-            c.set(Calendar.SECOND,0);
+            calendar=Calendar.getInstance();
+            calendar.set(Calendar.YEAR,selected_year);
+            calendar.set(Calendar.MONTH,selected_month);
+            calendar.set(Calendar.DAY_OF_MONTH,selected_dayOfMonth);
+            calendar.set(Calendar.HOUR_OF_DAY,selected_hourOfDay);
+            calendar.set(Calendar.MINUTE,selected_minute);
+            calendar.set(Calendar.SECOND,0);
+
             AlarmManager alarmManager=(AlarmManager) bottomSheetView.getContext().getSystemService(Context.ALARM_SERVICE);
             Intent intent=new Intent(getContext(), AlertReceiver.class);
             PendingIntent pendingIntent=PendingIntent.getBroadcast(getContext(),1,intent,0);
-            alarmManager.setExact(AlarmManager.RTC_WAKEUP,c.getTimeInMillis(),pendingIntent);
+            alarmManager.setExact(AlarmManager.RTC_WAKEUP,calendar.getTimeInMillis(),pendingIntent);
         }
+    }
+
+    private void showDateFields(){
+        deleteTaskDateButton.setVisibility(View.VISIBLE);
+        changeTaskDateButton.setVisibility(View.VISIBLE);
+        changeTaskTimeButton.setVisibility(View.VISIBLE);
+    }
+
+    private void deleteDateFields(){
+        changeTaskDateButton.setText("");
+        changeTaskTimeButton.setText("");
+        deleteTaskDateButton.setVisibility(View.GONE);
+        changeTaskDateButton.setVisibility(View.GONE);
+        changeTaskTimeButton.setVisibility(View.GONE);
     }
 
     /*
