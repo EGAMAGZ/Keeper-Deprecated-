@@ -13,21 +13,21 @@ import com.android.keeper.R;
 
 public class NotificationHelper extends ContextWrapper {
 
-    public static final String channelTaskID="channelTasks";
-    public static final String channelTasksName="Task Alarm";
-    public static final String channelRemindersID="channelReminders";
-    public static final String channelRemindersName="Channel Reminders";
+    public static String channelTaskID="channelTasks";
+    public static String channelTasksName="Task Alarm";
+    public String channelRemindersID="channelReminders";
+    public String channelRemindersName="Channel Reminders";
 
-    private NotificationManager manager;
+    private static NotificationManager manager;
 
     public NotificationHelper(Context base) {
         super(base);
         if(Build.VERSION.SDK_INT>= Build.VERSION_CODES.O){
-            createChannels();
+            //createChannels();
         }
     }
 
-    @RequiresApi(api = Build.VERSION_CODES.O)
+    /*@RequiresApi(api = Build.VERSION_CODES.O)
     public void createChannels(){
         NotificationChannel tasksChannel=new NotificationChannel(channelTaskID,channelTasksName, NotificationManager.IMPORTANCE_DEFAULT);
         tasksChannel.enableLights(true);
@@ -35,26 +35,29 @@ public class NotificationHelper extends ContextWrapper {
         tasksChannel.setLightColor(R.color.primaryColor);
         tasksChannel.setLockscreenVisibility(Notification.VISIBILITY_PRIVATE);
 
-        getManager().createNotificationChannel(tasksChannel);
-    }
+        //getManager().createNotificationChannel(tasksChannel);
+    }*/
 
     public NotificationManager getManager(){
         if(manager==null){
-            manager=(NotificationManager)getSystemService(Context.NOTIFICATION_SERVICE);
+            manager=(NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
         }
         return manager;
     }
 
-    /*public NotificationCompat.Builder getTaskChannelNotification(String title,String message){
-        return new NotificationCompat.Builder(getApplicationContext(),channelTaskID)
-                .setContentTitle(title)
-                .setContentText(message)
-                .setSmallIcon(R.drawable.ic_check_black_24dp);
-    }*/
-    public NotificationCompat.Builder getTaskChannelNotification() {
-        return new NotificationCompat.Builder(getApplicationContext(), channelTaskID)
-                .setContentTitle("EXAMPLE")
-                .setContentText("THIS IS AN EXAMPLE OF A NOTIFICATION WITH ALERT")
-                .setSmallIcon(R.drawable.ic_check_black_24dp);
+    public Notification getTaskNotification(String title, String content) {
+        /*NotificationCompat.Builder builder = new NotificationCompat.Builder( this, default_notification_channel_id ) ;
+        builder.setContentTitle( "Scheduled Notification" ) ;
+        builder.setContentText(content) ;
+        builder.setSmallIcon(R.drawable. ic_launcher_foreground ) ;
+        builder.setAutoCancel( true ) ;
+        builder.setChannelId( NOTIFICATION_CHANNEL_ID ) ;
+        return builder.build() ;*/
+
+        NotificationCompat.Builder builder=new NotificationCompat.Builder(getApplicationContext(),channelTaskID);
+        builder.setContentTitle(title);
+        builder.setContentText(content);
+        builder.setSmallIcon(R.drawable.ic_check_black_24dp);
+        return builder.build();
     }
 }

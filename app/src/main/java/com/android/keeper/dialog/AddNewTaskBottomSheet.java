@@ -1,6 +1,7 @@
 package com.android.keeper.dialog;
 
 import android.app.AlarmManager;
+import android.app.Notification;
 import android.app.PendingIntent;
 import android.content.ContentValues;
 import android.content.Context;
@@ -12,8 +13,6 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.design.widget.BottomSheetDialogFragment;
 import android.support.v4.app.DialogFragment;
-import android.support.v4.app.Fragment;
-import android.support.v4.app.NotificationCompat;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -49,8 +48,8 @@ public class AddNewTaskBottomSheet extends BottomSheetDialogFragment {
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        bottomSheetView=inflater.inflate(R.layout.bottom_sheet_add_new_task,container,false);
-        conn=new SQLiteConnection(getContext(),"keeper_db",null,1);
+        bottomSheetView = inflater.inflate(R.layout.bottom_sheet_add_new_task, container, false);
+        conn = new SQLiteConnection(getContext(), "keeper_db", null, 1);
         notificationHelper=new NotificationHelper(getContext());
 
         selected_year=0;selected_month=0;selected_dayOfMonth=0;selected_hourOfDay=0;selected_minute=0;
@@ -95,8 +94,7 @@ public class AddNewTaskBottomSheet extends BottomSheetDialogFragment {
                     Toast.makeText(getContext(),"Task Title is Empty",Toast.LENGTH_SHORT).show();
                 }else{
                     task_id=saveTask();
-                    //showNotifications(task_title,task_details);
-                    setNotificationAlarm();
+                    //setNotificationAlarm(notificationHelper.getTaskNotification(task_title,task_details));
                     bottomSheetListener.OnAddTask(task_id,task_title,task_details);
                     dismiss();
                 }
@@ -172,12 +170,13 @@ public class AddNewTaskBottomSheet extends BottomSheetDialogFragment {
         selected_minute=minute;
     }
 
-    /*public void showNotifications(String title, String message){
-        NotificationCompat.Builder nb=notificationHelper.getTaskChannelNotification(title,message);
+    /*public void showNotifications(){
+        //NotificationCompat.Builder nb=notificationHelper.getTaskChannelNotification(title,message);
+        NotificationCompat.Builder nb=notificationHelper.getTaskChannelNotification();
         notificationHelper.getManager().notify(1,nb.build());
     }*/
 
-    public void setNotificationAlarm(){
+    public void setNotificationAlarm(Notification notification){
         if(selected_year==0 && selected_month==0 && selected_dayOfMonth==0){
             return ;
         }else{
@@ -190,7 +189,13 @@ public class AddNewTaskBottomSheet extends BottomSheetDialogFragment {
             calendar.set(Calendar.SECOND,0);
 
             AlarmManager alarmManager=(AlarmManager) bottomSheetView.getContext().getSystemService(Context.ALARM_SERVICE);
+
             Intent intent=new Intent(getContext(), AlertReceiver.class);
+            intent.putExtra(AlertReceiver.NOTIFICATION_ID , 1 ) ;
+            intent.putExtra(AlertReceiver.NOTIFICATION,notification);
+            intent.putExtra(AlertReceiver.NOTIFICATION_CHANNEL_ID,NotificationHelper.channelTaskID);
+            intent.putExtra(AlertReceiver.NOTIFICATION_CHANNEL_NAME,NotificationHelper.channelTasksName);
+
             PendingIntent pendingIntent=PendingIntent.getBroadcast(getContext(),1,intent,0);
             alarmManager.setExact(AlarmManager.RTC_WAKEUP,calendar.getTimeInMillis(),pendingIntent);
         }
