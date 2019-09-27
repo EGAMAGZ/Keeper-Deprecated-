@@ -10,6 +10,7 @@ import android.support.annotation.Nullable;
 import android.support.design.widget.BottomSheetDialogFragment;
 import android.support.v4.app.DialogFragment;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.NotificationCompat;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -21,6 +22,7 @@ import android.widget.Toast;
 import com.android.keeper.R;
 import com.android.keeper.localdb.SQLiteConnection;
 import com.android.keeper.localdb.utilities.TasksUtilities;
+import com.android.keeper.notifications.NotificationHelper;
 
 import java.text.DateFormat;
 import java.util.Calendar;
@@ -33,17 +35,18 @@ public class AddNewTaskBottomSheet extends BottomSheetDialogFragment {
     private Button changeTaskDateButton,changeTaskTimeButton;
     private EditText titleEditText,descriptionEditText;
     private SQLiteConnection conn;
+    private NotificationHelper notificationHelper;
 
     private String task_title,task_details;
     private int task_id;
     private boolean saveTaskButtonClicked=false;
-
 
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         bottomSheetView=inflater.inflate(R.layout.bottom_sheet_add_new_task,container,false);
         conn=new SQLiteConnection(getContext(),"keeper_db",null,1);
+        notificationHelper=new NotificationHelper(getContext());
 
         addDetailsButton=bottomSheetView.findViewById(R.id.task_add_details);
         addDateButton=bottomSheetView.findViewById(R.id.task_add_date);
@@ -86,6 +89,7 @@ public class AddNewTaskBottomSheet extends BottomSheetDialogFragment {
                     Toast.makeText(getContext(),"Task Title is Empty",Toast.LENGTH_SHORT).show();
                 }else{
                     task_id=saveTask();
+                    showNotifications(task_title,task_details);
                     bottomSheetListener.OnAddTask(task_id,task_title,task_details);
                     dismiss();
                 }
@@ -159,6 +163,11 @@ public class AddNewTaskBottomSheet extends BottomSheetDialogFragment {
         changeTaskDateButton.setText(date);
         changeTaskTimeButton.setText(hourOfDay+":"+minute);
         Toast.makeText(getContext(),"Task Date Selected"+dayOfMonth,Toast.LENGTH_SHORT).show();
+    }
+
+    public void showNotifications(String title, String message){
+        NotificationCompat.Builder nb=notificationHelper.getTaskChannelNotification(title,message);
+        notificationHelper.getManager().notify(1,nb.build());
     }
 
     /*
