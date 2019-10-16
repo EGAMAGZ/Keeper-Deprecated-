@@ -114,19 +114,8 @@ public class AddNewTaskBottomSheet extends BottomSheetDialogFragment {
 
     @Override
     public void onDismiss(DialogInterface dialog) {
-        //TODO: MAKE MORE TEST TO THIS METHOD
         super.onDismiss(dialog);
-        task_title=titleEditText.getText().toString();
-        if(task_title.isEmpty() || saveTaskButtonClicked){
-            return ;
-        }else{
-            if(descriptionEditText.getVisibility()== View.VISIBLE){
-                task_details=descriptionEditText.getText().toString();
-            }else{ task_details="";}
-            task_id=saveTask();
-            bottomSheetListener.OnAddTask(task_id,task_title,task_details);
-            dismiss();
-        }
+
     }
 
     private int saveTask(){

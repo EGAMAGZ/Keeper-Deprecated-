@@ -82,7 +82,7 @@
         <android.support.design.bottomappbar.BottomAppBar
             android:layout_width="match_parent"
             android:layout_height="56dp"
-            android:id="@+id/botombar"
+            android:id="@+id/bottombar"
             android:layout_gravity="bottom"
             android:backgroundTint="@color/thirdColor"/>
 
@@ -92,7 +92,7 @@
             android:layout_height="wrap_content"
             android:layout_marginEnd="9dp"
             android:layout_marginBottom="0dp"
-            app:layout_anchor="@id/botombar"
+            app:layout_anchor="@id/bottombar"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:fabSize="normal"

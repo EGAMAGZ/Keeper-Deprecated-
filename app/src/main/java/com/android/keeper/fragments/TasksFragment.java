@@ -11,6 +11,7 @@ import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.design.bottomappbar.BottomAppBar;
 import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
@@ -41,6 +42,7 @@ public class TasksFragment extends Fragment {
     private SQLiteConnection conn;
     private View FragmentView;
     private FloatingActionButton AddTaskBtn;
+    private BottomAppBar bottomAppBar;
     private ProgressBar TaskProgressBar;
     private TextView TaskPercentage;
     private RecyclerView tasksRecyclerView;
@@ -57,7 +59,7 @@ public class TasksFragment extends Fragment {
         FragmentView=inflater.inflate(R.layout.fragment_tasks,container,false);
 
         coordinatorLayout=FragmentView.findViewById(R.id.task_fragment_container);
-        //coordinatorLayout=FragmentView.findViewById(R.id.task_snackbar_container);
+        bottomAppBar=FragmentView.findViewById(R.id.bottombar);
 
         tasksRecyclerView=FragmentView.findViewById(R.id.tasks_recyclerview);
         tasksLayoutManager=new LinearLayoutManager(getContext());
@@ -151,6 +153,12 @@ public class TasksFragment extends Fragment {
                         tasksRecAdapter.notifyItemChanged(position);
                     }
                 }
+
+                @Override
+                public void onItemLongClick(int position) {
+                    Toast.makeText(getContext(),"LONG CLICKED "+position,Toast.LENGTH_SHORT).show();
+                    bottomAppBar.setFabAlignmentMode(BottomAppBar.FAB_ALIGNMENT_MODE_END);
+                }
             });
             percentageTasks();
             sortTaskArrayList();
@@ -204,7 +212,8 @@ public class TasksFragment extends Fragment {
         database.delete(TasksUtilities.TABLE_NAME,TasksUtilities.COLUMN_TASK_ID+"="+task_id,null);
         for(int i=0;i<tasksList.size();++i){
             if(tasksList.get(i).getTaskId()==task_id){
-                tasksList.remove(i);
+                tasksList.remove(i); //It is related with the adapter for the elements that are shown
+                tasksRecAdapter.removeItem(i);//It is related with the adapter with the elements for filter
             }
         }
         database.close();
@@ -292,6 +301,7 @@ public class TasksFragment extends Fragment {
 
     public void AddTask(int task_id,String task_title, String task_details,int selected_year, int selected_month, int selected_dayOfMonth){
         tasksList.add(0,new TaskItem(R.drawable.ic_check_box_outline_blank_black_24dp,task_id,task_title,task_details,false));
+        tasksRecAdapter.addItem(0,new TaskItem(R.drawable.ic_check_box_outline_blank_black_24dp,task_id,task_title,task_details,false));
         tasksRecAdapter.notifyItemInserted(0);
         percentageTasks();
         snackbar=Snackbar.make(coordinatorLayout,"Task Saved",Snackbar.LENGTH_LONG);
