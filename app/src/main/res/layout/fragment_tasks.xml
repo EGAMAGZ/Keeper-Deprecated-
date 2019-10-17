@@ -48,6 +48,8 @@
                     android:layout_height="wrap_content"
                     android:layout_below="@+id/task_progress_percentage"
                     android:layout_marginTop="6dp"
+                    android:layout_marginStart="5dp"
+                    android:layout_marginEnd="5dp"
                     android:progress="75" />
 
                 <TextView
@@ -60,6 +62,7 @@
                     android:layout_marginTop="0dp"
                     android:text="Task Complete:"
                     android:textColor="@color/thirdColor"
+                    android:textStyle="bold"
                     android:textSize="20sp"/>
 
             </RelativeLayout>

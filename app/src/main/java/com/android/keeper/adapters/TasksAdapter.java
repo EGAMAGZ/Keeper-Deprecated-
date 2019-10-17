@@ -160,4 +160,14 @@ public class TasksAdapter extends RecyclerView.Adapter<TasksAdapter.TasksViewHol
     public void addItem(int index,TaskItem taskItem){
         taskListFull.add(index,taskItem);
     }
+
+    public void editItem(int id,String task_title,String task_details){
+        //TODO: THIS
+        for (int i=0;i<tasksList.size();++i) {
+            if(taskListFull.get(i).getTaskId()==id){
+                taskListFull.get(i).setTaskTitle(task_title);
+                taskListFull.get(i).setTaskDetails(task_details);
+            }
+        }
+    }
 }

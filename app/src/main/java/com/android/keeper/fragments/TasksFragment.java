@@ -207,12 +207,23 @@ public class TasksFragment extends Fragment {
     *   Functions related with the interaction with tasks
     * */
 
+    public void addTask(int task_id,String task_title, String task_details){
+        //The SQL PART IS AUTO EXECUTED ON ADDNEWTASKBOTTOMSHEET
+
+        //It is related with the adapter for the elements that are shown
+        tasksList.add(0,new TaskItem(R.drawable.ic_check_box_outline_blank_black_24dp,task_id,task_title,task_details,false));
+
+        //It is related with the adapter with the elements for filter
+        tasksRecAdapter.addItem(0,new TaskItem(R.drawable.ic_check_box_outline_blank_black_24dp,task_id,task_title,task_details,false));
+    }
+
     private void deleteTask(int task_id){
         SQLiteDatabase database=conn.getReadableDatabase();
         database.delete(TasksUtilities.TABLE_NAME,TasksUtilities.COLUMN_TASK_ID+"="+task_id,null);
         for(int i=0;i<tasksList.size();++i){
             if(tasksList.get(i).getTaskId()==task_id){
                 tasksList.remove(i); //It is related with the adapter for the elements that are shown
+
                 tasksRecAdapter.removeItem(i);//It is related with the adapter with the elements for filter
             }
         }
@@ -229,11 +240,13 @@ public class TasksFragment extends Fragment {
 
         for (int i=0;i<tasksList.size();++i){
             if(tasksList.get(i).getTaskId()==task_id){
+                //It is related with the adapter for the elements that are shown
                 tasksList.get(i).setTaskTitle(task_title);
                 tasksList.get(i).setTaskDetails(task_details);
+
+                tasksRecAdapter.editItem(task_id,task_title,task_details);//It is related with the adapter with the elements for filter
             }
         }
-
         database.close();
     }
     private void setTaskDone(int task_id){
@@ -250,10 +263,9 @@ public class TasksFragment extends Fragment {
                 tasksList.get(i).setTaskDone(true);
             }
         }
-        percentageTasks();
         sortTaskArrayList();
         database.close();
-
+        percentageTasks();
     }
 
     private void setTaskUndone(int task_id){
@@ -270,9 +282,9 @@ public class TasksFragment extends Fragment {
                 tasksList.get(i).setTaskDone(false);
             }
         }
-        percentageTasks();
         sortTaskArrayList();
         database.close();
+        percentageTasks();
     }
 
     private void sortTaskArrayList(){
@@ -300,10 +312,8 @@ public class TasksFragment extends Fragment {
     * */
 
     public void AddTask(int task_id,String task_title, String task_details,int selected_year, int selected_month, int selected_dayOfMonth){
-        tasksList.add(0,new TaskItem(R.drawable.ic_check_box_outline_blank_black_24dp,task_id,task_title,task_details,false));
-        tasksRecAdapter.addItem(0,new TaskItem(R.drawable.ic_check_box_outline_blank_black_24dp,task_id,task_title,task_details,false));
+        addTask(task_id, task_title, task_details);
         tasksRecAdapter.notifyItemInserted(0);
-        percentageTasks();
         snackbar=Snackbar.make(coordinatorLayout,"Task Saved",Snackbar.LENGTH_LONG);
         snackbar.show();
         if(selected_year==0 && selected_month==0 && selected_dayOfMonth==0){
@@ -311,6 +321,7 @@ public class TasksFragment extends Fragment {
         }else{
 
         }
+        percentageTasks();
     }
 
     public void SaveEditedTask(int task_position, int task_id,String task_title,String task_details){
@@ -323,9 +334,9 @@ public class TasksFragment extends Fragment {
     public void DeleteSavedTask(int task_position, int task_id){
         deleteTask(task_id);
         tasksRecAdapter.notifyItemRemoved(task_position);
-        percentageTasks();
         snackbar=Snackbar.make(coordinatorLayout,"Task Deleted",Snackbar.LENGTH_SHORT);
         snackbar.show();
+        percentageTasks();
     }
 
     public void FilterTask(String text){
