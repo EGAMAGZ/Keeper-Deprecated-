@@ -10,8 +10,12 @@ import android.os.Build;
 import android.support.annotation.RequiresApi;
 import android.support.v4.app.NotificationCompat;
 
+import com.android.keeper.R;
+
 public class AlertReceiver extends BroadcastReceiver {
     private NotificationManager notificationManager;
+    private Notification notification;
+
     public static String NOTIFICATION_ID = "notification-id" ;
     public static String NOTIFICATION = "notification" ;
 
@@ -22,15 +26,20 @@ public class AlertReceiver extends BroadcastReceiver {
     @RequiresApi(api = Build.VERSION_CODES.O)
     public void onReceive(Context context, Intent intent) {
         notificationManager=(NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
-        Notification notification = intent.getParcelableExtra( NOTIFICATION ) ;
-        String channelId=intent.getParcelableExtra(NOTIFICATION_CHANNEL_ID);
-        String channelName=intent.getParcelableExtra(NOTIFICATION_CHANNEL_NAME);
+        notification = intent.getParcelableExtra( NOTIFICATION ) ;
+        String channelId=intent.getStringExtra(NOTIFICATION_CHANNEL_ID);
+        String channelName=intent.getStringExtra(NOTIFICATION_CHANNEL_NAME);
         /*NotificationHelper notificationHelper=new NotificationHelper(context);
         NotificationCompat.Builder nb=notificationHelper.getTaskChannelNotification();
         notificationHelper.getManager().notify(1,nb.build());*/
 
         if (android.os.Build.VERSION. SDK_INT >= android.os.Build.VERSION_CODES. O ) {
             NotificationChannel notificationChannel = new NotificationChannel( channelId , channelName , NotificationManager.IMPORTANCE_DEFAULT) ;
+            notificationChannel.enableLights(true);
+            notificationChannel.enableVibration(true);
+            notificationChannel.setLightColor(R.color.primaryColor);
+            notificationChannel.setLockscreenVisibility(Notification.VISIBILITY_PUBLIC);
+
             assert notificationManager != null;
             notificationManager.createNotificationChannel(notificationChannel) ;
         }

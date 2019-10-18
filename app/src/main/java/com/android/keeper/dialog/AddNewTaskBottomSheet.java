@@ -94,7 +94,7 @@ public class AddNewTaskBottomSheet extends BottomSheetDialogFragment {
                     Toast.makeText(getContext(),"Task Title is Empty",Toast.LENGTH_SHORT).show();
                 }else{
                     task_id=saveTask();
-                    //setNotificationAlarm(notificationHelper.getTaskNotification(task_title,task_details));
+                    setNotificationAlarm(notificationHelper.getTaskNotification(task_title,task_details));
                     bottomSheetListener.OnAddTask(task_id,task_title,task_details);
                     dismiss();
                 }
@@ -166,6 +166,9 @@ public class AddNewTaskBottomSheet extends BottomSheetDialogFragment {
     }*/
 
     public void setNotificationAlarm(Notification notification){
+        //TODO:FIX ERROR THAT SHOW THE SAME CONTENT TO EVERY NOTIFICATION(SOMETIMES)
+        //TODO:ADD METHOD TO DELETE/CANCEL NOTIFICAION
+        //TODO:ADD ARRAYLIST TO STORE DATE(YEAR;MOTH;DAY;HOUR;MINUTE)
         if(selected_year==0 && selected_month==0 && selected_dayOfMonth==0){
             return ;
         }else{
@@ -179,11 +182,14 @@ public class AddNewTaskBottomSheet extends BottomSheetDialogFragment {
 
             AlarmManager alarmManager=(AlarmManager) bottomSheetView.getContext().getSystemService(Context.ALARM_SERVICE);
 
+            String channelTaskID=NotificationHelper.channelTaskID;
+            String channelTaskName=NotificationHelper.channelTasksName;
+
             Intent intent=new Intent(getContext(), AlertReceiver.class);
-            intent.putExtra(AlertReceiver.NOTIFICATION_ID , 1 ) ;
+            intent.putExtra(AlertReceiver.NOTIFICATION_ID , "1" ) ;
             intent.putExtra(AlertReceiver.NOTIFICATION,notification);
-            intent.putExtra(AlertReceiver.NOTIFICATION_CHANNEL_ID,NotificationHelper.channelTaskID);
-            intent.putExtra(AlertReceiver.NOTIFICATION_CHANNEL_NAME,NotificationHelper.channelTasksName);
+            intent.putExtra(AlertReceiver.NOTIFICATION_CHANNEL_ID,channelTaskID);
+            intent.putExtra(AlertReceiver.NOTIFICATION_CHANNEL_NAME,channelTaskName);
 
             PendingIntent pendingIntent=PendingIntent.getBroadcast(getContext(),1,intent,0);
             alarmManager.setExact(AlarmManager.RTC_WAKEUP,calendar.getTimeInMillis(),pendingIntent);

@@ -46,18 +46,12 @@ public class NotificationHelper extends ContextWrapper {
     }
 
     public Notification getTaskNotification(String title, String content) {
-        /*NotificationCompat.Builder builder = new NotificationCompat.Builder( this, default_notification_channel_id ) ;
-        builder.setContentTitle( "Scheduled Notification" ) ;
-        builder.setContentText(content) ;
-        builder.setSmallIcon(R.drawable. ic_launcher_foreground ) ;
-        builder.setAutoCancel( true ) ;
-        builder.setChannelId( NOTIFICATION_CHANNEL_ID ) ;
-        return builder.build() ;*/
-
         NotificationCompat.Builder builder=new NotificationCompat.Builder(getApplicationContext(),channelTaskID);
-        builder.setContentTitle(title);
-        builder.setContentText(content);
-        builder.setSmallIcon(R.drawable.ic_check_black_24dp);
+        builder.setContentTitle(title)
+                .setContentText(content)
+                .setSmallIcon(R.drawable.ic_check_black_24dp)
+                .setPriority(NotificationCompat.PRIORITY_HIGH)
+                .setCategory(NotificationCompat.CATEGORY_MESSAGE);
         return builder.build();
     }
 }
