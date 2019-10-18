@@ -7,7 +7,6 @@ import java.util.Comparator;
 import android.annotation.SuppressLint;
 import android.content.ContentValues;
 import android.database.Cursor;
-import android.database.DatabaseUtils;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -15,12 +14,10 @@ import android.support.annotation.Nullable;
 import android.support.design.bottomappbar.BottomAppBar;
 import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
-import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -62,7 +59,7 @@ public class TasksFragment extends Fragment {
 
     @Nullable
     @Override
-    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+    public View onCreateView(@NonNull final LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         FragmentView=inflater.inflate(R.layout.fragment_tasks,container,false);
 
         risefrombottom= AnimationUtils.loadAnimation(getContext(),R.anim.rise_from_bottom);
@@ -89,7 +86,7 @@ public class TasksFragment extends Fragment {
             @Override
             public void onScrollChange(View view, int scrollX, int scrollY, int oldScrollX, int oldScrollY) {
                 //if(scrollY<=oldScrollY){
-                if(scrollY<oldScrollY){
+                if(scrollY<=oldScrollY){
                     //scrollView up
                     risefrombottom.setAnimationListener(new Animation.AnimationListener() {
                         @Override
@@ -108,7 +105,9 @@ public class TasksFragment extends Fragment {
 
                         }
                     });
-                    bottomAppBar.startAnimation(risefrombottom);
+                    if(bottomAppBar.getVisibility()!=View.VISIBLE){
+                        bottomAppBar.startAnimation(risefrombottom);
+                    }
                 }else{
                     hidetobottom.setAnimationListener(new Animation.AnimationListener() {
                         @Override
@@ -127,7 +126,9 @@ public class TasksFragment extends Fragment {
 
                         }
                     });
-                    bottomAppBar.startAnimation(hidetobottom);
+                    if(bottomAppBar.getVisibility()!=View.GONE){
+                        bottomAppBar.startAnimation(hidetobottom);
+                    }
                 }
             }
         });
@@ -172,13 +173,13 @@ public class TasksFragment extends Fragment {
         catch(IllegalStateException e){
             TaskProgressBar.setProgress(0);
             TaskPercentage.setText(0+"%");
-            Toast.makeText(getContext(),"Error while reading database",Toast.LENGTH_SHORT).show();
+            CustomToast("App Error",R.drawable.ic_close_white_24dp);
         }
         catch(Exception e){
             Log.e("Keeper Error Logger","ERROR:",e);
             TaskProgressBar.setProgress(0);
             TaskPercentage.setText(0+"%");
-            Toast.makeText(getContext(),"Internal Error",Toast.LENGTH_SHORT).show();
+            CustomToast("Internal Error",R.drawable.ic_close_white_24dp);
         }
         finally {
             tasksRecAdapter=new TasksAdapter(tasksList);

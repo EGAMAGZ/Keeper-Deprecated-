@@ -59,7 +59,7 @@
             android:layout_toEndOf="@+id/task_date"
             android:textColor="@color/thirdColor"
             android:background="@color/primaryColor"
-            android:src="@drawable/ic_close_black_24dp"
+            android:src="@drawable/ic_close_white_24dp"
             android:visibility="gone"/>
         <Button
             android:id="@+id/task_time"
