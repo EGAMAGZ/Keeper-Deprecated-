@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 
+import android.annotation.SuppressLint;
 import android.content.ContentValues;
 import android.database.Cursor;
 import android.database.DatabaseUtils;
@@ -19,10 +20,15 @@ import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
+import android.widget.ImageView;
 import android.widget.ProgressBar;
+import android.widget.ScrollView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -46,8 +52,9 @@ public class TasksFragment extends Fragment {
     private ProgressBar TaskProgressBar;
     private TextView TaskPercentage;
     private RecyclerView tasksRecyclerView;
+    private ScrollView scrollView;
     private TasksAdapter tasksRecAdapter;
-    private Snackbar snackbar;
+    private Animation risefrombottom,hidetobottom;
     //private RecyclerView.Adapter tasksRecAdapter;
     private RecyclerView.LayoutManager tasksLayoutManager;
     private EditTaskBottomSheet editTaskBottomSheet;
@@ -58,8 +65,14 @@ public class TasksFragment extends Fragment {
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         FragmentView=inflater.inflate(R.layout.fragment_tasks,container,false);
 
+        risefrombottom= AnimationUtils.loadAnimation(getContext(),R.anim.rise_from_bottom);
+        risefrombottom.setDuration(200);
+        hidetobottom=AnimationUtils.loadAnimation(getContext(),R.anim.hide_to_bottom);
+        hidetobottom.setDuration(200);
+
         coordinatorLayout=FragmentView.findViewById(R.id.task_fragment_container);
         bottomAppBar=FragmentView.findViewById(R.id.bottombar);
+        scrollView=FragmentView.findViewById(R.id.task_scrollview);
 
         tasksRecyclerView=FragmentView.findViewById(R.id.tasks_recyclerview);
         tasksLayoutManager=new LinearLayoutManager(getContext());
@@ -68,9 +81,57 @@ public class TasksFragment extends Fragment {
         TaskProgressBar=(ProgressBar) FragmentView.findViewById(R.id.task_progress_bar);
         TaskPercentage=(TextView) FragmentView.findViewById(R.id.task_progress_percentage);
 
+        AddTaskBtn =(FloatingActionButton) FragmentView.findViewById(R.id.addtask_flt_btn);
         conn=new SQLiteConnection(getContext(),"keeper_db",null,1);
 
-        AddTaskBtn =(FloatingActionButton) FragmentView.findViewById(R.id.addtask_flt_btn);
+        scrollView.setOnScrollChangeListener(new View.OnScrollChangeListener() {
+            @SuppressLint("RestrictedApi")
+            @Override
+            public void onScrollChange(View view, int scrollX, int scrollY, int oldScrollX, int oldScrollY) {
+                //if(scrollY<=oldScrollY){
+                if(scrollY<oldScrollY){
+                    //scrollView up
+                    risefrombottom.setAnimationListener(new Animation.AnimationListener() {
+                        @Override
+                        public void onAnimationStart(Animation animation) {
+
+                        }
+
+                        @Override
+                        public void onAnimationEnd(Animation animation) {
+                            bottomAppBar.setVisibility(View.VISIBLE);
+                            AddTaskBtn.show();
+                        }
+
+                        @Override
+                        public void onAnimationRepeat(Animation animation) {
+
+                        }
+                    });
+                    bottomAppBar.startAnimation(risefrombottom);
+                }else{
+                    hidetobottom.setAnimationListener(new Animation.AnimationListener() {
+                        @Override
+                        public void onAnimationStart(Animation animation) {
+
+                        }
+
+                        @Override
+                        public void onAnimationEnd(Animation animation) {
+                            bottomAppBar.setVisibility(View.GONE);
+                            AddTaskBtn.hide();
+                        }
+
+                        @Override
+                        public void onAnimationRepeat(Animation animation) {
+
+                        }
+                    });
+                    bottomAppBar.startAnimation(hidetobottom);
+                }
+            }
+        });
+
         AddTaskBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -207,7 +268,7 @@ public class TasksFragment extends Fragment {
     *   Functions related with the interaction with tasks
     * */
 
-    public void addTask(int task_id,String task_title, String task_details){
+    private void addTask(int task_id,String task_title, String task_details){
         //The SQL PART IS AUTO EXECUTED ON ADDNEWTASKBOTTOMSHEET
 
         //It is related with the adapter for the elements that are shown
@@ -311,11 +372,10 @@ public class TasksFragment extends Fragment {
     *
     * */
 
-    public void AddTask(int task_id,String task_title, String task_details,int selected_year, int selected_month, int selected_dayOfMonth){
+    private void AddTask(int task_id,String task_title, String task_details,int selected_year, int selected_month, int selected_dayOfMonth){
         addTask(task_id, task_title, task_details);
         tasksRecAdapter.notifyItemInserted(0);
-        snackbar=Snackbar.make(coordinatorLayout,"Task Saved",Snackbar.LENGTH_LONG);
-        snackbar.show();
+        CustomToast("Task added",R.drawable.ic_done_white_24dp);
         if(selected_year==0 && selected_month==0 && selected_dayOfMonth==0){
             Toast.makeText(getContext(),"Year:"+selected_year,Toast.LENGTH_SHORT).show();
         }else{
@@ -324,23 +384,40 @@ public class TasksFragment extends Fragment {
         percentageTasks();
     }
 
-    public void SaveEditedTask(int task_position, int task_id,String task_title,String task_details){
+    private void SaveEditedTask(int task_position, int task_id,String task_title,String task_details){
         editTask(task_id,task_title,task_details);
         tasksRecAdapter.notifyItemChanged(task_position);
-        snackbar=Snackbar.make(coordinatorLayout,"Task Saved",Snackbar.LENGTH_LONG);
-        snackbar.show();
+        //CustomToast("Task saved",R.drawable.ic_done_white_24dp);
     }
 
-    public void DeleteSavedTask(int task_position, int task_id){
+    private void DeleteSavedTask(int task_position, int task_id){
         deleteTask(task_id);
         tasksRecAdapter.notifyItemRemoved(task_position);
-        snackbar=Snackbar.make(coordinatorLayout,"Task Deleted",Snackbar.LENGTH_SHORT);
-        snackbar.show();
+        CustomToast("Task deleted",R.drawable.ic_done_white_24dp);
         percentageTasks();
     }
 
     public void FilterTask(String text){
         tasksRecAdapter.getFilter().filter(text);
+    }
+
+    private void CustomToast(String text,int imageResource){
+        LayoutInflater inflater=getLayoutInflater();
+
+        View layout = inflater.inflate(R.layout.toast_layout, (ViewGroup) FragmentView.findViewById(R.id.toast_root));
+
+        TextView toastText = layout.findViewById(R.id.toast_text);
+        ImageView toastImage = layout.findViewById(R.id.toast_image);
+
+        toastText.setText(text);
+        toastImage.setImageResource(imageResource);
+
+        Toast toast = new Toast(getContext());
+        //toast.setGravity(Gravity.BOTTOM, 0, 0);
+        toast.setDuration(Toast.LENGTH_SHORT);
+        toast.setView(layout);
+
+        toast.show();
     }
 
 }

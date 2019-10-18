@@ -67,14 +67,18 @@
 
             </RelativeLayout>
         </android.support.v7.widget.CardView>
-
-        <android.support.v7.widget.RecyclerView
-            android:id="@+id/tasks_recyclerview"
+        <ScrollView
+            android:id="@+id/task_scrollview"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:padding="10dp"
-            android:scrollbars="vertical"/>
+            android:layout_height="wrap_content">
 
+            <android.support.v7.widget.RecyclerView
+                android:id="@+id/tasks_recyclerview"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:padding="10dp"
+                android:scrollbars="vertical" />
+        </ScrollView>
     </LinearLayout>
 
     <android.support.design.widget.CoordinatorLayout

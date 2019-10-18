@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.v7.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    app:cardCornerRadius="20dp">
+    <RelativeLayout
+        android:id="@+id/toast_root"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/thirdColor"
+        android:padding="8dp">
+
+        <ImageView
+            android:id="@+id/toast_image"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_alignParentEnd="true"
+            android:layout_marginEnd="0dp"
+            android:background="@drawable/bg_toast_ic_circle_orange"
+            android:src="@drawable/ic_done_veish_24dp" />
+
+        <TextView
+            android:id="@+id/toast_text"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentStart="true"
+            android:layout_marginStart="12dp"
+            android:layout_centerVertical="true"
+            android:text="Task saved"
+            android:textColor="@android:color/white"
+            android:textSize="15sp" />
+    </RelativeLayout>
+</android.support.v7.widget.CardView>
