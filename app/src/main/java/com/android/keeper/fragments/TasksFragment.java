@@ -215,11 +215,11 @@ public class TasksFragment extends Fragment {
                     }
                 }
 
-                @Override
+                /*@Override
                 public void onItemLongClick(int position) {
                     Toast.makeText(getContext(),"LONG CLICKED "+position,Toast.LENGTH_SHORT).show();
                     bottomAppBar.setFabAlignmentMode(BottomAppBar.FAB_ALIGNMENT_MODE_END);
-                }
+                }*/
             });
             percentageTasks();
             sortTaskArrayList();

@@ -24,7 +24,7 @@ public class TasksAdapter extends RecyclerView.Adapter<TasksAdapter.TasksViewHol
     public interface OnItemClickListener{
         void onItemClick(int position);
         void onDoneTaskClick(int position);
-        void onItemLongClick(int position);
+        //void onItemLongClick(int position);
     }
 
     public void setOnItemClickListener(OnItemClickListener listener){
@@ -37,11 +37,11 @@ public class TasksAdapter extends RecyclerView.Adapter<TasksAdapter.TasksViewHol
         * */
         public TextView taskTitleTextView,taskDetailsTextView;
         public ImageView taskImage;
-        public View v;
+        //public View v;
 
         public TasksViewHolder(@NonNull View itemView, final OnItemClickListener listener) { //Because this class is static, we need to pass the interface OnItemClickListener
             super(itemView);
-            v=itemView;
+            /*v=itemView;
             itemView.setOnLongClickListener(new View.OnLongClickListener() {
                 @Override
                 public boolean onLongClick(View view) {
@@ -50,7 +50,7 @@ public class TasksAdapter extends RecyclerView.Adapter<TasksAdapter.TasksViewHol
                     //Toast.makeText(v.getContext(),"LONG CLICKED",Toast.LENGTH_SHORT).show();
                     return true;
                 }
-            });
+            });*/
 
             taskTitleTextView=itemView.findViewById(R.id.task_item_title);
             taskDetailsTextView=itemView.findViewById(R.id.task_item_details);
