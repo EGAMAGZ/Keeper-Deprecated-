@@ -19,6 +19,7 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
+import android.widget.RelativeLayout;
 import android.widget.Toast;
 
 import com.android.keeper.R;
@@ -39,10 +40,10 @@ public class AddNewTaskBottomSheet extends BottomSheetDialogFragment {
     private EditText titleEditText,descriptionEditText;
     private SQLiteConnection conn;
     private NotificationHelper notificationHelper;
+    private RelativeLayout taskDateContainer;
 
     private String task_title,task_details;
     private int task_id,selected_year,selected_month,selected_dayOfMonth,selected_hourOfDay,selected_minute;
-    private boolean saveTaskButtonClicked=false;
     private Calendar calendar;
 
     @Nullable
@@ -65,12 +66,15 @@ public class AddNewTaskBottomSheet extends BottomSheetDialogFragment {
         descriptionEditText= fragmentView.findViewById(R.id.task_details);
         titleEditText= fragmentView.findViewById(R.id.task_title);
 
+        taskDateContainer=fragmentView.findViewById(R.id.task_date_container);
+
         addDetailsButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if(descriptionEditText.getVisibility()==View.INVISIBLE){
+                if(descriptionEditText.getVisibility()==View.GONE){
                     descriptionEditText.setVisibility(View.VISIBLE);
                 }
+
             }
         });
 
@@ -79,12 +83,12 @@ public class AddNewTaskBottomSheet extends BottomSheetDialogFragment {
             public void onClick(View view) {
                 DialogFragment datePicker = new DatePickerDialogFragment();
                 datePicker.show(getFragmentManager(),"date picker");
+
             }
         });
         saveTaskButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                saveTaskButtonClicked=true;
                 task_title=titleEditText.getText().toString();
                 if(descriptionEditText.getVisibility()== View.VISIBLE){
                     task_details=descriptionEditText.getText().toString();
@@ -128,11 +132,11 @@ public class AddNewTaskBottomSheet extends BottomSheetDialogFragment {
         values.put(TasksUtilities.COLUMN_TASK_TITLE,task_title);
         values.put(TasksUtilities.COLUMN_TASK_DETAILS,task_details);
         //if(selected_year!=0 && selected_month!=0 && selected_dayOfMonth!=0){
-            values.put(TasksUtilities.COLUMN_TASK_YEAR,selected_year);
-            values.put(TasksUtilities.COLUMN_TASK_MONTH,selected_month);
-            values.put(TasksUtilities.COLUMN_TASK_DAY,selected_dayOfMonth);
-            values.put(TasksUtilities.COLUMN_TASK_HOUR,selected_hourOfDay);
-            values.put(TasksUtilities.COLUMN_TASK_MINUTE,selected_minute);
+        values.put(TasksUtilities.COLUMN_TASK_YEAR,selected_year);
+        values.put(TasksUtilities.COLUMN_TASK_MONTH,selected_month);
+        values.put(TasksUtilities.COLUMN_TASK_DAY,selected_dayOfMonth);
+        values.put(TasksUtilities.COLUMN_TASK_HOUR,selected_hourOfDay);
+        values.put(TasksUtilities.COLUMN_TASK_MINUTE,selected_minute);
 
         returnedId=database.insert(TasksUtilities.TABLE_NAME,TasksUtilities.COLUMN_TASK_ID,values);
         id=(int) returnedId;
@@ -201,6 +205,7 @@ public class AddNewTaskBottomSheet extends BottomSheetDialogFragment {
         deleteTaskDateButton.setVisibility(View.VISIBLE);
         changeTaskDateButton.setVisibility(View.VISIBLE);
         changeTaskTimeButton.setVisibility(View.VISIBLE);
+            taskDateContainer.setVisibility(View.VISIBLE);
     }
 
     private void deleteDateFields(){
@@ -209,6 +214,8 @@ public class AddNewTaskBottomSheet extends BottomSheetDialogFragment {
         deleteTaskDateButton.setVisibility(View.GONE);
         changeTaskDateButton.setVisibility(View.GONE);
         changeTaskTimeButton.setVisibility(View.GONE);
+
+        taskDateContainer.setVisibility(View.GONE);
 
         selected_year=0;selected_month=0;selected_dayOfMonth=0;selected_hourOfDay=0;selected_minute=0;
     }
