@@ -11,6 +11,7 @@ import android.support.design.widget.BottomSheetDialogFragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.Toast;
@@ -19,12 +20,16 @@ import com.android.keeper.R;
 import com.android.keeper.localdb.SQLiteConnection;
 import com.android.keeper.localdb.utilities.TasksUtilities;
 
+import java.text.DateFormat;
+import java.util.Calendar;
+
 public class EditTaskBottomSheet extends BottomSheetDialogFragment {
 
     private EditTaskBottomSheetListener bottomSheetListener;
     private View fragmentView;
     private EditText taskTitleEditText,taskDetailsEditText;
     private ImageButton saveTaskButton,deleteTaskButton;
+    private Button changeTaskDateButton,changeTaskTimeButton;
     private SQLiteConnection conn;
 
     private String old_task_title,old_task_details;
@@ -38,14 +43,17 @@ public class EditTaskBottomSheet extends BottomSheetDialogFragment {
         //selected_year=0;selected_month=0;selected_dayOfMonth=0;selected_hourOfDay=0;selected_minute=0;
         conn = new SQLiteConnection(getContext(), "keeper_db", null, 1);
 
-        loadDate(old_task_id);
+        changeTaskDateButton=fragmentView.findViewById(R.id.task_date);
+        changeTaskTimeButton=fragmentView.findViewById(R.id.task_time);
+
 
         taskTitleEditText=fragmentView.findViewById(R.id.task_title);
         taskDetailsEditText=fragmentView.findViewById(R.id.task_details);
         saveTaskButton=fragmentView.findViewById(R.id.task_save);
         deleteTaskButton=fragmentView.findViewById(R.id.task_delete);
 
-        Toast.makeText(getContext(),selected_year+"/"+selected_month+"/"+selected_dayOfMonth + "__" +selected_hourOfDay+":"+selected_minute,Toast.LENGTH_SHORT).show();
+        loadDate(old_task_id);
+        setDate();
         taskTitleEditText.setText(old_task_title);
         if(!old_task_details.isEmpty()){
             taskDetailsEditText.setText(old_task_details);
@@ -100,6 +108,21 @@ public class EditTaskBottomSheet extends BottomSheetDialogFragment {
 
         database.close();
     }
+
+    private void setDate(){
+        if(selected_year!=0 && selected_month!=0 && selected_dayOfMonth!=0){
+
+            Calendar calendar= Calendar.getInstance();
+            calendar.set(Calendar.YEAR,selected_year);
+            calendar.set(Calendar.MONTH,selected_month);
+            calendar.set(Calendar.DAY_OF_MONTH,selected_dayOfMonth);
+
+            String date= DateFormat.getDateInstance(DateFormat.FULL).format(calendar.getTime());
+            changeTaskDateButton.setText(date);
+            changeTaskTimeButton.setText(selected_hourOfDay+":"+selected_minute);//TODO:ADD A FORMAT FOR TIME
+        }
+    }
+
     public void setContent(int position, int task_id, String task_title, String task_details){
         old_task_position=position;
         old_task_id=task_id;

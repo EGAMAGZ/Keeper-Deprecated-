@@ -155,7 +155,7 @@ public class AddNewTaskBottomSheet extends BottomSheetDialogFragment {
 
         String date= DateFormat.getDateInstance(DateFormat.FULL).format(calendar.getTime());
         changeTaskDateButton.setText(date);
-        changeTaskTimeButton.setText(hourOfDay+":"+minute);
+        changeTaskTimeButton.setText(hourOfDay+":"+minute);//TODO:ADD A FORMAT FOR TIME
         Toast.makeText(getContext(),"Task Date Selected",Toast.LENGTH_SHORT).show();
 
         selected_year=year;
