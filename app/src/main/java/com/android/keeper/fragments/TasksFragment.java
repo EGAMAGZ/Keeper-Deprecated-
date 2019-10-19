@@ -140,7 +140,7 @@ public class TasksFragment extends Fragment {
                 addNewTaskBottomSheet.setBottomSheetListener(new AddNewTaskBottomSheet.AddNewTaskBottomSheetListener() {
                     @Override
                     public void OnAddTask(int task_id, String task_title, String task_details) {
-                        AddTask(task_id,task_title,task_details,1,1,1);
+                        AddTask(task_id,task_title,task_details);
                     }
                 });
                 addNewTaskBottomSheet.show(getFragmentManager(),"addNewTaskBottomSheet");
@@ -292,6 +292,7 @@ public class TasksFragment extends Fragment {
         database.close();
     }
     private void editTask(int task_id,String task_title,String task_details){
+        //TODO: PASS THE SQLITE SECTION TO THE BOTTOMSHEET THAT BELONGS
         SQLiteDatabase database=conn.getReadableDatabase();
 
         ContentValues values=new ContentValues();
@@ -361,7 +362,7 @@ public class TasksFragment extends Fragment {
 
     public void setTaskDate(int selected_year,int selected_month,int selected_dayOfMonth,int selected_hourOfDay,int selected_minute){
         if(selected_year==0 && selected_month==0 && selected_dayOfMonth==0){
-            Toast.makeText(getContext(),"Year:"+selected_year,Toast.LENGTH_SHORT).show();
+            return ;
         }else{
             addNewTaskBottomSheet.setTaskDate(selected_year,selected_month,selected_dayOfMonth,selected_hourOfDay,selected_minute);
         }
@@ -373,15 +374,15 @@ public class TasksFragment extends Fragment {
     *
     * */
 
-    private void AddTask(int task_id,String task_title, String task_details,int selected_year, int selected_month, int selected_dayOfMonth){
+    private void AddTask(int task_id,String task_title, String task_details){
         addTask(task_id, task_title, task_details);
         tasksRecAdapter.notifyItemInserted(0);
         CustomToast("Task added",R.drawable.ic_done_white_24dp);
-        if(selected_year==0 && selected_month==0 && selected_dayOfMonth==0){
+        /*if(selected_year==0 && selected_month==0 && selected_dayOfMonth==0){
             Toast.makeText(getContext(),"Year:"+selected_year,Toast.LENGTH_SHORT).show();
         }else{
 
-        }
+        }*/
         percentageTasks();
     }
 

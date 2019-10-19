@@ -127,6 +127,12 @@ public class AddNewTaskBottomSheet extends BottomSheetDialogFragment {
         //String sql="INSERT INTO "+ TasksUtilities.TABLE_NAME +"("+TasksUtilities.COLUMN_TASK_TITLE+","+TasksUtilities.COLUMN_TASK_DETAILS+") VALUES ('"+task_title+"','"+task_details+"')";
         values.put(TasksUtilities.COLUMN_TASK_TITLE,task_title);
         values.put(TasksUtilities.COLUMN_TASK_DETAILS,task_details);
+        //if(selected_year!=0 && selected_month!=0 && selected_dayOfMonth!=0){
+            values.put(TasksUtilities.COLUMN_TASK_YEAR,selected_year);
+            values.put(TasksUtilities.COLUMN_TASK_MONTH,selected_month);
+            values.put(TasksUtilities.COLUMN_TASK_DAY,selected_dayOfMonth);
+            values.put(TasksUtilities.COLUMN_TASK_HOUR,selected_hourOfDay);
+            values.put(TasksUtilities.COLUMN_TASK_MINUTE,selected_minute);
 
         returnedId=database.insert(TasksUtilities.TABLE_NAME,TasksUtilities.COLUMN_TASK_ID,values);
         id=(int) returnedId;
@@ -159,11 +165,6 @@ public class AddNewTaskBottomSheet extends BottomSheetDialogFragment {
         selected_minute=minute;
     }
 
-    /*public void showNotifications(){
-        //NotificationCompat.Builder nb=notificationHelper.getTaskChannelNotification(title,message);
-        NotificationCompat.Builder nb=notificationHelper.getTaskChannelNotification();
-        notificationHelper.getManager().notify(1,nb.build());
-    }*/
 
     public void setNotificationAlarm(Notification notification){
         //TODO:FIX ERROR THAT SHOW THE SAME CONTENT TO EVERY NOTIFICATION(SOMETIMES)
@@ -208,6 +209,8 @@ public class AddNewTaskBottomSheet extends BottomSheetDialogFragment {
         deleteTaskDateButton.setVisibility(View.GONE);
         changeTaskDateButton.setVisibility(View.GONE);
         changeTaskTimeButton.setVisibility(View.GONE);
+
+        selected_year=0;selected_month=0;selected_dayOfMonth=0;selected_hourOfDay=0;selected_minute=0;
     }
 
     /*
