@@ -33,7 +33,7 @@ import java.util.Calendar;
 public class AddNewTaskBottomSheet extends BottomSheetDialogFragment {
 
     public AddNewTaskBottomSheetListener bottomSheetListener;
-    private View bottomSheetView;
+    private View fragmentView;
     private ImageButton addDetailsButton,addDateButton,saveTaskButton,deleteTaskDateButton;
     private Button changeTaskDateButton,changeTaskTimeButton;
     private EditText titleEditText,descriptionEditText;
@@ -48,22 +48,22 @@ public class AddNewTaskBottomSheet extends BottomSheetDialogFragment {
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        bottomSheetView = inflater.inflate(R.layout.bottom_sheet_add_new_task, container, false);
+        fragmentView = inflater.inflate(R.layout.bottom_sheet_add_new_task, container, false);
         conn = new SQLiteConnection(getContext(), "keeper_db", null, 1);
         notificationHelper=new NotificationHelper(getContext());
 
         selected_year=0;selected_month=0;selected_dayOfMonth=0;selected_hourOfDay=0;selected_minute=0;
 
-        addDetailsButton=bottomSheetView.findViewById(R.id.task_add_details);
-        addDateButton=bottomSheetView.findViewById(R.id.task_add_date);
-        saveTaskButton=bottomSheetView.findViewById(R.id.task_save);
-        deleteTaskDateButton=bottomSheetView.findViewById(R.id.task_delete_date);
+        addDetailsButton= fragmentView.findViewById(R.id.task_add_details);
+        addDateButton= fragmentView.findViewById(R.id.task_add_date);
+        saveTaskButton= fragmentView.findViewById(R.id.task_save);
+        deleteTaskDateButton= fragmentView.findViewById(R.id.task_delete_date);
 
-        changeTaskDateButton=bottomSheetView.findViewById(R.id.task_date);
-        changeTaskTimeButton=bottomSheetView.findViewById(R.id.task_time);
+        changeTaskDateButton= fragmentView.findViewById(R.id.task_date);
+        changeTaskTimeButton= fragmentView.findViewById(R.id.task_time);
 
-        descriptionEditText=bottomSheetView.findViewById(R.id.task_details);
-        titleEditText=bottomSheetView.findViewById(R.id.task_title);
+        descriptionEditText= fragmentView.findViewById(R.id.task_details);
+        titleEditText= fragmentView.findViewById(R.id.task_title);
 
         addDetailsButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -109,7 +109,7 @@ public class AddNewTaskBottomSheet extends BottomSheetDialogFragment {
 
         //TODO: Add onClickListener when date is added, and also the storage of the date in the database
 
-        return bottomSheetView;
+        return fragmentView;
     }
 
     @Override
@@ -181,7 +181,7 @@ public class AddNewTaskBottomSheet extends BottomSheetDialogFragment {
             calendar.set(Calendar.MINUTE,selected_minute);
             calendar.set(Calendar.SECOND,0);
 
-            AlarmManager alarmManager=(AlarmManager) bottomSheetView.getContext().getSystemService(Context.ALARM_SERVICE);
+            AlarmManager alarmManager=(AlarmManager) fragmentView.getContext().getSystemService(Context.ALARM_SERVICE);
 
             String channelTaskID=NotificationHelper.channelTaskID;
             String channelTaskName=NotificationHelper.channelTasksName;

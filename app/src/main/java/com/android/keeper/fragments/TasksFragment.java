@@ -43,11 +43,11 @@ public class TasksFragment extends Fragment {
 
     private CoordinatorLayout coordinatorLayout;
     private SQLiteConnection conn;
-    private View FragmentView;
-    private FloatingActionButton AddTaskBtn;
+    private View fragmentView;
+    private FloatingActionButton addTaskBtn;
     private BottomAppBar bottomAppBar;
-    private ProgressBar TaskProgressBar;
-    private TextView TaskPercentage;
+    private ProgressBar taskProgressBar;
+    private TextView taskPercentage;
     private RecyclerView tasksRecyclerView;
     private ScrollView scrollView;
     private TasksAdapter tasksRecAdapter;
@@ -60,25 +60,25 @@ public class TasksFragment extends Fragment {
     @Nullable
     @Override
     public View onCreateView(@NonNull final LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        FragmentView=inflater.inflate(R.layout.fragment_tasks,container,false);
+        fragmentView =inflater.inflate(R.layout.fragment_tasks,container,false);
 
         risefrombottom= AnimationUtils.loadAnimation(getContext(),R.anim.rise_from_bottom);
         risefrombottom.setDuration(200);
         hidetobottom=AnimationUtils.loadAnimation(getContext(),R.anim.hide_to_bottom);
         hidetobottom.setDuration(200);
 
-        coordinatorLayout=FragmentView.findViewById(R.id.task_fragment_container);
-        bottomAppBar=FragmentView.findViewById(R.id.bottombar);
-        scrollView=FragmentView.findViewById(R.id.task_scrollview);
+        coordinatorLayout= fragmentView.findViewById(R.id.task_fragment_container);
+        bottomAppBar= fragmentView.findViewById(R.id.bottombar);
+        scrollView= fragmentView.findViewById(R.id.task_scrollview);
 
-        tasksRecyclerView=FragmentView.findViewById(R.id.tasks_recyclerview);
+        tasksRecyclerView= fragmentView.findViewById(R.id.tasks_recyclerview);
         tasksLayoutManager=new LinearLayoutManager(getContext());
 
         tasksList=new ArrayList<TaskItem>();
-        TaskProgressBar=(ProgressBar) FragmentView.findViewById(R.id.task_progress_bar);
-        TaskPercentage=(TextView) FragmentView.findViewById(R.id.task_progress_percentage);
+        taskProgressBar =(ProgressBar) fragmentView.findViewById(R.id.task_progress_bar);
+        taskPercentage =(TextView) fragmentView.findViewById(R.id.task_progress_percentage);
 
-        AddTaskBtn =(FloatingActionButton) FragmentView.findViewById(R.id.addtask_flt_btn);
+        addTaskBtn =(FloatingActionButton) fragmentView.findViewById(R.id.addtask_flt_btn);
         conn=new SQLiteConnection(getContext(),"keeper_db",null,1);
 
         scrollView.setOnScrollChangeListener(new View.OnScrollChangeListener() {
@@ -97,7 +97,7 @@ public class TasksFragment extends Fragment {
                         @Override
                         public void onAnimationEnd(Animation animation) {
                             bottomAppBar.setVisibility(View.VISIBLE);
-                            AddTaskBtn.show();
+                            addTaskBtn.show();
                         }
 
                         @Override
@@ -118,7 +118,7 @@ public class TasksFragment extends Fragment {
                         @Override
                         public void onAnimationEnd(Animation animation) {
                             bottomAppBar.setVisibility(View.GONE);
-                            AddTaskBtn.hide();
+                            addTaskBtn.hide();
                         }
 
                         @Override
@@ -133,7 +133,7 @@ public class TasksFragment extends Fragment {
             }
         });
 
-        AddTaskBtn.setOnClickListener(new View.OnClickListener() {
+        addTaskBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 addNewTaskBottomSheet=new AddNewTaskBottomSheet();
@@ -149,7 +149,7 @@ public class TasksFragment extends Fragment {
 
         loadTasks();
 
-        return FragmentView;
+        return fragmentView;
     }
 
     public void loadTasks(){
@@ -171,14 +171,14 @@ public class TasksFragment extends Fragment {
 
         }
         catch(IllegalStateException e){
-            TaskProgressBar.setProgress(0);
-            TaskPercentage.setText(0+"%");
+            taskProgressBar.setProgress(0);
+            taskPercentage.setText(0+"%");
             CustomToast("App Error",R.drawable.ic_close_white_24dp);
         }
         catch(Exception e){
             Log.e("Keeper Error Logger","ERROR:",e);
-            TaskProgressBar.setProgress(0);
-            TaskPercentage.setText(0+"%");
+            taskProgressBar.setProgress(0);
+            taskPercentage.setText(0+"%");
             CustomToast("Internal Error",R.drawable.ic_close_white_24dp);
         }
         finally {
@@ -238,8 +238,8 @@ public class TasksFragment extends Fragment {
         }catch(ArithmeticException e){
             percentage=0;
         }
-        TaskProgressBar.setProgress(percentage);
-        TaskPercentage.setText(percentage+"%");
+        taskProgressBar.setProgress(percentage);
+        taskPercentage.setText(percentage+"%");
         database.close();
     }
 
@@ -406,7 +406,7 @@ public class TasksFragment extends Fragment {
     private void CustomToast(String text,int imageResource){
         LayoutInflater inflater=getLayoutInflater();
 
-        View layout = inflater.inflate(R.layout.toast_layout, (ViewGroup) FragmentView.findViewById(R.id.toast_root));
+        View layout = inflater.inflate(R.layout.toast_layout, (ViewGroup) fragmentView.findViewById(R.id.toast_root));
 
         TextView toastText = layout.findViewById(R.id.toast_text);
         ImageView toastImage = layout.findViewById(R.id.toast_image);
