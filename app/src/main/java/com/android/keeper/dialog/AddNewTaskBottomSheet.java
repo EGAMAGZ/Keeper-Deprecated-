@@ -95,10 +95,10 @@ public class AddNewTaskBottomSheet extends BottomSheetDialogFragment {
                 }else{ task_details="";}
 
                 if(task_title.isEmpty()){
-                    Toast.makeText(getContext(),"Task Title is Empty",Toast.LENGTH_SHORT).show();
+                    bottomSheetListener.OnEmptyTaskTitle();
                 }else{
                     task_id=saveTask();
-                    setNotificationAlarm(notificationHelper.getTaskNotification(task_title,task_details));
+                    setNotificationAlarm(notificationHelper.getTaskNotification(task_title,task_details),String.valueOf(task_id));
                     bottomSheetListener.OnAddTask(task_id,task_title,task_details);
                     dismiss();
                 }
@@ -170,7 +170,7 @@ public class AddNewTaskBottomSheet extends BottomSheetDialogFragment {
     }
 
 
-    public void setNotificationAlarm(Notification notification){
+    public void setNotificationAlarm(Notification notification,String task_id){
         //TODO:FIX ERROR THAT SHOW THE SAME CONTENT TO EVERY NOTIFICATION(SOMETIMES)
         //TODO:ADD METHOD TO DELETE/CANCEL NOTIFICAION
         //TODO:ADD ARRAYLIST TO STORE DATE(YEAR;MOTH;DAY;HOUR;MINUTE)
@@ -191,7 +191,7 @@ public class AddNewTaskBottomSheet extends BottomSheetDialogFragment {
             String channelTaskName=NotificationHelper.channelTasksName;
 
             Intent intent=new Intent(getContext(), AlertReceiver.class);
-            intent.putExtra(AlertReceiver.NOTIFICATION_ID , "1" ) ;
+            intent.putExtra(AlertReceiver.NOTIFICATION_ID , task_id ) ;
             intent.putExtra(AlertReceiver.NOTIFICATION,notification);
             intent.putExtra(AlertReceiver.NOTIFICATION_CHANNEL_ID,channelTaskID);
             intent.putExtra(AlertReceiver.NOTIFICATION_CHANNEL_NAME,channelTaskName);
@@ -226,6 +226,7 @@ public class AddNewTaskBottomSheet extends BottomSheetDialogFragment {
     * */
     public interface AddNewTaskBottomSheetListener{
         void OnAddTask(int task_id,String task_title,String task_details);
+        void OnEmptyTaskTitle();
     }
 
     public void setBottomSheetListener(AddNewTaskBottomSheetListener listener){

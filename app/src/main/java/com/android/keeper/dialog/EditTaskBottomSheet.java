@@ -64,7 +64,7 @@ public class EditTaskBottomSheet extends BottomSheetDialogFragment {
             public void onClick(View view) {
                 saveTaskButtonClicked=true;
                 if(taskTitleEditText.getText().toString().isEmpty()){
-                    Toast.makeText(getContext(),"Task Title is Empty",Toast.LENGTH_SHORT).show();
+                    bottomSheetListener.OnEmptyTaskTitle();
                 }else{
                     bottomSheetListener.OnSaveEditedTask(old_task_position,old_task_id,taskTitleEditText.getText().toString(),taskDetailsEditText.getText().toString());
                     dismiss();
@@ -128,12 +128,12 @@ public class EditTaskBottomSheet extends BottomSheetDialogFragment {
         old_task_id=task_id;
         old_task_title=task_title;
         old_task_details=task_details;
-        //loadDate(old_task_id);
     }
 
     public interface EditTaskBottomSheetListener{
         void OnSaveEditedTask(int task_position,int task_id,String task_title,String task_details);
         void OnDeleteSavedTask(int task_position,int task_id);
+        void OnEmptyTaskTitle();
     }
 
     public void setEditTaskBottomSheetListener(EditTaskBottomSheetListener listener){

@@ -142,6 +142,11 @@ public class TasksFragment extends Fragment {
                     public void OnAddTask(int task_id, String task_title, String task_details) {
                         AddTask(task_id,task_title,task_details);
                     }
+
+                    @Override
+                    public void OnEmptyTaskTitle() {
+                        CustomToast("Task Title Empty",R.drawable.ic_close_white_24dp);
+                    }
                 });
                 addNewTaskBottomSheet.show(getFragmentManager(),"addNewTaskBottomSheet");
             }
@@ -179,7 +184,7 @@ public class TasksFragment extends Fragment {
             Log.e("Keeper Error Logger","ERROR:",e);
             taskProgressBar.setProgress(0);
             taskPercentage.setText(0+"%");
-            CustomToast("Internal Error",R.drawable.ic_close_white_24dp);
+            CustomToast("Internal App Error",R.drawable.ic_close_white_24dp);
         }
         finally {
             tasksRecAdapter=new TasksAdapter(tasksList);
@@ -199,6 +204,11 @@ public class TasksFragment extends Fragment {
                         @Override
                         public void OnDeleteSavedTask(int task_position, int task_id) {
                             DeleteSavedTask(task_position,task_id);
+                        }
+
+                        @Override
+                        public void OnEmptyTaskTitle() {
+                            CustomToast("Task Title Empty",R.drawable.ic_close_white_24dp);
                         }
                     });
                     editTaskBottomSheet.show(getFragmentManager(),"ediTaskBottomSheet");
