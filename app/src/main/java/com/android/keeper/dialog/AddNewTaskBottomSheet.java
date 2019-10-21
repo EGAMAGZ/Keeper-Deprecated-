@@ -98,7 +98,7 @@ public class AddNewTaskBottomSheet extends BottomSheetDialogFragment {
                     bottomSheetListener.OnEmptyTaskTitle();
                 }else{
                     task_id=saveTask();
-                    setNotificationAlarm(notificationHelper.getTaskNotification(task_title,task_details),String.valueOf(task_id));
+                    setNotificationAlarm(notificationHelper.getTaskNotification(task_title,task_details),task_id);
                     bottomSheetListener.OnAddTask(task_id,task_title,task_details);
                     dismiss();
                 }
@@ -170,7 +170,7 @@ public class AddNewTaskBottomSheet extends BottomSheetDialogFragment {
     }
 
 
-    public void setNotificationAlarm(Notification notification,String task_id){
+    private void setNotificationAlarm(Notification notification,int task_id){
         //TODO:FIX ERROR THAT SHOW THE SAME CONTENT TO EVERY NOTIFICATION(SOMETIMES)
         //TODO:ADD METHOD TO DELETE/CANCEL NOTIFICAION
         //TODO:ADD ARRAYLIST TO STORE DATE(YEAR;MOTH;DAY;HOUR;MINUTE)

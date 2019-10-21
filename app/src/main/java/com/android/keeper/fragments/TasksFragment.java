@@ -399,7 +399,7 @@ public class TasksFragment extends Fragment {
     private void SaveEditedTask(int task_position, int task_id,String task_title,String task_details){
         editTask(task_id,task_title,task_details);
         tasksRecAdapter.notifyItemChanged(task_position);
-        //CustomToast("Task saved",R.drawable.ic_done_white_24dp);
+        CustomToast("Task saved",R.drawable.ic_done_white_24dp);
     }
 
     private void DeleteSavedTask(int task_position, int task_id){

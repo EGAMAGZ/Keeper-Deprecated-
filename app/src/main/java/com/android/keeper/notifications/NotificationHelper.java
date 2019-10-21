@@ -51,7 +51,7 @@ public class NotificationHelper extends ContextWrapper {
                 .setContentText(content)
                 .setSmallIcon(R.drawable.ic_check_black_24dp)
                 .setPriority(NotificationCompat.PRIORITY_HIGH)
-                .setCategory(NotificationCompat.CATEGORY_MESSAGE);
+                .setCategory(NotificationCompat.CATEGORY_REMINDER);
         return builder.build();
     }
 }
