@@ -17,6 +17,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.SearchView;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.inputmethod.EditorInfo;
@@ -65,27 +66,20 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         toogle.syncState();
 
         /* Replace default fragment content*/
+        Intent intent=getIntent();
+        String fragmentValue=intent.getStringExtra("fragment");
+            if (fragmentValue != null) {
+                switch(fragmentValue){
+                    case "tasks":
+                        getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new TasksFragment(), "tasks_fragment").commit();
+                        navigationView.setCheckedItem(R.id.nav_tasks);
+                        break;
+                }
 
-        /*try{
-            Intent intent=getIntent();
-            String fragmentValue=intent.getStringExtra("fragment");
-            switch(fragmentValue){
-                case "tasks":
-                    navigationView.setCheckedItem(R.id.nav_tasks);
-                    getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container,tasksFragment,"tasks_fragment").commit();
-                    break;
-                default:
-                    getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container,new NotesFragment(),"notes_fragment").commit();
-                    navigationView.setCheckedItem(R.id.nav_notes);
-                    break;
+            } else {
+                getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new NotesFragment(), "notes_fragment").commit();
+                navigationView.setCheckedItem(R.id.nav_notes);
             }
-        }catch (NullPointerException e){
-            getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container,new NotesFragment(),"notes_fragment").commit();
-            navigationView.setCheckedItem(R.id.nav_notes);
-        }*/
-
-        getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container,new NotesFragment(),"notes_fragment").commit();
-        navigationView.setCheckedItem(R.id.nav_notes);
 
         getWindow().setStatusBarColor(ContextCompat.getColor(this,R.color.thirdColor));
     }

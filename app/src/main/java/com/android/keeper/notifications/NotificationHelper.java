@@ -52,7 +52,7 @@ public class NotificationHelper extends ContextWrapper {
         Intent intent=new Intent(this, MainActivity.class);
         intent.putExtra("fragment","tasks");
         intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-        PendingIntent pendingIntent=PendingIntent.getActivity(this,1,intent,PendingIntent.FLAG_CANCEL_CURRENT);
+        PendingIntent pendingIntent=PendingIntent.getActivity(this,1,intent,PendingIntent.FLAG_UPDATE_CURRENT);
 
         NotificationCompat.Builder builder=new NotificationCompat.Builder(getApplicationContext(),channelTaskID);
         builder.setContentTitle(title)
