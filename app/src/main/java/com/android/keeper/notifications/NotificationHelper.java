@@ -3,12 +3,15 @@ package com.android.keeper.notifications;
 import android.app.Notification;
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
+import android.app.PendingIntent;
 import android.content.Context;
 import android.content.ContextWrapper;
+import android.content.Intent;
 import android.os.Build;
 import android.support.annotation.RequiresApi;
 import android.support.v4.app.NotificationCompat;
 
+import com.android.keeper.MainActivity;
 import com.android.keeper.R;
 
 public class NotificationHelper extends ContextWrapper {
@@ -46,12 +49,19 @@ public class NotificationHelper extends ContextWrapper {
     }
 
     public Notification getTaskNotification(String title, String content) {
+        Intent intent=new Intent(this, MainActivity.class);
+        intent.putExtra("fragment","tasks");
+        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        PendingIntent pendingIntent=PendingIntent.getActivity(this,1,intent,PendingIntent.FLAG_CANCEL_CURRENT);
+
         NotificationCompat.Builder builder=new NotificationCompat.Builder(getApplicationContext(),channelTaskID);
         builder.setContentTitle(title)
                 .setContentText(content)
                 .setSmallIcon(R.drawable.ic_check_black_24dp)
                 .setPriority(NotificationCompat.PRIORITY_HIGH)
-                .setCategory(NotificationCompat.CATEGORY_REMINDER);
+                .setAutoCancel(true)
+                .setCategory(NotificationCompat.CATEGORY_REMINDER)
+                .setContentIntent(pendingIntent);
         return builder.build();
     }
 }
