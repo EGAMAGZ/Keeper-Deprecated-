@@ -3,6 +3,7 @@ package com.android.keeper.dialog;
 import android.app.Dialog;
 import android.app.TimePickerDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -16,8 +17,21 @@ public class TimePickerDialogFragment extends DialogFragment {
 
     private SharedPreferences sharedPreferences;
     private TimePickerDialog timePickerDialog;
+    private TimePickerDialog.OnTimeSetListener onTimeSetListener;
+    private DialogInterface.OnDismissListener onDismissListener;
 
     private String clockFormat;
+
+    public TimePickerDialogFragment() {}
+
+    public void setCallBack(TimePickerDialog.OnTimeSetListener onTimeSet){
+        onTimeSetListener=onTimeSet;
+    }
+
+    public void setOnDismissListener(DialogInterface.OnDismissListener ondismiss){
+        //TODO: CHECK IF THIS METHOD WORKS
+        onDismissListener=ondismiss;
+    }
 
     @NonNull
     @Override
@@ -30,11 +44,11 @@ public class TimePickerDialogFragment extends DialogFragment {
         int minute=calendar.get(Calendar.MINUTE);
 
         if(clockFormat.equals("auto")){
-            timePickerDialog= new TimePickerDialog(getActivity(),(TimePickerDialog.OnTimeSetListener) getActivity(),hour,minute,android.text.format.DateFormat.is24HourFormat(getActivity()));
+            timePickerDialog= new TimePickerDialog(getActivity(),onTimeSetListener,hour,minute,android.text.format.DateFormat.is24HourFormat(getActivity()));
         }else if(clockFormat.equals("24hr")){
-            timePickerDialog= new TimePickerDialog(getActivity(),(TimePickerDialog.OnTimeSetListener) getActivity(),hour,minute,true);
+            timePickerDialog= new TimePickerDialog(getActivity(),onTimeSetListener,hour,minute,true);
         }else if(clockFormat.equals("12hr")){
-            timePickerDialog= new TimePickerDialog(getActivity(),(TimePickerDialog.OnTimeSetListener) getActivity(),hour,minute,false);
+            timePickerDialog= new TimePickerDialog(getActivity(),onTimeSetListener,hour,minute,false);
         }
         return timePickerDialog;
     }

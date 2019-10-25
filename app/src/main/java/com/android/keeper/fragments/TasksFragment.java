@@ -374,7 +374,7 @@ public class TasksFragment extends Fragment {
         if(selected_year==0 && selected_month==0 && selected_dayOfMonth==0){
             return ;
         }else{
-            addNewTaskBottomSheet.setTaskDate(selected_year,selected_month,selected_dayOfMonth,selected_hourOfDay,selected_minute);
+            //addNewTaskBottomSheet.setTaskDate(selected_year,selected_month,selected_dayOfMonth,selected_hourOfDay,selected_minute);
         }
     }
 
@@ -404,7 +404,8 @@ public class TasksFragment extends Fragment {
 
     private void DeleteSavedTask(int task_position, int task_id){
         deleteTask(task_id);
-        tasksRecAdapter.notifyItemRemoved(task_position);
+        tasksRecAdapter.notifyDataSetChanged();
+        //tasksRecAdapter.notifyItemRemoved(task_position);
         CustomToast("Task deleted",R.drawable.ic_done_white_24dp);
         percentageTasks();
     }

@@ -1,8 +1,10 @@
 package com.android.keeper.dialog;
 
 import android.app.AlarmManager;
+import android.app.DatePickerDialog;
 import android.app.Notification;
 import android.app.PendingIntent;
+import android.app.TimePickerDialog;
 import android.content.ContentValues;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -17,9 +19,11 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.RelativeLayout;
+import android.widget.TimePicker;
 import android.widget.Toast;
 
 import com.android.keeper.R;
@@ -41,6 +45,9 @@ public class AddNewTaskBottomSheet extends BottomSheetDialogFragment {
     private SQLiteConnection conn;
     private NotificationHelper notificationHelper;
     private RelativeLayout taskDateContainer;
+    private DatePickerDialog.OnDateSetListener onDateSetListener;
+    private DialogInterface.OnDismissListener onDateDismissListener,onTimeDismissListener;
+    private TimePickerDialog.OnTimeSetListener onTimeSetListener;
 
     private String task_title,task_details;
     private int task_id,selected_year,selected_month,selected_dayOfMonth,selected_hourOfDay,selected_minute;
@@ -68,6 +75,41 @@ public class AddNewTaskBottomSheet extends BottomSheetDialogFragment {
 
         taskDateContainer=fragmentView.findViewById(R.id.task_date_container);
 
+        onTimeDismissListener=new DialogInterface.OnDismissListener() {
+            @Override
+            public void onDismiss(DialogInterface dialogInterface) {
+                selected_year=0;selected_month=0;selected_dayOfMonth=0;selected_minute=0;selected_hourOfDay=0;
+            }
+        };
+        onTimeSetListener=new TimePickerDialog.OnTimeSetListener() {
+            @Override
+            public void onTimeSet(TimePicker timePicker, int hourOfDay, int minute) {
+                selected_hourOfDay=hourOfDay;
+                selected_minute=minute;
+                setTaskDate();
+            }
+        };
+
+        onDateDismissListener=new DialogInterface.OnDismissListener() {
+            @Override
+            public void onDismiss(DialogInterface dialogInterface) {
+                selected_year=0;selected_month=0;selected_dayOfMonth=0;
+            }
+        };
+        onDateSetListener=new DatePickerDialog.OnDateSetListener() {
+            @Override
+            public void onDateSet(DatePicker datePicker, int year, int month, int dayOfMonth) {
+                selected_year=year;
+                selected_month=month;
+                selected_dayOfMonth=dayOfMonth;
+
+                TimePickerDialogFragment timePicker=new TimePickerDialogFragment();
+                timePicker.setCallBack(onTimeSetListener);
+                timePicker.setOnDismissListener(onTimeDismissListener);
+                timePicker.show(getFragmentManager(),"time picker");
+            }
+        };
+
         addDetailsButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -81,7 +123,9 @@ public class AddNewTaskBottomSheet extends BottomSheetDialogFragment {
         addDateButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                DialogFragment datePicker = new DatePickerDialogFragment();
+                DatePickerDialogFragment datePicker = new DatePickerDialogFragment();
+                datePicker.setCallBack(onDateSetListener);
+                datePicker.setOnDismissListener(onDateDismissListener);
                 datePicker.show(getFragmentManager(),"date picker");
 
             }
@@ -145,28 +189,34 @@ public class AddNewTaskBottomSheet extends BottomSheetDialogFragment {
         return id;
     }
 
-    public void setTaskDate(int year,int month,int dayOfMonth,int hourOfDay,int minute){
+    //public void setTaskDate(int year,int month,int dayOfMonth,int hourOfDay,int minute){
+    public void setTaskDate(){
         //TODO: Add individual change to date and time
         //TODO: Create and Assign different methods for each bottom sheet when date and time is chosen
-        if(deleteTaskDateButton.getVisibility()==View.GONE || changeTaskDateButton.getVisibility()==View.GONE){
-            showDateFields();
+        if(selected_year==0 && selected_month==0 && selected_dayOfMonth==0){
+            return ;
+        }else{
+
+            if(deleteTaskDateButton.getVisibility()==View.GONE || changeTaskDateButton.getVisibility()==View.GONE){
+                showDateFields();
+            }
+
+            calendar= Calendar.getInstance();
+            calendar.set(Calendar.YEAR,selected_year);
+            calendar.set(Calendar.MONTH,selected_month);
+            calendar.set(Calendar.DAY_OF_MONTH,selected_dayOfMonth);
+
+            String date= DateFormat.getDateInstance(DateFormat.FULL).format(calendar.getTime());
+            changeTaskDateButton.setText(date);
+            changeTaskTimeButton.setText(selected_hourOfDay+":"+selected_minute);//TODO:ADD A FORMAT FOR TIME
+            Toast.makeText(getContext(),"Task Date Selected",Toast.LENGTH_SHORT).show();
+
+            /*selected_year=year;
+            selected_month=month;
+            selected_dayOfMonth=dayOfMonth;
+            selected_hourOfDay=hourOfDay;
+            selected_minute=minute;*/
         }
-
-        calendar= Calendar.getInstance();
-        calendar.set(Calendar.YEAR,year);
-        calendar.set(Calendar.MONTH,month);
-        calendar.set(Calendar.DAY_OF_MONTH,dayOfMonth);
-
-        String date= DateFormat.getDateInstance(DateFormat.FULL).format(calendar.getTime());
-        changeTaskDateButton.setText(date);
-        changeTaskTimeButton.setText(hourOfDay+":"+minute);//TODO:ADD A FORMAT FOR TIME
-        Toast.makeText(getContext(),"Task Date Selected",Toast.LENGTH_SHORT).show();
-
-        selected_year=year;
-        selected_month=month;
-        selected_dayOfMonth=dayOfMonth;
-        selected_hourOfDay=hourOfDay;
-        selected_minute=minute;
     }
 
 

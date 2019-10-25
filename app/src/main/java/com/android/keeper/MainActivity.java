@@ -35,8 +35,8 @@ import com.android.keeper.fragments.RemindersFragment;
 import com.android.keeper.fragments.TasksFragment;
 import com.android.keeper.localdb.SQLiteConnection;
 
-public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener, DatePickerDialog.OnDateSetListener, TimePickerDialog.OnTimeSetListener {
-
+//public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener, DatePickerDialog.OnDateSetListener, TimePickerDialog.OnTimeSetListener {
+public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
     private TasksFragment tasksFragment;
     private DrawerLayout drawer;
     private Toolbar toolbar;
@@ -172,7 +172,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
      * */
 
     //DatePicker
-    @Override
+    /*@Override
     public void onDateSet(DatePicker datePicker, int year, int month, int dayOfMonth) {
         selected_year=year;
         selected_month=month;
@@ -188,5 +188,5 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         selected_minute=minute;
 
         tasksFragment.setTaskDate(selected_year,selected_month,selected_dayOfMonth,selected_hourOfDay,selected_minute);
-    }
+    }*/
 }
