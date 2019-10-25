@@ -370,14 +370,6 @@ public class TasksFragment extends Fragment {
         tasksRecAdapter.notifyDataSetChanged();
     }
 
-    public void setTaskDate(int selected_year,int selected_month,int selected_dayOfMonth,int selected_hourOfDay,int selected_minute){
-        if(selected_year==0 && selected_month==0 && selected_dayOfMonth==0){
-            return ;
-        }else{
-            //addNewTaskBottomSheet.setTaskDate(selected_year,selected_month,selected_dayOfMonth,selected_hourOfDay,selected_minute);
-        }
-    }
-
     /*
     *
     * Action like Add,Save,Delete tasks
@@ -388,11 +380,6 @@ public class TasksFragment extends Fragment {
         addTask(task_id, task_title, task_details);
         tasksRecAdapter.notifyItemInserted(0);
         CustomToast("Task added",R.drawable.ic_done_white_24dp);
-        /*if(selected_year==0 && selected_month==0 && selected_dayOfMonth==0){
-            Toast.makeText(getContext(),"Year:"+selected_year,Toast.LENGTH_SHORT).show();
-        }else{
-
-        }*/
         percentageTasks();
     }
 
@@ -405,7 +392,6 @@ public class TasksFragment extends Fragment {
     private void DeleteSavedTask(int task_position, int task_id){
         deleteTask(task_id);
         tasksRecAdapter.notifyDataSetChanged();
-        //tasksRecAdapter.notifyItemRemoved(task_position);
         CustomToast("Task deleted",R.drawable.ic_done_white_24dp);
         percentageTasks();
     }
@@ -426,7 +412,6 @@ public class TasksFragment extends Fragment {
         toastImage.setImageResource(imageResource);
 
         Toast toast = new Toast(getContext());
-        //toast.setGravity(Gravity.BOTTOM, 0, 0);
         toast.setDuration(Toast.LENGTH_SHORT);
         toast.setView(layout);
 

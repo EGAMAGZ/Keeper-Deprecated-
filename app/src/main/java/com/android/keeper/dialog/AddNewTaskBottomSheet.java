@@ -211,11 +211,6 @@ public class AddNewTaskBottomSheet extends BottomSheetDialogFragment {
             changeTaskTimeButton.setText(selected_hourOfDay+":"+selected_minute);//TODO:ADD A FORMAT FOR TIME
             Toast.makeText(getContext(),"Task Date Selected",Toast.LENGTH_SHORT).show();
 
-            /*selected_year=year;
-            selected_month=month;
-            selected_dayOfMonth=dayOfMonth;
-            selected_hourOfDay=hourOfDay;
-            selected_minute=minute;*/
         }
     }
 
