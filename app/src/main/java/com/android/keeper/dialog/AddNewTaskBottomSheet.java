@@ -45,9 +45,9 @@ public class AddNewTaskBottomSheet extends BottomSheetDialogFragment {
     private SQLiteConnection conn;
     private NotificationHelper notificationHelper;
     private RelativeLayout taskDateContainer;
-    private DatePickerDialog.OnDateSetListener onDateSetListener;
-    private DialogInterface.OnDismissListener onDateDismissListener,onTimeDismissListener;
-    private TimePickerDialog.OnTimeSetListener onTimeSetListener;
+    //private DatePickerDialog.OnDateSetListener onDateSetListener;
+    //private DialogInterface.OnDismissListener onDateDismissListener,onTimeDismissListener;
+    //private TimePickerDialog.OnTimeSetListener onTimeSetListener;
 
     private String task_title,task_details;
     private int task_id,selected_year,selected_month,selected_dayOfMonth,selected_hourOfDay,selected_minute;
@@ -74,41 +74,6 @@ public class AddNewTaskBottomSheet extends BottomSheetDialogFragment {
         titleEditText= fragmentView.findViewById(R.id.task_title);
 
         taskDateContainer=fragmentView.findViewById(R.id.task_date_container);
-
-        onTimeDismissListener=new DialogInterface.OnDismissListener() {
-            @Override
-            public void onDismiss(DialogInterface dialogInterface) {
-                selected_year=0;selected_month=0;selected_dayOfMonth=0;selected_minute=0;selected_hourOfDay=0;
-            }
-        };
-        onTimeSetListener=new TimePickerDialog.OnTimeSetListener() {
-            @Override
-            public void onTimeSet(TimePicker timePicker, int hourOfDay, int minute) {
-                selected_hourOfDay=hourOfDay;
-                selected_minute=minute;
-                setTaskDate();
-            }
-        };
-
-        onDateDismissListener=new DialogInterface.OnDismissListener() {
-            @Override
-            public void onDismiss(DialogInterface dialogInterface) {
-                selected_year=0;selected_month=0;selected_dayOfMonth=0;
-            }
-        };
-        onDateSetListener=new DatePickerDialog.OnDateSetListener() {
-            @Override
-            public void onDateSet(DatePicker datePicker, int year, int month, int dayOfMonth) {
-                selected_year=year;
-                selected_month=month;
-                selected_dayOfMonth=dayOfMonth;
-
-                TimePickerDialogFragment timePicker=new TimePickerDialogFragment();
-                timePicker.setCallBack(onTimeSetListener);
-                timePicker.setOnDismissListener(onTimeDismissListener);
-                timePicker.show(getFragmentManager(),"time picker");
-            }
-        };
 
         addDetailsButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -159,6 +124,43 @@ public class AddNewTaskBottomSheet extends BottomSheetDialogFragment {
 
         return fragmentView;
     }
+
+    private DatePickerDialog.OnDateSetListener onDateSetListener=new DatePickerDialog.OnDateSetListener() {
+        @Override
+        public void onDateSet(DatePicker datePicker, int year, int month, int dayOfMonth) {
+            selected_year=year;
+            selected_month=month;
+            selected_dayOfMonth=dayOfMonth;
+
+            TimePickerDialogFragment timePicker=new TimePickerDialogFragment();
+            timePicker.setCallBack(onTimeSetListener);
+            timePicker.setOnDismissListener(onTimeDismissListener);
+            timePicker.show(getFragmentManager(),"time picker");
+        }
+    };
+
+    private DialogInterface.OnDismissListener onDateDismissListener=new DialogInterface.OnDismissListener() {
+        @Override
+        public void onDismiss(DialogInterface dialogInterface) {
+            selected_year=0;selected_month=0;selected_dayOfMonth=0;
+        }
+    };
+
+    private TimePickerDialog.OnTimeSetListener onTimeSetListener=new TimePickerDialog.OnTimeSetListener() {
+        @Override
+        public void onTimeSet(TimePicker timePicker, int hourOfDay, int minute) {
+            selected_hourOfDay=hourOfDay;
+            selected_minute=minute;
+            setTaskDate();
+        }
+    };
+
+    private DialogInterface.OnDismissListener onTimeDismissListener=new DialogInterface.OnDismissListener() {
+        @Override
+        public void onDismiss(DialogInterface dialogInterface) {
+            selected_year=0;selected_month=0;selected_dayOfMonth=0;selected_minute=0;selected_hourOfDay=0;
+        }
+    };
 
     @Override
     public void onDismiss(DialogInterface dialog) {
