@@ -45,9 +45,6 @@ public class AddNewTaskBottomSheet extends BottomSheetDialogFragment {
     private SQLiteConnection conn;
     private NotificationHelper notificationHelper;
     private RelativeLayout taskDateContainer;
-    //private DatePickerDialog.OnDateSetListener onDateSetListener;
-    //private DialogInterface.OnDismissListener onDateDismissListener,onTimeDismissListener;
-    //private TimePickerDialog.OnTimeSetListener onTimeSetListener;
 
     private String task_title,task_details;
     private int task_id,selected_year,selected_month,selected_dayOfMonth,selected_hourOfDay,selected_minute;
@@ -65,8 +62,8 @@ public class AddNewTaskBottomSheet extends BottomSheetDialogFragment {
         addDetailsButton= fragmentView.findViewById(R.id.task_add_details);
         addDateButton= fragmentView.findViewById(R.id.task_add_date);
         saveTaskButton= fragmentView.findViewById(R.id.task_save);
-        deleteTaskDateButton= fragmentView.findViewById(R.id.task_delete_date);
 
+        deleteTaskDateButton= fragmentView.findViewById(R.id.task_delete_date);
         changeTaskDateButton= fragmentView.findViewById(R.id.task_date);
         changeTaskTimeButton= fragmentView.findViewById(R.id.task_time);
 
@@ -75,13 +72,37 @@ public class AddNewTaskBottomSheet extends BottomSheetDialogFragment {
 
         taskDateContainer=fragmentView.findViewById(R.id.task_date_container);
 
+        changeTaskDateButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                DatePickerDialogFragment datePicker = new DatePickerDialogFragment();
+                datePicker.setCallBack(onChangeDateListener);
+                datePicker.show(getFragmentManager(),"date picker");
+            }
+        });
+
+        changeTaskTimeButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                TimePickerDialogFragment timePicker=new TimePickerDialogFragment();
+                timePicker.setCallBack(onChangeTimeListener);
+                timePicker.show(getFragmentManager(),"time picker");
+            }
+        });
+
+        deleteTaskDateButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                deleteDateFields();
+            }
+        });
+
         addDetailsButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 if(descriptionEditText.getVisibility()==View.GONE){
                     descriptionEditText.setVisibility(View.VISIBLE);
                 }
-
             }
         });
 
@@ -159,6 +180,26 @@ public class AddNewTaskBottomSheet extends BottomSheetDialogFragment {
         @Override
         public void onDismiss(DialogInterface dialogInterface) {
             selected_year=0;selected_month=0;selected_dayOfMonth=0;selected_minute=0;selected_hourOfDay=0;
+        }
+    };
+
+    private DatePickerDialog.OnDateSetListener onChangeDateListener=new DatePickerDialog.OnDateSetListener() {
+        @Override
+        public void onDateSet(DatePicker datePicker, int year, int month, int dayOfMonth) {
+            selected_year=year;
+            selected_month=month;
+            selected_dayOfMonth=dayOfMonth;
+
+            setTaskDate();
+        }
+    };
+
+    private TimePickerDialog.OnTimeSetListener onChangeTimeListener=new TimePickerDialog.OnTimeSetListener() {
+        @Override
+        public void onTimeSet(TimePicker timePicker, int hourOfDay, int minute) {
+            selected_hourOfDay=hourOfDay;
+            selected_minute=minute;
+            setTaskDate();
         }
     };
 
