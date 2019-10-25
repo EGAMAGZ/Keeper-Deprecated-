@@ -1,6 +1,8 @@
 package com.android.keeper.dialog;
 
-import android.content.Context;
+import android.app.DatePickerDialog;
+import android.app.TimePickerDialog;
+import android.content.ContentValues;
 import android.content.DialogInterface;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
@@ -12,9 +14,10 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.ImageButton;
-import android.widget.Toast;
+import android.widget.TimePicker;
 
 import com.android.keeper.R;
 import com.android.keeper.localdb.SQLiteConnection;
@@ -28,7 +31,7 @@ public class EditTaskBottomSheet extends BottomSheetDialogFragment {
     private EditTaskBottomSheetListener bottomSheetListener;
     private View fragmentView;
     private EditText taskTitleEditText,taskDetailsEditText;
-    private ImageButton saveTaskButton,deleteTaskButton;
+    private ImageButton saveTaskButton,deleteTaskButton, addTaskDateButton,deleteTaskDateButton;
     private Button changeTaskDateButton,changeTaskTimeButton;
     private SQLiteConnection conn;
 
@@ -45,7 +48,8 @@ public class EditTaskBottomSheet extends BottomSheetDialogFragment {
 
         changeTaskDateButton=fragmentView.findViewById(R.id.task_date);
         changeTaskTimeButton=fragmentView.findViewById(R.id.task_time);
-
+        addTaskDateButton = fragmentView.findViewById(R.id.task_add_date);
+        deleteTaskDateButton=fragmentView.findViewById(R.id.task_delete_date);
 
         taskTitleEditText=fragmentView.findViewById(R.id.task_title);
         taskDetailsEditText=fragmentView.findViewById(R.id.task_details);
@@ -53,11 +57,65 @@ public class EditTaskBottomSheet extends BottomSheetDialogFragment {
         deleteTaskButton=fragmentView.findViewById(R.id.task_delete);
 
         loadDate(old_task_id);
-        setDate();
+        setTaskDate();
         taskTitleEditText.setText(old_task_title);
         if(!old_task_details.isEmpty()){
             taskDetailsEditText.setText(old_task_details);
         }
+
+        changeTaskDateButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if(selected_year!=0 && selected_month!=0 && selected_dayOfMonth!=0){
+
+                    DatePickerDialogFragment datePicker = new DatePickerDialogFragment();
+                    datePicker.setCallBack(onChangeDateListener);
+                    datePicker.show(getFragmentManager(),"date picker");
+                }else{
+                    DatePickerDialogFragment datePicker = new DatePickerDialogFragment();
+                    datePicker.setCallBack(onDateSetListener);
+                    datePicker.setOnDismissListener(onDateDismissListener);
+                    datePicker.show(getFragmentManager(),"date picker");
+                }
+            }
+        });
+
+        changeTaskTimeButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if(selected_year!=0 && selected_month!=0 && selected_dayOfMonth!=0){
+
+                    TimePickerDialogFragment timePicker=new TimePickerDialogFragment();
+                    timePicker.setCallBack(onChangeTimeListener);
+                    timePicker.show(getFragmentManager(),"time picker");
+                }else{
+                    DatePickerDialogFragment datePicker = new DatePickerDialogFragment();
+                    datePicker.setCallBack(onDateSetListener);
+                    datePicker.setOnDismissListener(onDateDismissListener);
+                    datePicker.show(getFragmentManager(),"date picker");
+                }
+            }
+        });
+
+        addTaskDateButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                DatePickerDialogFragment datePicker = new DatePickerDialogFragment();
+                datePicker.setCallBack(onDateSetListener);
+                datePicker.setOnDismissListener(onDateDismissListener);
+                datePicker.show(getFragmentManager(),"date picker");
+
+            }
+        });
+
+        deleteTaskDateButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                selected_year=0;selected_month=0;selected_dayOfMonth=0;selected_hourOfDay=0;selected_minute=0;
+                changeTaskDateButton.setText("FECHAS");
+                changeTaskTimeButton.setText("00:00");
+            }
+        });
 
         saveTaskButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -66,6 +124,7 @@ public class EditTaskBottomSheet extends BottomSheetDialogFragment {
                 if(taskTitleEditText.getText().toString().isEmpty()){
                     bottomSheetListener.OnEmptyTaskTitle();
                 }else{
+                    saveEditedTask();
                     bottomSheetListener.OnSaveEditedTask(old_task_position,old_task_id,taskTitleEditText.getText().toString(),taskDetailsEditText.getText().toString());
                     dismiss();
                 }
@@ -82,15 +141,67 @@ public class EditTaskBottomSheet extends BottomSheetDialogFragment {
         return fragmentView;
     }
 
+
+    private DatePickerDialog.OnDateSetListener onDateSetListener=new DatePickerDialog.OnDateSetListener() {
+        @Override
+        public void onDateSet(DatePicker datePicker, int year, int month, int dayOfMonth) {
+            selected_year=year;
+            selected_month=month;
+            selected_dayOfMonth=dayOfMonth;
+
+            TimePickerDialogFragment timePicker=new TimePickerDialogFragment();
+            timePicker.setCallBack(onTimeSetListener);
+            timePicker.setOnDismissListener(onTimeDismissListener);
+            timePicker.show(getFragmentManager(),"time picker");
+        }
+    };
+
+    private DialogInterface.OnDismissListener onDateDismissListener=new DialogInterface.OnDismissListener() {
+        @Override
+        public void onDismiss(DialogInterface dialogInterface) {
+            selected_year=0;selected_month=0;selected_dayOfMonth=0;
+        }
+    };
+
+    private TimePickerDialog.OnTimeSetListener onTimeSetListener=new TimePickerDialog.OnTimeSetListener() {
+        @Override
+        public void onTimeSet(TimePicker timePicker, int hourOfDay, int minute) {
+            selected_hourOfDay=hourOfDay;
+            selected_minute=minute;
+            setTaskDate();
+        }
+    };
+
+    private DialogInterface.OnDismissListener onTimeDismissListener=new DialogInterface.OnDismissListener() {
+        @Override
+        public void onDismiss(DialogInterface dialogInterface) {
+            selected_year=0;selected_month=0;selected_dayOfMonth=0;selected_minute=0;selected_hourOfDay=0;
+        }
+    };
+
+    private DatePickerDialog.OnDateSetListener onChangeDateListener=new DatePickerDialog.OnDateSetListener() {
+        @Override
+        public void onDateSet(DatePicker datePicker, int year, int month, int dayOfMonth) {
+            selected_year=year;
+            selected_month=month;
+            selected_dayOfMonth=dayOfMonth;
+
+            setTaskDate();
+        }
+    };
+
+    private TimePickerDialog.OnTimeSetListener onChangeTimeListener=new TimePickerDialog.OnTimeSetListener() {
+        @Override
+        public void onTimeSet(TimePicker timePicker, int hourOfDay, int minute) {
+            selected_hourOfDay=hourOfDay;
+            selected_minute=minute;
+            setTaskDate();
+        }
+    };
+
     @Override
     public void onDismiss(DialogInterface dialog) {
-        //TODO: MAKE MORE TEST TO THIS METHOD
         super.onDismiss(dialog);
-        /*if(taskTitleEditText.getText().toString().isEmpty() || saveTaskButtonClicked){
-            return ;
-        }else{
-            bottomSheetListener.OnSaveEditedTask(old_task_position,old_task_id,taskTitleEditText.getText().toString(),taskDetailsEditText.getText().toString());
-        }*/
     }
 
     private void loadDate(int task_id){
@@ -109,7 +220,7 @@ public class EditTaskBottomSheet extends BottomSheetDialogFragment {
         database.close();
     }
 
-    private void setDate(){
+    private void setTaskDate(){
         if(selected_year!=0 && selected_month!=0 && selected_dayOfMonth!=0){
 
             Calendar calendar= Calendar.getInstance();
@@ -128,6 +239,24 @@ public class EditTaskBottomSheet extends BottomSheetDialogFragment {
         old_task_id=task_id;
         old_task_title=task_title;
         old_task_details=task_details;
+    }
+
+    private void saveEditedTask(){
+        SQLiteDatabase database=conn.getReadableDatabase();
+
+        ContentValues values=new ContentValues();
+        values.put(TasksUtilities.COLUMN_TASK_TITLE,taskTitleEditText.getText().toString());
+        values.put(TasksUtilities.COLUMN_TASK_DETAILS,taskDetailsEditText.getText().toString());
+
+        values.put(TasksUtilities.COLUMN_TASK_YEAR,selected_year);
+        values.put(TasksUtilities.COLUMN_TASK_MONTH,selected_month);
+        values.put(TasksUtilities.COLUMN_TASK_DAY,selected_dayOfMonth);
+
+        values.put(TasksUtilities.COLUMN_TASK_HOUR,selected_hourOfDay);
+        values.put(TasksUtilities.COLUMN_TASK_MINUTE,selected_minute);
+
+        database.update(TasksUtilities.TABLE_NAME,values,TasksUtilities.COLUMN_TASK_ID+"="+old_task_id,null);
+        database.close();
     }
 
     public interface EditTaskBottomSheetListener{

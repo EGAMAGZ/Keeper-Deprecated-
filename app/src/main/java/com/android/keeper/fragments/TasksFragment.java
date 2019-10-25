@@ -302,14 +302,6 @@ public class TasksFragment extends Fragment {
         database.close();
     }
     private void editTask(int task_id,String task_title,String task_details){
-        //TODO: PASS THE SQLITE SECTION TO THE BOTTOMSHEET THAT BELONGS
-        SQLiteDatabase database=conn.getReadableDatabase();
-
-        ContentValues values=new ContentValues();
-        values.put(TasksUtilities.COLUMN_TASK_TITLE,task_title);
-        values.put(TasksUtilities.COLUMN_TASK_DETAILS,task_details);
-
-        database.update(TasksUtilities.TABLE_NAME,values,TasksUtilities.COLUMN_TASK_ID+"="+task_id,null);
 
         for (int i=0;i<tasksList.size();++i){
             if(tasksList.get(i).getTaskId()==task_id){
@@ -320,7 +312,6 @@ public class TasksFragment extends Fragment {
                 tasksRecAdapter.editItem(task_id,task_title,task_details);//It is related with the adapter with the elements for filter
             }
         }
-        database.close();
     }
     private void setTaskDone(int task_id){
         SQLiteDatabase database=conn.getWritableDatabase();
