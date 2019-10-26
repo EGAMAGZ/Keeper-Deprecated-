@@ -21,7 +21,6 @@ public class DatePickerDialogFragment extends DialogFragment {
         onDateSetListener = ondate;
     }
     public void setOnDismissListener(DialogInterface.OnDismissListener ondismiss){
-        //TODO: CHECK IF THIS METHOD WORKS
         onDismissListener=ondismiss;
     }
 

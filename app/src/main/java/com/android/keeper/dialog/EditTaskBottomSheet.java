@@ -74,7 +74,7 @@ public class EditTaskBottomSheet extends BottomSheetDialogFragment {
                 }else{
                     DatePickerDialogFragment datePicker = new DatePickerDialogFragment();
                     datePicker.setCallBack(onDateSetListener);
-                    datePicker.setOnDismissListener(onDateDismissListener);
+                    datePicker.setOnDismissListener(onDateDismissListener);//TODO: ADD ONDISMISSLISTENER
                     datePicker.show(getFragmentManager(),"date picker");
                 }
             }
@@ -91,7 +91,7 @@ public class EditTaskBottomSheet extends BottomSheetDialogFragment {
                 }else{
                     DatePickerDialogFragment datePicker = new DatePickerDialogFragment();
                     datePicker.setCallBack(onDateSetListener);
-                    datePicker.setOnDismissListener(onDateDismissListener);
+                    datePicker.setOnDismissListener(onDateDismissListener);//TODO: ADD ONDISMISSLISTENER
                     datePicker.show(getFragmentManager(),"date picker");
                 }
             }
@@ -102,7 +102,7 @@ public class EditTaskBottomSheet extends BottomSheetDialogFragment {
             public void onClick(View view) {
                 DatePickerDialogFragment datePicker = new DatePickerDialogFragment();
                 datePicker.setCallBack(onDateSetListener);
-                datePicker.setOnDismissListener(onDateDismissListener);
+                datePicker.setOnDismissListener(onDateDismissListener);//TODO: ADD ONDISMISSLISTENER
                 datePicker.show(getFragmentManager(),"date picker");
 
             }
@@ -151,7 +151,7 @@ public class EditTaskBottomSheet extends BottomSheetDialogFragment {
 
             TimePickerDialogFragment timePicker=new TimePickerDialogFragment();
             timePicker.setCallBack(onTimeSetListener);
-            timePicker.setOnDismissListener(onTimeDismissListener);
+            timePicker.setOnDismissListener(onTimeDismissListener);//TODO: ADD ONDISMISSLISTENER
             timePicker.show(getFragmentManager(),"time picker");
         }
     };

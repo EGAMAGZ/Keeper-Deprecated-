@@ -111,7 +111,7 @@ public class AddNewTaskBottomSheet extends BottomSheetDialogFragment {
             public void onClick(View view) {
                 DatePickerDialogFragment datePicker = new DatePickerDialogFragment();
                 datePicker.setCallBack(onDateSetListener);
-                datePicker.setOnDismissListener(onDateDismissListener);
+                datePicker.setOnDismissListener(onDateDismissListener);//TODO: ADD ONDISMISSLISTENER
                 datePicker.show(getFragmentManager(),"date picker");
 
             }
@@ -141,8 +141,6 @@ public class AddNewTaskBottomSheet extends BottomSheetDialogFragment {
             }
         });
 
-        //TODO: Add onClickListener when date is added, and also the storage of the date in the database
-
         return fragmentView;
     }
 
@@ -155,7 +153,7 @@ public class AddNewTaskBottomSheet extends BottomSheetDialogFragment {
 
             TimePickerDialogFragment timePicker=new TimePickerDialogFragment();
             timePicker.setCallBack(onTimeSetListener);
-            timePicker.setOnDismissListener(onTimeDismissListener);
+            timePicker.setOnDismissListener(onTimeDismissListener);//TODO: ADD ONDISMISSLISTENER
             timePicker.show(getFragmentManager(),"time picker");
         }
     };
@@ -234,8 +232,6 @@ public class AddNewTaskBottomSheet extends BottomSheetDialogFragment {
 
     //public void setTaskDate(int year,int month,int dayOfMonth,int hourOfDay,int minute){
     public void setTaskDate(){
-        //TODO: Add individual change to date and time
-        //TODO: Create and Assign different methods for each bottom sheet when date and time is chosen
         if(selected_year==0 && selected_month==0 && selected_dayOfMonth==0){
             return ;
         }else{
