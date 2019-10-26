@@ -1,9 +1,13 @@
 package com.android.keeper.dialog;
 
+import android.app.AlarmManager;
 import android.app.DatePickerDialog;
+import android.app.PendingIntent;
 import android.app.TimePickerDialog;
 import android.content.ContentValues;
+import android.content.Context;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
@@ -22,6 +26,7 @@ import android.widget.TimePicker;
 import com.android.keeper.R;
 import com.android.keeper.localdb.SQLiteConnection;
 import com.android.keeper.localdb.utilities.TasksUtilities;
+import com.android.keeper.notifications.AlertReceiver;
 
 import java.text.DateFormat;
 import java.util.Calendar;
@@ -135,6 +140,7 @@ public class EditTaskBottomSheet extends BottomSheetDialogFragment {
             @Override
             public void onClick(View view) {
                 bottomSheetListener.OnDeleteSavedTask(old_task_position,old_task_id);
+                cancelNotificationAlarm();//TODO: CHECK WHEN A TASK HAS A NOTIFICATION ALARM
                 dismiss();
             }
         });
@@ -257,6 +263,13 @@ public class EditTaskBottomSheet extends BottomSheetDialogFragment {
 
         database.update(TasksUtilities.TABLE_NAME,values,TasksUtilities.COLUMN_TASK_ID+"="+old_task_id,null);
         database.close();
+    }
+
+    private void cancelNotificationAlarm(){
+        AlarmManager alarmManager=(AlarmManager) getActivity().getSystemService(Context.ALARM_SERVICE);
+        Intent intent=new Intent(getContext(), AlertReceiver.class);
+        PendingIntent pendingIntent=PendingIntent.getBroadcast(getContext(), 1, intent,PendingIntent.FLAG_UPDATE_CURRENT);
+        alarmManager.cancel(pendingIntent);
     }
 
     public interface EditTaskBottomSheetListener{
