@@ -17,4 +17,25 @@
             android:scrollbars="vertical" />
     </ScrollView>
 
+    <android.support.design.bottomappbar.BottomAppBar
+        android:layout_width="match_parent"
+        android:layout_height="56dp"
+        android:id="@+id/bottombar"
+        android:layout_gravity="bottom"
+        app:fabAlignmentMode="end"
+        android:backgroundTint="@color/thirdColor"/>
+
+    <android.support.design.widget.FloatingActionButton
+        android:id="@+id/addnote_flt_btn"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="9dp"
+        android:layout_marginBottom="0dp"
+        app:layout_anchor="@id/bottombar"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:fabSize="normal"
+        android:clickable="true"
+        app:srcCompat="@drawable/ic_add_white_24dp"/>
+
 </android.support.design.widget.CoordinatorLayout>
