@@ -32,6 +32,7 @@ import com.android.keeper.dialog.EditTaskBottomSheet;
 import com.android.keeper.dialog.TimePickerDialogFragment;
 import com.android.keeper.fragments.NotesFragment;
 import com.android.keeper.fragments.RemindersFragment;
+import com.android.keeper.fragments.ScheduleFragment;
 import com.android.keeper.fragments.TasksFragment;
 import com.android.keeper.localdb.SQLiteConnection;
 
@@ -111,16 +112,16 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         switch(menuItem.getItemId()){
             case R.id.nav_notes:
                 getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container,new NotesFragment(),"notes_fragment").commit();
-                //toolbar.setTitle("Keeper: Notes");
                 break;
             case R.id.nav_reminders:
                 getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container,new RemindersFragment(),"reminders_fragment").commit();
-                //toolbar.setTitle("Keeper: Reminders");
                 break;
             case R.id.nav_tasks:
                 tasksFragment=new TasksFragment();
                 getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container,tasksFragment,"tasks_fragment").commit();
-                //toolbar.setTitle("Keeper: Tasks");
+                break;
+            case R.id.nav_schedule:
+                getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container,new ScheduleFragment(),"schedule_fragment").commit();
                 break;
             case R.id.nav_settings:
                 Intent intent=new Intent(MainActivity.this,SettingsActivity.class);

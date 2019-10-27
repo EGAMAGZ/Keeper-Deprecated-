@@ -21,11 +21,12 @@ public class NotesFragment extends Fragment {
 
     private SQLiteConnection conn;
     private ScrollView scrollView;
+    private View fragmentView;
 
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        View fragmentView=inflater.inflate(R.layout.fragment_notes,container,false);
+        fragmentView=inflater.inflate(R.layout.fragment_notes,container,false);
         conn=new SQLiteConnection(getContext(),"keeper_db",null,1);
 
         scrollView=fragmentView.findViewById(R.id.notes_scrollview);
