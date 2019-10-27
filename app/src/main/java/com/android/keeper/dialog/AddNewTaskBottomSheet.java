@@ -119,6 +119,7 @@ public class AddNewTaskBottomSheet extends BottomSheetDialogFragment {
         saveTaskButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                //TODO: MAKE SOME TEST, TO CHECK IF THE NOTIFICATION ALARMS DO NOT OVERLAP
                 task_title=titleEditText.getText().toString();
                 if(descriptionEditText.getVisibility()== View.VISIBLE){
                     task_details=descriptionEditText.getText().toString();

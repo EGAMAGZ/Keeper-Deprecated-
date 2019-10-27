@@ -130,6 +130,7 @@ public class EditTaskBottomSheet extends BottomSheetDialogFragment {
                     bottomSheetListener.OnEmptyTaskTitle();
                 }else{
                     saveEditedTask();
+                    //TODO: ADD A METHOD TO CHANGE ALARM AND/OR CANCEL THE PREVIOUS VERSION OF IT
                     bottomSheetListener.OnSaveEditedTask(old_task_position,old_task_id,taskTitleEditText.getText().toString(),taskDetailsEditText.getText().toString());
                     dismiss();
                 }
@@ -139,6 +140,7 @@ public class EditTaskBottomSheet extends BottomSheetDialogFragment {
         deleteTaskButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                //TODO: MAKE SOME TEST, TO PROOF THAT IS CANCEL ONLY THE TASK SELECTED
                 bottomSheetListener.OnDeleteSavedTask(old_task_position,old_task_id);
                 cancelNotificationAlarm();//TODO: CHECK WHEN A TASK HAS A NOTIFICATION ALARM
                 dismiss();
