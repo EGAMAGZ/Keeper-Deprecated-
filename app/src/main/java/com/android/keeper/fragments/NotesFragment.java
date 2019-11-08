@@ -6,8 +6,11 @@ import android.database.sqlite.SQLiteOpenHelper;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.design.bottomappbar.BottomAppBar;
 import android.support.v4.app.Fragment;
+import android.support.v7.widget.Toolbar;
 import android.view.LayoutInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ScrollView;
@@ -22,6 +25,7 @@ public class NotesFragment extends Fragment {
     private SQLiteConnection conn;
     private ScrollView scrollView;
     private View fragmentView;
+    private BottomAppBar bottomAppBar;
 
     @Nullable
     @Override
@@ -30,6 +34,17 @@ public class NotesFragment extends Fragment {
         conn=new SQLiteConnection(getContext(),"keeper_db",null,1);
 
         scrollView=fragmentView.findViewById(R.id.notes_scrollview);
+        bottomAppBar=fragmentView.findViewById(R.id.bottombar);
+        bottomAppBar.replaceMenu(R.menu.task_bottomappbar_menu);
+        bottomAppBar.setOnMenuItemClickListener(new Toolbar.OnMenuItemClickListener() {
+            @Override
+            public boolean onMenuItemClick(MenuItem menuItem) {
+                switch(menuItem.getItemId()){
+
+                }
+                return true;
+            }
+        });
 
         loadNotes();
         return fragmentView;

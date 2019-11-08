@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+    <item android:id="@+id/note_drawing" android:icon="@drawable/ic_brush_veish_24dp"
+        android:title="Note with drawing" app:showAsAction="always"/>
+    <item android:id="@+id/note_image" android:icon="@drawable/ic_photo_veish_24dp"
+        android:title="Note with draw" app:showAsAction="always"/>
+    <item android:id="@+id/note_voice" android:icon="@drawable/ic_keyboard_voice_veish_24dp"
+        android:title="Voice note" app:showAsAction="always"/>
+    <item android:id="@+id/note_list" android:icon="@drawable/ic_check_box_veish_24dp"
+        android:title="Note List" app:showAsAction="always"/>
+</menu>

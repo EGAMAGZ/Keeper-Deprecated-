@@ -22,11 +22,12 @@ public class NotificationHelper extends ContextWrapper {
     public String channelRemindersName="Channel Reminders";
 
     private static NotificationManager manager;
+    private Context context;
 
     public NotificationHelper(Context base) {
         super(base);
         if(Build.VERSION.SDK_INT>= Build.VERSION_CODES.O){
-            //createChannels();
+            context=base;
         }
     }
 
@@ -62,6 +63,7 @@ public class NotificationHelper extends ContextWrapper {
                 .setAutoCancel(true)
                 .setCategory(NotificationCompat.CATEGORY_REMINDER)
                 .setContentIntent(pendingIntent);
+        //TODO:ADD ACTION, COMPLETE TASK
         return builder.build();
     }
 }
