@@ -79,7 +79,7 @@ public class EditTaskBottomSheet extends BottomSheetDialogFragment {
                 }else{
                     DatePickerDialogFragment datePicker = new DatePickerDialogFragment();
                     datePicker.setCallBack(onDateSetListener);
-                    datePicker.setOnDismissListener(onDateDismissListener);//TODO: ADD ONDISMISSLISTENER
+                    datePicker.setOnDismissListener(onDateDismissListener);
                     datePicker.show(getFragmentManager(),"date picker");
                 }
             }
@@ -89,14 +89,13 @@ public class EditTaskBottomSheet extends BottomSheetDialogFragment {
             @Override
             public void onClick(View view) {
                 if(selected_year!=0 && selected_month!=0 && selected_dayOfMonth!=0){
-
                     TimePickerDialogFragment timePicker=new TimePickerDialogFragment();
                     timePicker.setCallBack(onChangeTimeListener);
                     timePicker.show(getFragmentManager(),"time picker");
                 }else{
                     DatePickerDialogFragment datePicker = new DatePickerDialogFragment();
                     datePicker.setCallBack(onDateSetListener);
-                    datePicker.setOnDismissListener(onDateDismissListener);//TODO: ADD ONDISMISSLISTENER
+                    datePicker.setOnDismissListener(onDateDismissListener);
                     datePicker.show(getFragmentManager(),"date picker");
                 }
             }
@@ -147,69 +146,6 @@ public class EditTaskBottomSheet extends BottomSheetDialogFragment {
             }
         });
         return fragmentView;
-    }
-
-
-    private DatePickerDialog.OnDateSetListener onDateSetListener=new DatePickerDialog.OnDateSetListener() {
-        @Override
-        public void onDateSet(DatePicker datePicker, int year, int month, int dayOfMonth) {
-            selected_year=year;
-            selected_month=month;
-            selected_dayOfMonth=dayOfMonth;
-
-            TimePickerDialogFragment timePicker=new TimePickerDialogFragment();
-            timePicker.setCallBack(onTimeSetListener);
-            timePicker.setOnDismissListener(onTimeDismissListener);//TODO: ADD ONDISMISSLISTENER
-            timePicker.show(getFragmentManager(),"time picker");
-        }
-    };
-
-    private DialogInterface.OnDismissListener onDateDismissListener=new DialogInterface.OnDismissListener() {
-        @Override
-        public void onDismiss(DialogInterface dialogInterface) {
-            selected_year=0;selected_month=0;selected_dayOfMonth=0;
-        }
-    };
-
-    private TimePickerDialog.OnTimeSetListener onTimeSetListener=new TimePickerDialog.OnTimeSetListener() {
-        @Override
-        public void onTimeSet(TimePicker timePicker, int hourOfDay, int minute) {
-            selected_hourOfDay=hourOfDay;
-            selected_minute=minute;
-            setTaskDate();
-        }
-    };
-
-    private DialogInterface.OnDismissListener onTimeDismissListener=new DialogInterface.OnDismissListener() {
-        @Override
-        public void onDismiss(DialogInterface dialogInterface) {
-            selected_year=0;selected_month=0;selected_dayOfMonth=0;selected_minute=0;selected_hourOfDay=0;
-        }
-    };
-
-    private DatePickerDialog.OnDateSetListener onChangeDateListener=new DatePickerDialog.OnDateSetListener() {
-        @Override
-        public void onDateSet(DatePicker datePicker, int year, int month, int dayOfMonth) {
-            selected_year=year;
-            selected_month=month;
-            selected_dayOfMonth=dayOfMonth;
-
-            setTaskDate();
-        }
-    };
-
-    private TimePickerDialog.OnTimeSetListener onChangeTimeListener=new TimePickerDialog.OnTimeSetListener() {
-        @Override
-        public void onTimeSet(TimePicker timePicker, int hourOfDay, int minute) {
-            selected_hourOfDay=hourOfDay;
-            selected_minute=minute;
-            setTaskDate();
-        }
-    };
-
-    @Override
-    public void onDismiss(DialogInterface dialog) {
-        super.onDismiss(dialog);
     }
 
     private void loadDate(int task_id){
@@ -273,6 +209,64 @@ public class EditTaskBottomSheet extends BottomSheetDialogFragment {
         PendingIntent pendingIntent=PendingIntent.getBroadcast(getContext(), 1, intent,PendingIntent.FLAG_UPDATE_CURRENT);
         alarmManager.cancel(pendingIntent);
     }
+
+
+    private DatePickerDialog.OnDateSetListener onDateSetListener=new DatePickerDialog.OnDateSetListener() {
+        @Override
+        public void onDateSet(DatePicker datePicker, int year, int month, int dayOfMonth) {
+            selected_year=year;
+            selected_month=month;
+            selected_dayOfMonth=dayOfMonth;
+
+            TimePickerDialogFragment timePicker=new TimePickerDialogFragment();
+            timePicker.setCallBack(onTimeSetListener);
+            timePicker.setOnDismissListener(onTimeDismissListener);//TODO: ADD ONDISMISSLISTENER
+            timePicker.show(getFragmentManager(),"time picker");
+        }
+    };
+
+    private DialogInterface.OnDismissListener onDateDismissListener=new DialogInterface.OnDismissListener() {
+        @Override
+        public void onDismiss(DialogInterface dialogInterface) {
+            selected_year=0;selected_month=0;selected_dayOfMonth=0;
+        }
+    };
+
+    private TimePickerDialog.OnTimeSetListener onTimeSetListener=new TimePickerDialog.OnTimeSetListener() {
+        @Override
+        public void onTimeSet(TimePicker timePicker, int hourOfDay, int minute) {
+            selected_hourOfDay=hourOfDay;
+            selected_minute=minute;
+            setTaskDate();
+        }
+    };
+
+    private DialogInterface.OnDismissListener onTimeDismissListener=new DialogInterface.OnDismissListener() {
+        @Override
+        public void onDismiss(DialogInterface dialogInterface) {
+            selected_year=0;selected_month=0;selected_dayOfMonth=0;selected_minute=0;selected_hourOfDay=0;
+        }
+    };
+
+    private DatePickerDialog.OnDateSetListener onChangeDateListener=new DatePickerDialog.OnDateSetListener() {
+        @Override
+        public void onDateSet(DatePicker datePicker, int year, int month, int dayOfMonth) {
+            selected_year=year;
+            selected_month=month;
+            selected_dayOfMonth=dayOfMonth;
+
+            setTaskDate();
+        }
+    };
+
+    private TimePickerDialog.OnTimeSetListener onChangeTimeListener=new TimePickerDialog.OnTimeSetListener() {
+        @Override
+        public void onTimeSet(TimePicker timePicker, int hourOfDay, int minute) {
+            selected_hourOfDay=hourOfDay;
+            selected_minute=minute;
+            setTaskDate();
+        }
+    };
 
     public interface EditTaskBottomSheetListener{
         void OnSaveEditedTask(int task_position,int task_id,String task_title,String task_details);

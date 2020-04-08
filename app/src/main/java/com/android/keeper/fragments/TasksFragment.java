@@ -147,6 +147,11 @@ public class TasksFragment extends Fragment {
                     public void OnEmptyTaskTitle() {
                         CustomToast("Task Title Empty",R.drawable.ic_close_white_24dp);
                     }
+
+                    @Override
+                    public void OnTaskDateSelected() {
+                        CustomToast("Task Date Selected",R.drawable.ic_done_white_24dp);
+                    }
                 });
                 addNewTaskBottomSheet.show(getFragmentManager(),"addNewTaskBottomSheet");
             }
@@ -173,7 +178,6 @@ public class TasksFragment extends Fragment {
                     tasksList.add(new TaskItem(R.drawable.ic_check_box_black_24dp,cursor.getInt(0),cursor.getString(1),cursor.getString(2),true));
                 }
             }
-
         }
         catch(IllegalStateException e){
             taskProgressBar.setProgress(0);
@@ -192,7 +196,7 @@ public class TasksFragment extends Fragment {
             tasksRecyclerView.setAdapter(tasksRecAdapter);
             tasksRecAdapter.setOnItemClickListener(new TasksAdapter.OnItemClickListener() {
                 @Override
-                public void onItemClick(int position) {
+                public void OnEditTask(int position) {
                     editTaskBottomSheet=new EditTaskBottomSheet();
                     editTaskBottomSheet.setContent(position,tasksList.get(position).getTaskId(),tasksList.get(position).getTaskTitle(),tasksList.get(position).getTaskDetails());
                     editTaskBottomSheet.setEditTaskBottomSheetListener(new EditTaskBottomSheet.EditTaskBottomSheetListener() {
@@ -215,7 +219,7 @@ public class TasksFragment extends Fragment {
                 }
 
                 @Override
-                public void onDoneTaskClick(int position) {
+                public void OnTaskDoneClick(int position) {
                     //TODO: Show snackbar with undo action for the both status that the task could have(EX: setTaskDone -> setTaskUndone)
                     if(tasksList.get(position).isTaskDone()){
                         setTaskUndone(tasksList.get(position).getTaskId());
@@ -225,12 +229,6 @@ public class TasksFragment extends Fragment {
                         tasksRecAdapter.notifyItemChanged(position);
                     }
                 }
-
-                /*@Override
-                public void onItemLongClick(int position) {
-                    Toast.makeText(getContext(),"LONG CLICKED "+position,Toast.LENGTH_SHORT).show();
-                    bottomAppBar.setFabAlignmentMode(BottomAppBar.FAB_ALIGNMENT_MODE_END);
-                }*/
             });
             percentageTasks();
             sortTaskArrayList();

@@ -22,8 +22,8 @@ public class TasksAdapter extends RecyclerView.Adapter<TasksAdapter.TasksViewHol
     private OnItemClickListener itemClickListener;
 
     public interface OnItemClickListener{
-        void onItemClick(int position);
-        void onDoneTaskClick(int position);
+        void OnEditTask(int position);
+        void OnTaskDoneClick(int position);
         //void onItemLongClick(int position);
     }
 
@@ -37,43 +37,35 @@ public class TasksAdapter extends RecyclerView.Adapter<TasksAdapter.TasksViewHol
         * */
         public TextView taskTitleTextView,taskDetailsTextView;
         public ImageView taskImage;
-        //public View v;
+        public View v;
 
         public TasksViewHolder(@NonNull View itemView, final OnItemClickListener listener) { //Because this class is static, we need to pass the interface OnItemClickListener
             super(itemView);
-            /*v=itemView;
+            v=itemView;
             itemView.setOnLongClickListener(new View.OnLongClickListener() {
                 @Override
                 public boolean onLongClick(View view) {
-                    int position=getAdapterPosition();
-                    listener.onItemLongClick(position);
-                    //Toast.makeText(v.getContext(),"LONG CLICKED",Toast.LENGTH_SHORT).show();
+                    if(listener !=null){
+                        int position=getAdapterPosition();//Get Adapter Position (ItemPosition)
+                        if(position!=RecyclerView.NO_POSITION){
+                            listener.OnEditTask(position);
+                        }
+                    }
                     return true;
                 }
-            });*/
+            });
 
             taskTitleTextView=itemView.findViewById(R.id.task_item_title);
             taskDetailsTextView=itemView.findViewById(R.id.task_item_details);
             taskImage=itemView.findViewById(R.id.task_item_image);
 
-            itemView.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    if(listener !=null){
-                        int position=getAdapterPosition();//Get Adapter Position (ItemPosition)
-                        if(position!=RecyclerView.NO_POSITION){
-                            listener.onItemClick(position);
-                        }
-                    }
-                }
-            });
             taskImage.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
                     if(listener !=null){
                         int position=getAdapterPosition();//Get Adapter Position (ItemPosition)
                         if(position!=RecyclerView.NO_POSITION){
-                            listener.onDoneTaskClick(position);
+                            listener.OnTaskDoneClick(position);
                         }
                     }
                 }

@@ -2,6 +2,7 @@ package com.android.keeper.dialog;
 
 import android.app.AlarmManager;
 import android.app.DatePickerDialog;
+import android.app.Dialog;
 import android.app.Notification;
 import android.app.PendingIntent;
 import android.app.TimePickerDialog;
@@ -13,6 +14,7 @@ import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.design.widget.BottomSheetDialog;
 import android.support.design.widget.BottomSheetDialogFragment;
 import android.support.v4.app.DialogFragment;
 import android.view.LayoutInflater;
@@ -47,7 +49,12 @@ public class AddNewTaskBottomSheet extends BottomSheetDialogFragment {
     private RelativeLayout taskDateContainer;
 
     private String task_title,task_details;
-    private int task_id,selected_year,selected_month,selected_dayOfMonth,selected_hourOfDay,selected_minute;
+    private int task_id;
+    private int selected_year=0;
+    private int selected_month=0;
+    private int selected_dayOfMonth=0;
+    private int selected_hourOfDay=0;
+    private int selected_minute=0;
     private Calendar calendar;
 
     @Nullable
@@ -57,8 +64,6 @@ public class AddNewTaskBottomSheet extends BottomSheetDialogFragment {
         conn = new SQLiteConnection(getContext(), "keeper_db", null, 1);
         notificationHelper=new NotificationHelper(getContext());
 
-        selected_year=0;selected_month=0;selected_dayOfMonth=0;selected_hourOfDay=0;selected_minute=0;
-
         addDetailsButton= fragmentView.findViewById(R.id.task_add_details);
         addDateButton= fragmentView.findViewById(R.id.task_add_date);
         saveTaskButton= fragmentView.findViewById(R.id.task_save);
@@ -66,10 +71,10 @@ public class AddNewTaskBottomSheet extends BottomSheetDialogFragment {
         deleteTaskDateButton= fragmentView.findViewById(R.id.task_delete_date);
         changeTaskDateButton= fragmentView.findViewById(R.id.task_date);
         changeTaskTimeButton= fragmentView.findViewById(R.id.task_time);
-
+        //EditTexts
         descriptionEditText= fragmentView.findViewById(R.id.task_details);
         titleEditText= fragmentView.findViewById(R.id.task_title);
-
+        //Layouts
         taskDateContainer=fragmentView.findViewById(R.id.task_date_container);
 
         changeTaskDateButton.setOnClickListener(new View.OnClickListener() {
@@ -145,6 +150,98 @@ public class AddNewTaskBottomSheet extends BottomSheetDialogFragment {
         return fragmentView;
     }
 
+    private int saveTask(){
+        int id;
+        long returnedId;
+        SQLiteDatabase database=conn.getWritableDatabase();
+        ContentValues values=new ContentValues();
+
+        values.put(TasksUtilities.COLUMN_TASK_TITLE,task_title);
+        values.put(TasksUtilities.COLUMN_TASK_DETAILS,task_details);
+        values.put(TasksUtilities.COLUMN_TASK_YEAR,selected_year);
+        values.put(TasksUtilities.COLUMN_TASK_MONTH,selected_month);
+        values.put(TasksUtilities.COLUMN_TASK_DAY,selected_dayOfMonth);
+        values.put(TasksUtilities.COLUMN_TASK_HOUR,selected_hourOfDay);
+        values.put(TasksUtilities.COLUMN_TASK_MINUTE,selected_minute);
+
+        returnedId=database.insert(TasksUtilities.TABLE_NAME,TasksUtilities.COLUMN_TASK_ID,values);
+        id=(int) returnedId;
+
+        database.close();
+        return id;
+    }
+
+    public void setTaskDate(){
+        if(selected_year==0 && selected_month==0 && selected_dayOfMonth==0){
+            return ;
+        }else{
+
+            if(deleteTaskDateButton.getVisibility()==View.GONE || changeTaskDateButton.getVisibility()==View.GONE){
+                showDateFields();
+            }
+
+            calendar= Calendar.getInstance();
+            calendar.set(Calendar.YEAR,selected_year);
+            calendar.set(Calendar.MONTH,selected_month);
+            calendar.set(Calendar.DAY_OF_MONTH,selected_dayOfMonth);
+
+            String date= DateFormat.getDateInstance(DateFormat.FULL).format(calendar.getTime());
+            changeTaskDateButton.setText(date);
+            changeTaskTimeButton.setText(selected_hourOfDay+":"+selected_minute);//TODO:ADD A FORMAT FOR TIME
+            bottomSheetListener.OnTaskDateSelected();
+        }
+    }
+
+    private void setNotificationAlarm(Notification notification,int task_id){
+        //TODO:FIX ERROR THAT SHOW THE SAME CONTENT TO EVERY NOTIFICATION(SOMETIMES)
+        //TODO:ADD METHOD TO DELETE/CANCEL NOTIFICAION
+        //TODO:ADD ARRAYLIST TO STORE DATE(YEAR;MOTH;DAY;HOUR;MINUTE)
+        if(selected_year==0 && selected_month==0 && selected_dayOfMonth==0){
+            return ;
+        }else{
+            calendar=Calendar.getInstance();
+            calendar.set(Calendar.YEAR,selected_year);
+            calendar.set(Calendar.MONTH,selected_month);
+            calendar.set(Calendar.DAY_OF_MONTH,selected_dayOfMonth);
+            calendar.set(Calendar.HOUR_OF_DAY,selected_hourOfDay);
+            calendar.set(Calendar.MINUTE,selected_minute);
+            calendar.set(Calendar.SECOND,0);
+
+            AlarmManager alarmManager=(AlarmManager) fragmentView.getContext().getSystemService(Context.ALARM_SERVICE);
+
+            String channelTaskID=NotificationHelper.channelTaskID;
+            String channelTaskName=NotificationHelper.channelTasksName;
+
+            Intent intent=new Intent(getContext(), AlertReceiver.class);
+            intent.putExtra(AlertReceiver.NOTIFICATION_ID , task_id ) ;
+            intent.putExtra(AlertReceiver.NOTIFICATION,notification);
+            intent.putExtra(AlertReceiver.NOTIFICATION_CHANNEL_ID,channelTaskID);
+            intent.putExtra(AlertReceiver.NOTIFICATION_CHANNEL_NAME,channelTaskName);
+
+            PendingIntent pendingIntent=PendingIntent.getBroadcast(getContext(),1,intent,0);
+            alarmManager.setExact(AlarmManager.RTC_WAKEUP,calendar.getTimeInMillis(),pendingIntent);
+        }
+    }
+
+    private void showDateFields(){
+        deleteTaskDateButton.setVisibility(View.VISIBLE);
+        changeTaskDateButton.setVisibility(View.VISIBLE);
+        changeTaskTimeButton.setVisibility(View.VISIBLE);
+            taskDateContainer.setVisibility(View.VISIBLE);
+    }
+
+    private void deleteDateFields(){
+        changeTaskDateButton.setText("");
+        changeTaskTimeButton.setText("");
+        deleteTaskDateButton.setVisibility(View.GONE);
+        changeTaskDateButton.setVisibility(View.GONE);
+        changeTaskTimeButton.setVisibility(View.GONE);
+
+        taskDateContainer.setVisibility(View.GONE);
+
+        selected_year=0;selected_month=0;selected_dayOfMonth=0;selected_hourOfDay=0;selected_minute=0;
+    }
+
     private DatePickerDialog.OnDateSetListener onDateSetListener=new DatePickerDialog.OnDateSetListener() {
         @Override
         public void onDateSet(DatePicker datePicker, int year, int month, int dayOfMonth) {
@@ -203,106 +300,10 @@ public class AddNewTaskBottomSheet extends BottomSheetDialogFragment {
     };
 
     @Override
-    public void onDismiss(DialogInterface dialog) {
-        super.onDismiss(dialog);
+    public Dialog onCreateDialog(Bundle savedInstanceState) {
+        BottomSheetDialog dialog= (BottomSheetDialog) super.onCreateDialog(savedInstanceState);
 
-    }
-
-    private int saveTask(){
-        int id;
-        long returnedId;
-        SQLiteDatabase database=conn.getWritableDatabase();
-        ContentValues values=new ContentValues();
-
-        //String sql="INSERT INTO "+ TasksUtilities.TABLE_NAME +"("+TasksUtilities.COLUMN_TASK_TITLE+","+TasksUtilities.COLUMN_TASK_DETAILS+") VALUES ('"+task_title+"','"+task_details+"')";
-        values.put(TasksUtilities.COLUMN_TASK_TITLE,task_title);
-        values.put(TasksUtilities.COLUMN_TASK_DETAILS,task_details);
-        //if(selected_year!=0 && selected_month!=0 && selected_dayOfMonth!=0){
-        values.put(TasksUtilities.COLUMN_TASK_YEAR,selected_year);
-        values.put(TasksUtilities.COLUMN_TASK_MONTH,selected_month);
-        values.put(TasksUtilities.COLUMN_TASK_DAY,selected_dayOfMonth);
-        values.put(TasksUtilities.COLUMN_TASK_HOUR,selected_hourOfDay);
-        values.put(TasksUtilities.COLUMN_TASK_MINUTE,selected_minute);
-
-        returnedId=database.insert(TasksUtilities.TABLE_NAME,TasksUtilities.COLUMN_TASK_ID,values);
-        id=(int) returnedId;
-
-        database.close();
-        return id;
-    }
-
-    //public void setTaskDate(int year,int month,int dayOfMonth,int hourOfDay,int minute){
-    public void setTaskDate(){
-        if(selected_year==0 && selected_month==0 && selected_dayOfMonth==0){
-            return ;
-        }else{
-
-            if(deleteTaskDateButton.getVisibility()==View.GONE || changeTaskDateButton.getVisibility()==View.GONE){
-                showDateFields();
-            }
-
-            calendar= Calendar.getInstance();
-            calendar.set(Calendar.YEAR,selected_year);
-            calendar.set(Calendar.MONTH,selected_month);
-            calendar.set(Calendar.DAY_OF_MONTH,selected_dayOfMonth);
-
-            String date= DateFormat.getDateInstance(DateFormat.FULL).format(calendar.getTime());
-            changeTaskDateButton.setText(date);
-            changeTaskTimeButton.setText(selected_hourOfDay+":"+selected_minute);//TODO:ADD A FORMAT FOR TIME
-            Toast.makeText(getContext(),"Task Date Selected",Toast.LENGTH_SHORT).show();
-
-        }
-    }
-
-
-    private void setNotificationAlarm(Notification notification,int task_id){
-        //TODO:FIX ERROR THAT SHOW THE SAME CONTENT TO EVERY NOTIFICATION(SOMETIMES)
-        //TODO:ADD METHOD TO DELETE/CANCEL NOTIFICAION
-        //TODO:ADD ARRAYLIST TO STORE DATE(YEAR;MOTH;DAY;HOUR;MINUTE)
-        if(selected_year==0 && selected_month==0 && selected_dayOfMonth==0){
-            return ;
-        }else{
-            calendar=Calendar.getInstance();
-            calendar.set(Calendar.YEAR,selected_year);
-            calendar.set(Calendar.MONTH,selected_month);
-            calendar.set(Calendar.DAY_OF_MONTH,selected_dayOfMonth);
-            calendar.set(Calendar.HOUR_OF_DAY,selected_hourOfDay);
-            calendar.set(Calendar.MINUTE,selected_minute);
-            calendar.set(Calendar.SECOND,0);
-
-            AlarmManager alarmManager=(AlarmManager) fragmentView.getContext().getSystemService(Context.ALARM_SERVICE);
-
-            String channelTaskID=NotificationHelper.channelTaskID;
-            String channelTaskName=NotificationHelper.channelTasksName;
-
-            Intent intent=new Intent(getContext(), AlertReceiver.class);
-            intent.putExtra(AlertReceiver.NOTIFICATION_ID , task_id ) ;
-            intent.putExtra(AlertReceiver.NOTIFICATION,notification);
-            intent.putExtra(AlertReceiver.NOTIFICATION_CHANNEL_ID,channelTaskID);
-            intent.putExtra(AlertReceiver.NOTIFICATION_CHANNEL_NAME,channelTaskName);
-
-            PendingIntent pendingIntent=PendingIntent.getBroadcast(getContext(),1,intent,0);
-            alarmManager.setExact(AlarmManager.RTC_WAKEUP,calendar.getTimeInMillis(),pendingIntent);
-        }
-    }
-
-    private void showDateFields(){
-        deleteTaskDateButton.setVisibility(View.VISIBLE);
-        changeTaskDateButton.setVisibility(View.VISIBLE);
-        changeTaskTimeButton.setVisibility(View.VISIBLE);
-            taskDateContainer.setVisibility(View.VISIBLE);
-    }
-
-    private void deleteDateFields(){
-        changeTaskDateButton.setText("");
-        changeTaskTimeButton.setText("");
-        deleteTaskDateButton.setVisibility(View.GONE);
-        changeTaskDateButton.setVisibility(View.GONE);
-        changeTaskTimeButton.setVisibility(View.GONE);
-
-        taskDateContainer.setVisibility(View.GONE);
-
-        selected_year=0;selected_month=0;selected_dayOfMonth=0;selected_hourOfDay=0;selected_minute=0;
+        return dialog;
     }
 
     /*
@@ -312,6 +313,7 @@ public class AddNewTaskBottomSheet extends BottomSheetDialogFragment {
     public interface AddNewTaskBottomSheetListener{
         void OnAddTask(int task_id,String task_title,String task_details);
         void OnEmptyTaskTitle();
+        void OnTaskDateSelected();
     }
 
     public void setBottomSheetListener(AddNewTaskBottomSheetListener listener){
