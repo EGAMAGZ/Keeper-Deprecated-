@@ -62,6 +62,8 @@ public class TasksFragment extends Fragment {
     public View onCreateView(@NonNull final LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         fragmentView =inflater.inflate(R.layout.fragment_tasks,container,false);
 
+        tasksList=new ArrayList<TaskItem>();
+
         risefrombottom= AnimationUtils.loadAnimation(getContext(),R.anim.rise_from_bottom);
         risefrombottom.setDuration(200);
         hidetobottom=AnimationUtils.loadAnimation(getContext(),R.anim.hide_to_bottom);
@@ -74,7 +76,6 @@ public class TasksFragment extends Fragment {
         tasksRecyclerView= fragmentView.findViewById(R.id.tasks_recyclerview);
         tasksLayoutManager=new LinearLayoutManager(getContext());
 
-        tasksList=new ArrayList<TaskItem>();
         taskProgressBar =(ProgressBar) fragmentView.findViewById(R.id.task_progress_bar);
         taskPercentage =(TextView) fragmentView.findViewById(R.id.task_progress_percentage);
 
@@ -222,10 +223,10 @@ public class TasksFragment extends Fragment {
                 public void OnTaskDoneClick(int position) {
                     //TODO: Show snackbar with undo action for the both status that the task could have(EX: setTaskDone -> setTaskUndone)
                     if(tasksList.get(position).isTaskDone()){
-                        setTaskUndone(tasksList.get(position).getTaskId());
+                        setTaskUndone(tasksList.get(position).getTaskId(),position);
                         tasksRecAdapter.notifyItemChanged(position);
                     }else{
-                        setTaskDone(tasksList.get(position).getTaskId());
+                        setTaskDone(tasksList.get(position).getTaskId(),position);
                         tasksRecAdapter.notifyItemChanged(position);
                     }
                 }
@@ -256,8 +257,10 @@ public class TasksFragment extends Fragment {
         try {
             Cursor cursor=database.rawQuery("SELECT "+TasksUtilities.COLUMN_TASK_ID+" FROM "+ TasksUtilities.TABLE_NAME,null);
             count=cursor.getCount();
-            return count;
         }catch (Exception e){
+            count=0;
+        }
+        finally {
             return count;
         }
     }
@@ -267,8 +270,10 @@ public class TasksFragment extends Fragment {
         try{
             Cursor cursor=database.rawQuery("SELECT "+TasksUtilities.COLUMN_TASK_ID+" FROM "+TasksUtilities.TABLE_NAME+" WHERE "+TasksUtilities.COLUMN_TASK_DONE+" = 1",null);
             count=cursor.getCount();
-            return count;
         }catch(Exception e){
+            count=0;
+        }
+        finally {
             return count;
         }
     }
@@ -287,31 +292,23 @@ public class TasksFragment extends Fragment {
         tasksRecAdapter.addItem(0,new TaskItem(R.drawable.ic_check_box_outline_blank_black_24dp,task_id,task_title,task_details,false));
     }
 
-    private void deleteTask(int task_id){
+    private void deleteTask(int task_id,int task_position){
         SQLiteDatabase database=conn.getReadableDatabase();
         database.delete(TasksUtilities.TABLE_NAME,TasksUtilities.COLUMN_TASK_ID+"="+task_id,null);
-        for(int i=0;i<tasksList.size();++i){
-            if(tasksList.get(i).getTaskId()==task_id){
-                tasksList.remove(i); //It is related with the adapter for the elements that are shown
 
-                tasksRecAdapter.removeItem(i);//It is related with the adapter with the elements for filter
-            }
-        }
+        tasksList.remove(task_position); //It is related with the adapter for the elements that are shown
+        tasksRecAdapter.removeItem(task_position);//It is related with the adapter with the elements for filter
+        //Here was a for before
         database.close();
     }
-    private void editTask(int task_id,String task_title,String task_details){
+    private void editTask(int task_id,int task_position,String task_title,String task_details){
+        //It is related with the adapter for the elements that are shown
+        tasksList.get(task_position).setTaskTitle(task_title);
+        tasksList.get(task_position).setTaskDetails(task_details);
 
-        for (int i=0;i<tasksList.size();++i){
-            if(tasksList.get(i).getTaskId()==task_id){
-                //It is related with the adapter for the elements that are shown
-                tasksList.get(i).setTaskTitle(task_title);
-                tasksList.get(i).setTaskDetails(task_details);
-
-                tasksRecAdapter.editItem(task_id,task_title,task_details);//It is related with the adapter with the elements for filter
-            }
-        }
+        tasksRecAdapter.editItem(task_id,task_title,task_details);//It is related with the adapter with the elements for filter
     }
-    private void setTaskDone(int task_id){
+    private void setTaskDone(int task_id,int task_position){
         SQLiteDatabase database=conn.getWritableDatabase();
 
         ContentValues values=new ContentValues();
@@ -319,18 +316,15 @@ public class TasksFragment extends Fragment {
 
         database.update(TasksUtilities.TABLE_NAME,values,TasksUtilities.COLUMN_TASK_ID+"="+task_id,null);
 
-        for(int i=0;i<tasksList.size();++i){
-            if(tasksList.get(i).getTaskId()==task_id){
-                tasksList.get(i).setImageResource(R.drawable.ic_check_box_black_24dp);
-                tasksList.get(i).setTaskDone(true);
-            }
-        }
+        tasksList.get(task_position).setImageResource(R.drawable.ic_check_box_black_24dp);
+        tasksList.get(task_position).setTaskDone(true);
+        //Here was a for before
         sortTaskArrayList();
         database.close();
         percentageTasks();
     }
 
-    private void setTaskUndone(int task_id){
+    private void setTaskUndone(int task_id,int task_position){
         SQLiteDatabase database=conn.getWritableDatabase();
 
         ContentValues values=new ContentValues();
@@ -338,12 +332,9 @@ public class TasksFragment extends Fragment {
 
         database.update(TasksUtilities.TABLE_NAME,values,TasksUtilities.COLUMN_TASK_ID+"="+task_id,null);
 
-        for(int i=0;i<tasksList.size();++i){
-            if(tasksList.get(i).getTaskId()==task_id){
-                tasksList.get(i).setImageResource(R.drawable.ic_check_box_outline_blank_black_24dp);
-                tasksList.get(i).setTaskDone(false);
-            }
-        }
+        tasksList.get(task_position).setImageResource(R.drawable.ic_check_box_outline_blank_black_24dp);
+        tasksList.get(task_position).setTaskDone(false);
+        //Here was a for before
         sortTaskArrayList();
         database.close();
         percentageTasks();
@@ -373,13 +364,13 @@ public class TasksFragment extends Fragment {
     }
 
     private void SaveEditedTask(int task_position, int task_id,String task_title,String task_details){
-        editTask(task_id,task_title,task_details);
+        editTask(task_id,task_position,task_title,task_details);
         tasksRecAdapter.notifyItemChanged(task_position);
         CustomToast("Task saved",R.drawable.ic_done_white_24dp);
     }
 
     private void DeleteSavedTask(int task_position, int task_id){
-        deleteTask(task_id);
+        deleteTask(task_id,task_position);
         tasksRecAdapter.notifyDataSetChanged();
         CustomToast("Task deleted",R.drawable.ic_done_white_24dp);
         percentageTasks();

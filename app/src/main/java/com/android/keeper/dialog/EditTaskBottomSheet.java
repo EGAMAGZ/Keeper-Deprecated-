@@ -42,13 +42,11 @@ public class EditTaskBottomSheet extends BottomSheetDialogFragment {
 
     private String old_task_title,old_task_details;
     private int old_task_id,old_task_position,selected_year,selected_month,selected_dayOfMonth,selected_hourOfDay,selected_minute;;
-    private boolean saveTaskButtonClicked=false;
 
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         fragmentView=inflater.inflate(R.layout.bottom_sheet_edit_task,container,false);
-        //selected_year=0;selected_month=0;selected_dayOfMonth=0;selected_hourOfDay=0;selected_minute=0;
         conn = new SQLiteConnection(getContext(), "keeper_db", null, 1);
 
         changeTaskDateButton=fragmentView.findViewById(R.id.task_date);
@@ -115,7 +113,11 @@ public class EditTaskBottomSheet extends BottomSheetDialogFragment {
         deleteTaskDateButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                selected_year=0;selected_month=0;selected_dayOfMonth=0;selected_hourOfDay=0;selected_minute=0;
+                selected_year=0;
+                selected_month=0;
+                selected_dayOfMonth=0;
+                selected_hourOfDay=0;
+                selected_minute=0;
                 changeTaskDateButton.setText("FECHAS");
                 changeTaskTimeButton.setText("00:00");
             }
@@ -124,13 +126,14 @@ public class EditTaskBottomSheet extends BottomSheetDialogFragment {
         saveTaskButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                saveTaskButtonClicked=true;
                 if(taskTitleEditText.getText().toString().isEmpty()){
                     bottomSheetListener.OnEmptyTaskTitle();
                 }else{
                     saveEditedTask();
+                    String new_task_title=taskTitleEditText.getText().toString();
+                    String new_task_details=taskDetailsEditText.getText().toString();
                     //TODO: ADD A METHOD TO CHANGE ALARM AND/OR CANCEL THE PREVIOUS VERSION OF IT
-                    bottomSheetListener.OnSaveEditedTask(old_task_position,old_task_id,taskTitleEditText.getText().toString(),taskDetailsEditText.getText().toString());
+                    bottomSheetListener.OnSaveEditedTask(old_task_position,old_task_id,new_task_title,new_task_details);
                     dismiss();
                 }
             }
@@ -209,7 +212,6 @@ public class EditTaskBottomSheet extends BottomSheetDialogFragment {
         PendingIntent pendingIntent=PendingIntent.getBroadcast(getContext(), 1, intent,PendingIntent.FLAG_UPDATE_CURRENT);
         alarmManager.cancel(pendingIntent);
     }
-
 
     private DatePickerDialog.OnDateSetListener onDateSetListener=new DatePickerDialog.OnDateSetListener() {
         @Override

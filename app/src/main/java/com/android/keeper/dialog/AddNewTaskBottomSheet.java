@@ -299,13 +299,6 @@ public class AddNewTaskBottomSheet extends BottomSheetDialogFragment {
         }
     };
 
-    @Override
-    public Dialog onCreateDialog(Bundle savedInstanceState) {
-        BottomSheetDialog dialog= (BottomSheetDialog) super.onCreateDialog(savedInstanceState);
-
-        return dialog;
-    }
-
     /*
     * Methods with the porpouse to create communication
     * between fragments
