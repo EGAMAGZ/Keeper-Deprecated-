@@ -140,17 +140,17 @@ public class TasksFragment extends Fragment {
                 addNewTaskBottomSheet=new AddNewTaskBottomSheet();
                 addNewTaskBottomSheet.setBottomSheetListener(new AddNewTaskBottomSheet.AddNewTaskBottomSheetListener() {
                     @Override
-                    public void OnAddTask(int task_id, String task_title, String task_details) {
+                    public void onAddTask(int task_id, String task_title, String task_details) {
                         AddTask(task_id,task_title,task_details);
                     }
 
                     @Override
-                    public void OnEmptyTaskTitle() {
+                    public void onEmptyTaskTitle() {
                         CustomToast("Task Title Empty",R.drawable.ic_close_white_24dp);
                     }
 
                     @Override
-                    public void OnTaskDateSelected() {
+                    public void onTaskDateSelected() {
                         CustomToast("Task Date Selected",R.drawable.ic_done_white_24dp);
                     }
                 });
@@ -202,17 +202,17 @@ public class TasksFragment extends Fragment {
                     editTaskBottomSheet.setContent(position,tasksList.get(position).getTaskId(),tasksList.get(position).getTaskTitle(),tasksList.get(position).getTaskDetails());
                     editTaskBottomSheet.setEditTaskBottomSheetListener(new EditTaskBottomSheet.EditTaskBottomSheetListener() {
                         @Override
-                        public void OnSaveEditedTask(int task_position, int task_id, String task_title, String task_details) {
+                        public void onSaveEditedTask(int task_position, int task_id, String task_title, String task_details) {
                             SaveEditedTask(task_position,task_id,task_title,task_details);
                         }
 
                         @Override
-                        public void OnDeleteSavedTask(int task_position, int task_id) {
+                        public void onDeleteSavedTask(int task_position, int task_id) {
                             DeleteSavedTask(task_position,task_id);
                         }
 
                         @Override
-                        public void OnEmptyTaskTitle() {
+                        public void onEmptyTaskTitle() {
                             CustomToast("Task Title Empty",R.drawable.ic_close_white_24dp);
                         }
                     });

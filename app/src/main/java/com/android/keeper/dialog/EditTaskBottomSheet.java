@@ -127,13 +127,13 @@ public class EditTaskBottomSheet extends BottomSheetDialogFragment {
             @Override
             public void onClick(View view) {
                 if(taskTitleEditText.getText().toString().isEmpty()){
-                    bottomSheetListener.OnEmptyTaskTitle();
+                    bottomSheetListener.onEmptyTaskTitle();
                 }else{
                     saveEditedTask();
                     String new_task_title=taskTitleEditText.getText().toString();
                     String new_task_details=taskDetailsEditText.getText().toString();
                     //TODO: ADD A METHOD TO CHANGE ALARM AND/OR CANCEL THE PREVIOUS VERSION OF IT
-                    bottomSheetListener.OnSaveEditedTask(old_task_position,old_task_id,new_task_title,new_task_details);
+                    bottomSheetListener.onSaveEditedTask(old_task_position,old_task_id,new_task_title,new_task_details);
                     dismiss();
                 }
             }
@@ -143,7 +143,7 @@ public class EditTaskBottomSheet extends BottomSheetDialogFragment {
             @Override
             public void onClick(View view) {
                 //TODO: MAKE SOME TEST, TO PROOF THAT IS CANCEL ONLY THE TASK SELECTED
-                bottomSheetListener.OnDeleteSavedTask(old_task_position,old_task_id);
+                bottomSheetListener.onDeleteSavedTask(old_task_position,old_task_id);
                 cancelNotificationAlarm();//TODO: CHECK WHEN A TASK HAS A NOTIFICATION ALARM
                 dismiss();
             }
@@ -271,9 +271,9 @@ public class EditTaskBottomSheet extends BottomSheetDialogFragment {
     };
 
     public interface EditTaskBottomSheetListener{
-        void OnSaveEditedTask(int task_position,int task_id,String task_title,String task_details);
-        void OnDeleteSavedTask(int task_position,int task_id);
-        void OnEmptyTaskTitle();
+        void onSaveEditedTask(int task_position,int task_id,String task_title,String task_details);
+        void onDeleteSavedTask(int task_position,int task_id);
+        void onEmptyTaskTitle();
     }
 
     public void setEditTaskBottomSheetListener(EditTaskBottomSheetListener listener){

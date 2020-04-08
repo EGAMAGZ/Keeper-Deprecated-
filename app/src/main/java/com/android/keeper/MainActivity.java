@@ -2,7 +2,9 @@ package com.android.keeper;
 
 import android.app.DatePickerDialog;
 import android.app.TimePickerDialog;
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.support.annotation.NonNull;
 import android.support.design.internal.NavigationMenuItemView;
 import android.support.design.widget.NavigationView;
@@ -41,6 +43,9 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     private DrawerLayout drawer;
     private Toolbar toolbar;
     private Toast backToast;
+    private NavigationView navigationView;
+    private SharedPreferences sharedPreferences;
+    private SharedPreferences.Editor sharedPreEditor;
 
     private long backPressedTime;
     private int selected_year,selected_month,selected_dayOfMonth,selected_hourOfDay,selected_minute;
@@ -51,8 +56,10 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         setContentView(R.layout.activity_main);
 
         SQLiteConnection conn=new SQLiteConnection(this,"keeper_db",null,1);//Creation of Database(SQLite)
+        sharedPreferences=getSharedPreferences("keeper_settings", Context.MODE_PRIVATE);
+        sharedPreEditor=sharedPreferences.edit();
 
-        NavigationView navigationView=findViewById(R.id.nav_view); //Gets Navigation View (Lateral Menu)
+        navigationView=findViewById(R.id.nav_view); //Gets Navigation View (Lateral Menu)
         navigationView.setNavigationItemSelectedListener(this); //Sets Item Listener to Navigation View
 
         toolbar=findViewById(R.id.toolbar); //Gets Toolbar
@@ -81,10 +88,10 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 }
 
             } else {
-                getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new NotesFragment(), "notes_fragment").commit();
-                navigationView.setCheckedItem(R.id.nav_notes);
+                changeLastFragment();
+                /*getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new NotesFragment(), "notes_fragment").commit();
+                navigationView.setCheckedItem(R.id.nav_notes);*/
             }
-
         getWindow().setStatusBarColor(ContextCompat.getColor(this,R.color.thirdColor));
     }
 
@@ -111,16 +118,24 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         NavigationMenuItemView navigationMenuItemView;
         switch(menuItem.getItemId()){
             case R.id.nav_notes:
+                sharedPreEditor.putString("last_intent","notes");
+                sharedPreEditor.commit();
                 getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container,new NotesFragment(),"notes_fragment").commit();
                 break;
             case R.id.nav_reminders:
+                sharedPreEditor.putString("last_intent","reminders");
+                sharedPreEditor.commit();
                 getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container,new RemindersFragment(),"reminders_fragment").commit();
                 break;
             case R.id.nav_tasks:
+                sharedPreEditor.putString("last_intent","tasks");
+                sharedPreEditor.commit();
                 tasksFragment=new TasksFragment();
                 getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container,tasksFragment,"tasks_fragment").commit();
                 break;
             case R.id.nav_schedule:
+                sharedPreEditor.putString("last_intent","schedules");
+                sharedPreEditor.commit();
                 getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container,new ScheduleFragment(),"schedule_fragment").commit();
                 break;
             case R.id.nav_settings:
@@ -169,6 +184,28 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 break;
         }
         return true;
+    }
+
+    private void changeLastFragment(){
+        String fragment=sharedPreferences.getString("last_intent","notes");
+        switch(fragment){
+            case "notes":
+                getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new NotesFragment(), "notes_fragment").commit();
+                navigationView.setCheckedItem(R.id.nav_notes);
+                break;
+            case "reminders":
+                getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new RemindersFragment(), "notes_fragment").commit();
+                navigationView.setCheckedItem(R.id.nav_reminders);
+                break;
+            case "tasks":
+                getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new TasksFragment(), "tasks_fragment").commit();
+                navigationView.setCheckedItem(R.id.nav_tasks);
+                break;
+            case "schedules":
+                getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new ScheduleFragment(), "notes_fragment").commit();
+                navigationView.setCheckedItem(R.id.nav_schedule);
+                break;
+        }
     }
 
 }

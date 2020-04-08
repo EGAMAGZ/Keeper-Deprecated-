@@ -131,11 +131,11 @@ public class AddNewTaskBottomSheet extends BottomSheetDialogFragment {
                 }else{ task_details="";}
 
                 if(task_title.isEmpty()){
-                    bottomSheetListener.OnEmptyTaskTitle();
+                    bottomSheetListener.onEmptyTaskTitle();
                 }else{
                     task_id=saveTask();
                     setNotificationAlarm(notificationHelper.getTaskNotification(task_title,task_details),task_id);
-                    bottomSheetListener.OnAddTask(task_id,task_title,task_details);
+                    bottomSheetListener.onAddTask(task_id,task_title,task_details);
                     dismiss();
                 }
             }
@@ -188,7 +188,7 @@ public class AddNewTaskBottomSheet extends BottomSheetDialogFragment {
             String date= DateFormat.getDateInstance(DateFormat.FULL).format(calendar.getTime());
             changeTaskDateButton.setText(date);
             changeTaskTimeButton.setText(selected_hourOfDay+":"+selected_minute);//TODO:ADD A FORMAT FOR TIME
-            bottomSheetListener.OnTaskDateSelected();
+            bottomSheetListener.onTaskDateSelected();
         }
     }
 
@@ -304,9 +304,9 @@ public class AddNewTaskBottomSheet extends BottomSheetDialogFragment {
     * between fragments
     * */
     public interface AddNewTaskBottomSheetListener{
-        void OnAddTask(int task_id,String task_title,String task_details);
-        void OnEmptyTaskTitle();
-        void OnTaskDateSelected();
+        void onAddTask(int task_id,String task_title,String task_details);
+        void onEmptyTaskTitle();
+        void onTaskDateSelected();
     }
 
     public void setBottomSheetListener(AddNewTaskBottomSheetListener listener){

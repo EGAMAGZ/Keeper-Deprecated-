@@ -37,16 +37,18 @@ public class SettingsActivity extends AppCompatActivity {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                 String option=parent.getItemAtPosition(position).toString();
-                if(option.equals("Automatic")){
-                    sharedPreEditor.putString("clock_format","auto");
-                    sharedPreEditor.commit();
-                }else if(option.equals("24 Hours")){
-                    sharedPreEditor.putString("clock_format","24hr");
-                    sharedPreEditor.commit();
-                }else if(option.equals("12 Hours")){
-                    sharedPreEditor.putString("clock_format","12hr");
-                    sharedPreEditor.commit();
+                switch(option){
+                    case "Automatic":
+                        sharedPreEditor.putString("clock_format","auto");
+                        break;
+                    case "24 Hours":
+                        sharedPreEditor.putString("clock_format","24hr");
+                        break;
+                    case "12 Hours":
+                        sharedPreEditor.putString("clock_format","12hr");
+                        break;
                 }
+                sharedPreEditor.commit();
             }
 
             @Override
@@ -56,11 +58,10 @@ public class SettingsActivity extends AppCompatActivity {
         });
     }
     private void setSettingsOptions(){
-        String option;
         clockFormatSpinner=(Spinner) findViewById(R.id.settings_clock_format_spinner);
         ArrayAdapter<CharSequence> adapter=ArrayAdapter.createFromResource(getApplicationContext(),R.array.clock_format_options,R.layout.item_spinner);
         clockFormatSpinner.setAdapter(adapter);
-        option=sharedPreferences.getString("clock_format","auto");
+        String option=sharedPreferences.getString("clock_format","auto");
         switch(option){
             case "auto":
                 clockFormatSpinner.setSelection(0);
