@@ -10,11 +10,15 @@ import android.view.View;
 import android.widget.Adapter;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.CompoundButton;
 import android.widget.Spinner;
+import android.widget.Switch;
+import android.widget.Toast;
 
 public class SettingsActivity extends AppCompatActivity {
 
     private Spinner clockFormatSpinner;
+    private Switch lastFragmentSwitch;
     private SharedPreferences sharedPreferences;
     private SharedPreferences.Editor sharedPreEditor;
 
@@ -25,12 +29,16 @@ public class SettingsActivity extends AppCompatActivity {
         sharedPreferences=getSharedPreferences("keeper_settings", Context.MODE_PRIVATE);
         sharedPreEditor=sharedPreferences.edit();
 
+        clockFormatSpinner=(Spinner) findViewById(R.id.settings_clock_format_spinner);
+        lastFragmentSwitch=(Switch) findViewById(R.id.settings_last_fragment_switch);
+
         Toolbar toolbar=findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         getSupportActionBar().setTitle("Settings");
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         getWindow().setStatusBarColor(ContextCompat.getColor(this,R.color.thirdColor));
+
         setSettingsOptions();
 
         clockFormatSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
@@ -56,13 +64,19 @@ public class SettingsActivity extends AppCompatActivity {
 
             }
         });
+        lastFragmentSwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton compoundButton, boolean isChecked) {
+                sharedPreEditor.putBoolean("change_last_fragment",isChecked);
+                sharedPreEditor.commit();
+            }
+        });
     }
     private void setSettingsOptions(){
-        clockFormatSpinner=(Spinner) findViewById(R.id.settings_clock_format_spinner);
         ArrayAdapter<CharSequence> adapter=ArrayAdapter.createFromResource(getApplicationContext(),R.array.clock_format_options,R.layout.item_spinner);
         clockFormatSpinner.setAdapter(adapter);
-        String option=sharedPreferences.getString("clock_format","auto");
-        switch(option){
+
+        switch(sharedPreferences.getString("clock_format","auto")){
             case "auto":
                 clockFormatSpinner.setSelection(0);
                 break;
@@ -73,6 +87,6 @@ public class SettingsActivity extends AppCompatActivity {
                 clockFormatSpinner.setSelection(2);
                 break;
         }
-
+        lastFragmentSwitch.setChecked(sharedPreferences.getBoolean("change_last_fragment",false));
     }
 }

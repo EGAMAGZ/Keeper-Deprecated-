@@ -74,6 +74,34 @@
                             android:textSize="15sp"/>
                     </RelativeLayout>
                 </android.support.v7.widget.CardView>
+                <android.support.v7.widget.CardView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+                    <RelativeLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:background="@android:color/white"
+                        android:paddingTop="8dp"
+                        android:paddingBottom="8dp">
+                        <TextView
+                            android:id="@+id/settings_last_fragment_title"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="8dp"
+                            android:layout_alignParentTop="true"
+                            android:text="Continue from where you leave it"
+                            android:textSize="20sp"
+                            android:textColor="@android:color/black"/>
+                        <Switch
+                            android:id="@+id/settings_last_fragment_switch"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="4dp"
+                            android:layout_alignParentEnd="true"
+                            android:layout_centerVertical="true"/>
+
+                    </RelativeLayout>
+                </android.support.v7.widget.CardView>
             </LinearLayout>
         </ScrollView>
     </LinearLayout>

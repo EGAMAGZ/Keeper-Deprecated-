@@ -48,7 +48,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     private SharedPreferences.Editor sharedPreEditor;
 
     private long backPressedTime;
-    private int selected_year,selected_month,selected_dayOfMonth,selected_hourOfDay,selected_minute;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -78,6 +77,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             if (fragmentValue != null) {
                 switch(fragmentValue){
                     case "tasks":
+                        setLastFragment("tasks");
                         getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new TasksFragment(), "tasks_fragment").commit();
                         navigationView.setCheckedItem(R.id.nav_tasks);
                         break;
@@ -86,11 +86,14 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                         navigationView.setCheckedItem(R.id.nav_notes);
                         break;
                 }
-
             } else {
-                changeLastFragment();
-                /*getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new NotesFragment(), "notes_fragment").commit();
-                navigationView.setCheckedItem(R.id.nav_notes);*/
+                if(sharedPreferences.getBoolean("change_last_fragment",false))
+                    changeLastFragment();
+                else{
+                    getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new NotesFragment(), "notes_fragment").commit();
+                    navigationView.setCheckedItem(R.id.nav_notes);
+                    setLastFragment("notes");
+                }
             }
         getWindow().setStatusBarColor(ContextCompat.getColor(this,R.color.thirdColor));
     }
@@ -118,24 +121,20 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         NavigationMenuItemView navigationMenuItemView;
         switch(menuItem.getItemId()){
             case R.id.nav_notes:
-                sharedPreEditor.putString("last_intent","notes");
-                sharedPreEditor.commit();
+                setLastFragment("notes");
                 getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container,new NotesFragment(),"notes_fragment").commit();
                 break;
             case R.id.nav_reminders:
-                sharedPreEditor.putString("last_intent","reminders");
-                sharedPreEditor.commit();
+                setLastFragment("reminders");
                 getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container,new RemindersFragment(),"reminders_fragment").commit();
                 break;
             case R.id.nav_tasks:
-                sharedPreEditor.putString("last_intent","tasks");
-                sharedPreEditor.commit();
+                setLastFragment("tasks");
                 tasksFragment=new TasksFragment();
                 getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container,tasksFragment,"tasks_fragment").commit();
                 break;
             case R.id.nav_schedule:
-                sharedPreEditor.putString("last_intent","schedules");
-                sharedPreEditor.commit();
+                setLastFragment("schedules");
                 getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container,new ScheduleFragment(),"schedule_fragment").commit();
                 break;
             case R.id.nav_settings:
@@ -187,7 +186,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     }
 
     private void changeLastFragment(){
-        String fragment=sharedPreferences.getString("last_intent","notes");
+        String fragment=sharedPreferences.getString("last_fragment","notes");
         switch(fragment){
             case "notes":
                 getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new NotesFragment(), "notes_fragment").commit();
@@ -207,5 +206,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 break;
         }
     }
-
+    private void setLastFragment(String keyword){
+        sharedPreEditor.putString("last_fragment",keyword);
+        sharedPreEditor.commit();
+    }
 }
