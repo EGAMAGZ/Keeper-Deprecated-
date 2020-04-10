@@ -39,8 +39,6 @@ import com.android.keeper.recycle_items.TaskItem;
 
 public class TasksFragment extends Fragment {
 
-    private ArrayList<TaskItem> tasksList;
-
     private CoordinatorLayout coordinatorLayout;
     private SQLiteConnection conn;
     private View fragmentView;
@@ -52,16 +50,17 @@ public class TasksFragment extends Fragment {
     private ScrollView scrollView;
     private TasksAdapter tasksRecAdapter;
     private Animation risefrombottom,hidetobottom;
-    //private RecyclerView.Adapter tasksRecAdapter;
     private RecyclerView.LayoutManager tasksLayoutManager;
     private EditTaskBottomSheet editTaskBottomSheet;
     private AddNewTaskBottomSheet addNewTaskBottomSheet;
+
+    private ArrayList<TaskItem> tasksList;
 
     @Nullable
     @Override
     public View onCreateView(@NonNull final LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         fragmentView =inflater.inflate(R.layout.fragment_tasks,container,false);
-
+        conn=new SQLiteConnection(getContext(),"keeper_db",null,1);
         tasksList=new ArrayList<TaskItem>();
 
         risefrombottom= AnimationUtils.loadAnimation(getContext(),R.anim.rise_from_bottom);
@@ -80,7 +79,6 @@ public class TasksFragment extends Fragment {
         taskPercentage =(TextView) fragmentView.findViewById(R.id.task_progress_percentage);
 
         addTaskBtn =(FloatingActionButton) fragmentView.findViewById(R.id.addtask_flt_btn);
-        conn=new SQLiteConnection(getContext(),"keeper_db",null,1);
 
         scrollView.setOnScrollChangeListener(new View.OnScrollChangeListener() {
             @SuppressLint("RestrictedApi")
@@ -293,13 +291,10 @@ public class TasksFragment extends Fragment {
     }
 
     private void deleteTask(int task_id,int task_position){
-        SQLiteDatabase database=conn.getReadableDatabase();
-        database.delete(TasksUtilities.TABLE_NAME,TasksUtilities.COLUMN_TASK_ID+"="+task_id,null);
 
         tasksList.remove(task_position); //It is related with the adapter for the elements that are shown
         tasksRecAdapter.removeItem(task_position);//It is related with the adapter with the elements for filter
         //Here was a for before
-        database.close();
     }
     private void editTask(int task_id,int task_position,String task_title,String task_details){
         //It is related with the adapter for the elements that are shown

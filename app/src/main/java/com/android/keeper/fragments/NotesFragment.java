@@ -2,7 +2,6 @@ package com.android.keeper.fragments;
 
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
-import android.database.sqlite.SQLiteOpenHelper;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -35,7 +34,7 @@ public class NotesFragment extends Fragment {
 
         scrollView=fragmentView.findViewById(R.id.notes_scrollview);
         bottomAppBar=fragmentView.findViewById(R.id.bottombar);
-        bottomAppBar.replaceMenu(R.menu.task_bottomappbar_menu);
+        bottomAppBar.replaceMenu(R.menu.notes_bottomappbar_menu);
         bottomAppBar.setOnMenuItemClickListener(new Toolbar.OnMenuItemClickListener() {
             @Override
             public boolean onMenuItemClick(MenuItem menuItem) {

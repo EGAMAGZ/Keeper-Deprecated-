@@ -11,9 +11,14 @@ import android.view.ViewGroup;
 import com.android.keeper.R;
 
 public class RemindersFragment extends Fragment {
+
+    private View fragmentView;
+
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        return inflater.inflate(R.layout.fragment_reminders,container,false);
+        fragmentView=inflater.inflate(R.layout.fragment_reminders,container,false);
+
+        return fragmentView;
     }
 }

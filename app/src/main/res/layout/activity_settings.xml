@@ -89,7 +89,7 @@
                             android:layout_height="wrap_content"
                             android:layout_marginStart="8dp"
                             android:layout_alignParentTop="true"
-                            android:text="Continue from where you leave it"
+                            android:text="Continue where you left it"
                             android:textSize="20sp"
                             android:textColor="@android:color/black"/>
                         <Switch

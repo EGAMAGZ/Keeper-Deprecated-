@@ -82,10 +82,10 @@
         </ScrollView>
     </LinearLayout>
 
-    <android.support.design.widget.CoordinatorLayout
+    <!--<android.support.design.widget.CoordinatorLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:id="@+id/task_snackbar_container"/>
+        android:id="@+id/task_snackbar_container"/>-->
 
         <android.support.design.bottomappbar.BottomAppBar
             android:layout_width="match_parent"

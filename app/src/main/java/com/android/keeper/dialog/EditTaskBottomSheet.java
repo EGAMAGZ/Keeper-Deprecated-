@@ -146,6 +146,7 @@ public class EditTaskBottomSheet extends BottomSheetDialogFragment {
             @Override
             public void onClick(View view) {
                 //TODO: MAKE SOME TEST, TO PROOF THAT IS CANCEL ONLY THE TASK SELECTED
+                deleteTask();
                 bottomSheetListener.onDeleteSavedTask(old_task_position,old_task_id);
                 cancelNotificationAlarm();//TODO: CHECK WHEN A TASK HAS A NOTIFICATION ALARM
                 dismiss();
@@ -192,7 +193,7 @@ public class EditTaskBottomSheet extends BottomSheetDialogFragment {
     }
 
     private void saveEditedTask(){
-        SQLiteDatabase database=conn.getReadableDatabase();
+        SQLiteDatabase database=conn.getWritableDatabase();
 
         ContentValues values=new ContentValues();
         values.put(TasksUtilities.COLUMN_TASK_TITLE,taskTitleEditText.getText().toString());
@@ -206,6 +207,12 @@ public class EditTaskBottomSheet extends BottomSheetDialogFragment {
         values.put(TasksUtilities.COLUMN_TASK_MINUTE,selected_minute);
 
         database.update(TasksUtilities.TABLE_NAME,values,TasksUtilities.COLUMN_TASK_ID+"="+old_task_id,null);
+        database.close();
+    }
+
+    private void deleteTask(){
+        SQLiteDatabase database=conn.getWritableDatabase();
+        database.delete(TasksUtilities.TABLE_NAME,TasksUtilities.COLUMN_TASK_ID+"="+old_task_id,null);
         database.close();
     }
 

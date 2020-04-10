@@ -1,7 +1,7 @@
 package com.android.keeper.localdb.entities;
 
 public class TasksEntities {
-
+    //TODO: DELETE ALL ENTITIES BECAUSE THEY AREN'T USE
     private Integer task_id;
     private String task_title;
     private String task_details;
