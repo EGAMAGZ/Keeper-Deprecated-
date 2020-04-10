@@ -190,6 +190,12 @@ public class TasksFragment extends Fragment {
             CustomToast("Internal App Error",R.drawable.ic_close_white_24dp);
         }
         finally {
+            /* At cause the adapter is getting the elements from the arraylist, the
+            * getAdapterPosition() [position returned by interface] will be the same
+            * position as the arraylist. That's the reason there isn't needed to pass
+            * the id from other interface [in this case, from the Bottomsheet, especially
+            * because almost of SQL CRUD is done in the same bottomsheets]
+            * */
             tasksRecAdapter=new TasksAdapter(tasksList);
             tasksRecyclerView.setLayoutManager(tasksLayoutManager);
             tasksRecyclerView.setAdapter(tasksRecAdapter);
@@ -200,13 +206,20 @@ public class TasksFragment extends Fragment {
                     editTaskBottomSheet.setContent(position,tasksList.get(position).getTaskId(),tasksList.get(position).getTaskTitle(),tasksList.get(position).getTaskDetails());
                     editTaskBottomSheet.setEditTaskBottomSheetListener(new EditTaskBottomSheet.EditTaskBottomSheetListener() {
                         @Override
-                        public void onSaveEditedTask(int task_position, int task_id, String task_title, String task_details) {
-                            SaveEditedTask(task_position,task_id,task_title,task_details);
+                        public void onSaveEditedTask(int task_position, String task_title, String task_details) {
+                            /*Here isn't needed to pass the id, because it isn't used and the
+                            * position returned is the same position for the arraylist. As you can see,
+                            * its posible to edit the task without the use of the id to look for it to modify it
+                            * */
+                            SaveEditedTask(task_position,task_title,task_details);
                         }
 
                         @Override
-                        public void onDeleteSavedTask(int task_position, int task_id) {
-                            DeleteSavedTask(task_position,task_id);
+                        public void onDeleteSavedTask(int task_position) {
+                            /*Here isn't not needed the id,beacuse whe are only deleting an element
+                            * from the array and the adapter using the same position, and it is deleted
+                            * from db in the bottomsheet (where it is needed the id)*/
+                            DeleteSavedTask(task_position);
                         }
 
                         @Override
@@ -219,6 +232,8 @@ public class TasksFragment extends Fragment {
 
                 @Override
                 public void OnTaskDoneClick(int position) {
+                    /*Example of why the position returned by the interface of the Adadpter (getAdapterPosition())
+                    * is the same position for the arraylist*/
                     //TODO: Show snackbar with undo action for the both status that the task could have(EX: setTaskDone -> setTaskUndone)
                     if(tasksList.get(position).isTaskDone()){
                         setTaskUndone(tasksList.get(position).getTaskId(),position);
@@ -290,18 +305,18 @@ public class TasksFragment extends Fragment {
         tasksRecAdapter.addItem(0,new TaskItem(R.drawable.ic_check_box_outline_blank_black_24dp,task_id,task_title,task_details,false));
     }
 
-    private void deleteTask(int task_id,int task_position){
+    private void deleteTask(int task_position){
 
         tasksList.remove(task_position); //It is related with the adapter for the elements that are shown
         tasksRecAdapter.removeItem(task_position);//It is related with the adapter with the elements for filter
         //Here was a for before
     }
-    private void editTask(int task_id,int task_position,String task_title,String task_details){
+    private void editTask(int task_position,String task_title,String task_details){
         //It is related with the adapter for the elements that are shown
         tasksList.get(task_position).setTaskTitle(task_title);
         tasksList.get(task_position).setTaskDetails(task_details);
 
-        tasksRecAdapter.editItem(task_id,task_title,task_details);//It is related with the adapter with the elements for filter
+        tasksRecAdapter.editItem(task_position,task_title,task_details);//It is related with the adapter with the elements for filter
     }
     private void setTaskDone(int task_id,int task_position){
         SQLiteDatabase database=conn.getWritableDatabase();
@@ -358,14 +373,14 @@ public class TasksFragment extends Fragment {
         percentageTasks();
     }
 
-    private void SaveEditedTask(int task_position, int task_id,String task_title,String task_details){
-        editTask(task_id,task_position,task_title,task_details);
+    private void SaveEditedTask(int task_position,String task_title,String task_details){
+        editTask(task_position,task_title,task_details);
         tasksRecAdapter.notifyItemChanged(task_position);
         CustomToast("Task saved",R.drawable.ic_done_white_24dp);
     }
 
-    private void DeleteSavedTask(int task_position, int task_id){
-        deleteTask(task_id,task_position);
+    private void DeleteSavedTask(int task_position){
+        deleteTask(task_position);
         tasksRecAdapter.notifyDataSetChanged();
         CustomToast("Task deleted",R.drawable.ic_done_white_24dp);
         percentageTasks();

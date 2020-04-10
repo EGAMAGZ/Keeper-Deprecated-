@@ -136,7 +136,7 @@ public class EditTaskBottomSheet extends BottomSheetDialogFragment {
                     String new_task_title=taskTitleEditText.getText().toString();
                     String new_task_details=taskDetailsEditText.getText().toString();
                     //TODO: ADD A METHOD TO CHANGE ALARM AND/OR CANCEL THE PREVIOUS VERSION OF IT
-                    bottomSheetListener.onSaveEditedTask(old_task_position,old_task_id,new_task_title,new_task_details);
+                    bottomSheetListener.onSaveEditedTask(old_task_position,new_task_title,new_task_details);
                     dismiss();
                 }
             }
@@ -147,7 +147,7 @@ public class EditTaskBottomSheet extends BottomSheetDialogFragment {
             public void onClick(View view) {
                 //TODO: MAKE SOME TEST, TO PROOF THAT IS CANCEL ONLY THE TASK SELECTED
                 deleteTask();
-                bottomSheetListener.onDeleteSavedTask(old_task_position,old_task_id);
+                bottomSheetListener.onDeleteSavedTask(old_task_position);
                 cancelNotificationAlarm();//TODO: CHECK WHEN A TASK HAS A NOTIFICATION ALARM
                 dismiss();
             }
@@ -281,8 +281,8 @@ public class EditTaskBottomSheet extends BottomSheetDialogFragment {
     };
 
     public interface EditTaskBottomSheetListener{
-        void onSaveEditedTask(int task_position,int task_id,String task_title,String task_details);
-        void onDeleteSavedTask(int task_position,int task_id);
+        void onSaveEditedTask(int task_position,String task_title,String task_details);
+        void onDeleteSavedTask(int task_position);
         void onEmptyTaskTitle();
     }
 

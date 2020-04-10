@@ -26,6 +26,7 @@
         app:layout_anchorGravity="bottom|right|end"
         android:layout_margin="16dp"
         android:clickable="true"
+        app:fabSize="normal"
         app:srcCompat="@drawable/ic_add_white_24dp" />
 
 

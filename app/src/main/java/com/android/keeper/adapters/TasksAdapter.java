@@ -37,11 +37,15 @@ public class TasksAdapter extends RecyclerView.Adapter<TasksAdapter.TasksViewHol
         * */
         public TextView taskTitleTextView,taskDetailsTextView;
         public ImageView taskImage;
-        public View v;
+        //public View v;
 
         public TasksViewHolder(@NonNull View itemView, final OnItemClickListener listener) { //Because this class is static, we need to pass the interface OnItemClickListener
             super(itemView);
-            v=itemView;
+            /*At cause the adapter is getting the elements from the arraylist, the
+            * getAdapterPosition() [position returned by interface] will be the same
+            * position as the arraylist.
+            * */
+            //v=itemView;
             itemView.setOnLongClickListener(new View.OnLongClickListener() {
                 @Override
                 public boolean onLongClick(View view) {
@@ -153,12 +157,10 @@ public class TasksAdapter extends RecyclerView.Adapter<TasksAdapter.TasksViewHol
         taskListFull.add(index,taskItem);
     }
 
-    public void editItem(int id,String task_title,String task_details){
-        for (int i=0;i<tasksList.size();++i) {
-            if(taskListFull.get(i).getTaskId()==id){
-                taskListFull.get(i).setTaskTitle(task_title);
-                taskListFull.get(i).setTaskDetails(task_details);
-            }
-        }
+    public void editItem(int task_position,String task_title,String task_details){
+
+        taskListFull.get(task_position).setTaskTitle(task_title);
+        taskListFull.get(task_position).setTaskDetails(task_details);
+        //Here was a for before to change searching by id
     }
 }
