@@ -61,6 +61,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         navigationView=findViewById(R.id.nav_view); //Gets Navigation View (Lateral Menu)
         navigationView.setNavigationItemSelectedListener(this); //Sets Item Listener to Navigation View
 
+        tasksFragment=new TasksFragment();
+
         toolbar=findViewById(R.id.toolbar); //Gets Toolbar
         setSupportActionBar(toolbar);
 
@@ -130,12 +132,11 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 break;
             case R.id.nav_tasks:
                 setLastFragment("tasks");
-                tasksFragment=new TasksFragment();
                 getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container,tasksFragment,"tasks_fragment").commit();
                 break;
             case R.id.nav_schedule:
                 setLastFragment("schedules");
-                getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container,new ScheduleFragment(),"schedule_fragment").commit();
+                getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container,new ScheduleFragment(),"schedules_fragment").commit();
                 break;
             case R.id.nav_settings:
                 Intent intent=new Intent(MainActivity.this,SettingsActivity.class);
@@ -193,15 +194,15 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 navigationView.setCheckedItem(R.id.nav_notes);
                 break;
             case "reminders":
-                getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new RemindersFragment(), "notes_fragment").commit();
+                getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new RemindersFragment(), "reminders_fragment").commit();
                 navigationView.setCheckedItem(R.id.nav_reminders);
                 break;
             case "tasks":
-                getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new TasksFragment(), "tasks_fragment").commit();
+                getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, tasksFragment, "tasks_fragment").commit();
                 navigationView.setCheckedItem(R.id.nav_tasks);
                 break;
             case "schedules":
-                getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new ScheduleFragment(), "notes_fragment").commit();
+                getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new ScheduleFragment(), "schedules_fragment").commit();
                 navigationView.setCheckedItem(R.id.nav_schedule);
                 break;
         }

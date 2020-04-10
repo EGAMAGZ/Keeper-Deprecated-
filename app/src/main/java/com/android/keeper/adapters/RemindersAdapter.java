@@ -11,6 +11,7 @@ import java.util.ArrayList;
 
 public class RemindersAdapter extends RecyclerView.Adapter<RemindersAdapter.RemindersViewHolder>{
 
+    private ArrayList<ReminderItem> remindersList;
     private ArrayList<ReminderItem> remindersListFull;
     private OnItemClickListener itemClickListener;
 
@@ -23,9 +24,14 @@ public class RemindersAdapter extends RecyclerView.Adapter<RemindersAdapter.Remi
     }
 
     public static class RemindersViewHolder extends RecyclerView.ViewHolder {
-        public RemindersViewHolder(@NonNull View itemView) {
+        public RemindersViewHolder(@NonNull View itemView,final OnItemClickListener listener) {
             super(itemView);
         }
+    }
+
+    public RemindersAdapter(ArrayList<ReminderItem> remindersList) {
+        this.remindersList = remindersList;
+        remindersListFull=new ArrayList<ReminderItem>(remindersList);
     }
 
     @NonNull
@@ -41,6 +47,7 @@ public class RemindersAdapter extends RecyclerView.Adapter<RemindersAdapter.Remi
 
     @Override
     public int getItemCount() {
-        return 0;
+        //Length of items that will be added to the recyclerview
+        return remindersList.size();
     }
 }

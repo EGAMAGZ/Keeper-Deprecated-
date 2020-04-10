@@ -24,7 +24,6 @@ public class TasksAdapter extends RecyclerView.Adapter<TasksAdapter.TasksViewHol
     public interface OnItemClickListener{
         void OnEditTask(int position);
         void OnTaskDoneClick(int position);
-        //void onItemLongClick(int position);
     }
 
     public void setOnItemClickListener(OnItemClickListener listener){
@@ -37,7 +36,6 @@ public class TasksAdapter extends RecyclerView.Adapter<TasksAdapter.TasksViewHol
         * */
         public TextView taskTitleTextView,taskDetailsTextView;
         public ImageView taskImage;
-        //public View v;
 
         public TasksViewHolder(@NonNull View itemView, final OnItemClickListener listener) { //Because this class is static, we need to pass the interface OnItemClickListener
             super(itemView);
@@ -45,7 +43,6 @@ public class TasksAdapter extends RecyclerView.Adapter<TasksAdapter.TasksViewHol
             * getAdapterPosition() [position returned by interface] will be the same
             * position as the arraylist.
             * */
-            //v=itemView;
             itemView.setOnLongClickListener(new View.OnLongClickListener() {
                 @Override
                 public boolean onLongClick(View view) {
