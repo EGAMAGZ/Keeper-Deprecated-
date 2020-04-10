@@ -14,8 +14,9 @@ import android.widget.Toast;
 
 import com.android.keeper.R;
 import com.android.keeper.recycle_items.TaskItem;
+import com.android.keeper.view_holders.TasksViewHolder;
 
-public class TasksAdapter extends RecyclerView.Adapter<TasksAdapter.TasksViewHolder>  implements Filterable {
+public class TasksAdapter extends RecyclerView.Adapter<TasksViewHolder>  implements Filterable {
 
     private ArrayList<TaskItem> tasksList;
     private ArrayList<TaskItem> taskListFull;
@@ -30,51 +31,6 @@ public class TasksAdapter extends RecyclerView.Adapter<TasksAdapter.TasksViewHol
         itemClickListener=listener;
     }
 
-    public static class TasksViewHolder extends RecyclerView.ViewHolder{
-        //TODO: PASS THIS CLASS TO AN INDEPENDENT CLASS
-        /*This class will get all the elements from layout, and allow us to acces to them(in this case define them)
-        * and also add them listeners
-        * */
-        public TextView taskTitleTextView,taskDetailsTextView;
-        public ImageView taskImage;
-
-        public TasksViewHolder(@NonNull View itemView, final OnItemClickListener listener) { //Because this class is static, we need to pass the interface OnItemClickListener
-            super(itemView);
-            /*At cause the adapter is getting the elements from the arraylist, the
-            * getAdapterPosition() [position returned by interface] will be the same
-            * position as the arraylist.
-            * */
-            itemView.setOnLongClickListener(new View.OnLongClickListener() {
-                @Override
-                public boolean onLongClick(View view) {
-                    if(listener !=null){
-                        int position=getAdapterPosition();//Get Adapter Position (ItemPosition)
-                        if(position!=RecyclerView.NO_POSITION){
-                            listener.OnEditTask(position);
-                        }
-                    }
-                    return true;
-                }
-            });
-
-            taskTitleTextView=itemView.findViewById(R.id.task_item_title);
-            taskDetailsTextView=itemView.findViewById(R.id.task_item_details);
-            taskImage=itemView.findViewById(R.id.task_item_image);
-
-            taskImage.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    if(listener !=null){
-                        int position=getAdapterPosition();//Get Adapter Position (ItemPosition)
-                        if(position!=RecyclerView.NO_POSITION){
-                            listener.OnTaskDoneClick(position);
-                        }
-                    }
-                }
-            });
-        }
-    }
-
     public TasksAdapter(ArrayList<TaskItem> tasksList){
         this.tasksList=tasksList;
         taskListFull=new ArrayList<>(tasksList);
@@ -86,7 +42,7 @@ public class TasksAdapter extends RecyclerView.Adapter<TasksAdapter.TasksViewHol
         //This method will directly access to the layout
         //viewgroup -> parent
         View view= LayoutInflater.from(viewGroup.getContext()).inflate(R.layout.task_item,viewGroup,false);
-        TasksViewHolder  tvh=new TasksViewHolder(view,itemClickListener);
+        TasksViewHolder tvh=new TasksViewHolder(view,itemClickListener);
         return tvh;
     }
 

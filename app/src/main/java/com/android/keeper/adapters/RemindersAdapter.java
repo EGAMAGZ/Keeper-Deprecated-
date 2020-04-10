@@ -9,10 +9,11 @@ import android.widget.TextView;
 
 import com.android.keeper.R;
 import com.android.keeper.recycle_items.ReminderItem;
+import com.android.keeper.view_holders.RemindersViewHolder;
 
 import java.util.ArrayList;
 
-public class RemindersAdapter extends RecyclerView.Adapter<RemindersAdapter.RemindersViewHolder>{
+public class RemindersAdapter extends RecyclerView.Adapter<RemindersViewHolder>{
 
     private ArrayList<ReminderItem> remindersList;
     private ArrayList<ReminderItem> remindersListFull;
@@ -26,33 +27,7 @@ public class RemindersAdapter extends RecyclerView.Adapter<RemindersAdapter.Remi
         itemClickListener=listener;
     }
 
-    public static class RemindersViewHolder extends RecyclerView.ViewHolder {
-        //TODO: PASS THIS CLASS TO AN INDEPENDENT CLASS
 
-        public TextView reminderTitleTextView,reminderDateTextView;
-
-        public RemindersViewHolder(@NonNull View itemView,final OnItemClickListener listener) {
-            super(itemView);
-
-            itemView.setOnLongClickListener(new View.OnLongClickListener() {
-                @Override
-                public boolean onLongClick(View view) {
-                    if(listener !=null){
-                        int position=getAdapterPosition();
-                        if(position != RecyclerView.NO_POSITION){
-                            listener.onEditReminder(position);
-                        }
-                    }
-
-                    return true;
-                }
-            });
-
-            reminderTitleTextView=itemView.findViewById(R.id.reminder_item_title);
-            reminderDateTextView=itemView.findViewById(R.id.reminder_item_date);
-
-        }
-    }
 
     public RemindersAdapter(ArrayList<ReminderItem> remindersList) {
         this.remindersList = remindersList;
