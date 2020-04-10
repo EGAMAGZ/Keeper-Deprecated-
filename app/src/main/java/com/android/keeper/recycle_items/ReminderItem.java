@@ -16,10 +16,6 @@ public class ReminderItem {
         return reminderId;
     }
 
-    public void setReminderId(int reminderId) {
-        this.reminderId = reminderId;
-    }
-
     public String getReminderTitle() {
         return reminderTitle;
     }

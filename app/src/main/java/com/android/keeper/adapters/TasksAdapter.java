@@ -31,6 +31,7 @@ public class TasksAdapter extends RecyclerView.Adapter<TasksAdapter.TasksViewHol
     }
 
     public static class TasksViewHolder extends RecyclerView.ViewHolder{
+        //TODO: PASS THIS CLASS TO AN INDEPENDENT CLASS
         /*This class will get all the elements from layout, and allow us to acces to them(in this case define them)
         * and also add them listeners
         * */
@@ -83,7 +84,7 @@ public class TasksAdapter extends RecyclerView.Adapter<TasksAdapter.TasksViewHol
     @Override
     public TasksViewHolder onCreateViewHolder(@NonNull ViewGroup viewGroup, int i) {
         //This method will directly access to the layout
-        //viewgroup = parent
+        //viewgroup -> parent
         View view= LayoutInflater.from(viewGroup.getContext()).inflate(R.layout.task_item,viewGroup,false);
         TasksViewHolder  tvh=new TasksViewHolder(view,itemClickListener);
         return tvh;
