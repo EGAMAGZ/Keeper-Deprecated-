@@ -18,6 +18,7 @@ import android.widget.Toast;
 
 import com.android.keeper.R;
 import com.android.keeper.adapters.RemindersAdapter;
+import com.android.keeper.dialog.AddNewReminderBottomSheet;
 import com.android.keeper.localdb.SQLiteConnection;
 import com.android.keeper.localdb.utilities.RemindersUtilities;
 import com.android.keeper.recycle_items.ReminderItem;
@@ -32,6 +33,7 @@ public class RemindersFragment extends Fragment {
     private RemindersAdapter remindersRecAdapter;
     private RecyclerView.LayoutManager remindersLayoutManager;
     private FloatingActionButton addReminderBtn;
+    private AddNewReminderBottomSheet addNewReminderBottomSheet;
 
     private ArrayList<ReminderItem> remindersList;
 
@@ -50,7 +52,24 @@ public class RemindersFragment extends Fragment {
         addReminderBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Toast.makeText(getContext(),"Crear",Toast.LENGTH_SHORT).show();
+                addNewReminderBottomSheet=new AddNewReminderBottomSheet();
+                addNewReminderBottomSheet.setBottomSheetListener(new AddNewReminderBottomSheet.AddNewReminderBottomSheetListener(){
+                    @Override
+                    public void onAddTask(int reminder_id, String reminder_title) {
+                        AddReminder(reminder_id,reminder_title);
+                    }
+
+                    @Override
+                    public void onEmptyReminderTitle() {
+                        CustomToast("Reminder Title Empty",R.drawable.ic_close_white_24dp);
+                    }
+
+                    @Override
+                    public void onReminderDateSelected() {
+
+                    }
+                });
+                addNewReminderBottomSheet.show(getFragmentManager(),"addReminderBottomSheet");
             }
         });
 
@@ -85,4 +104,32 @@ public class RemindersFragment extends Fragment {
         }
         database.close();
     }
+
+    private void AddReminder(int reminder_id, String reminder_title){
+        //TODO: DELETE ALL THE CRUD RELATED WITH ARRAYLIST TO CHECK IF IT IS NECESSARY
+        remindersList.add(0,new ReminderItem(0,reminder_title,false));
+        remindersRecAdapter.addItem(0,new ReminderItem(0,reminder_title,false));
+
+        remindersRecAdapter.notifyItemInserted(0);
+        CustomToast("Reminder Added",R.drawable.ic_done_white_24dp);
+    }
+
+    private void CustomToast(String text,int imageResource){
+        LayoutInflater inflater=getLayoutInflater();
+
+        View layout = inflater.inflate(R.layout.toast_layout, (ViewGroup) fragmentView.findViewById(R.id.toast_root));
+
+        TextView toastText = layout.findViewById(R.id.toast_text);
+        ImageView toastImage = layout.findViewById(R.id.toast_image);
+
+        toastText.setText(text);
+        toastImage.setImageResource(imageResource);
+
+        Toast toast = new Toast(getContext());
+        toast.setDuration(Toast.LENGTH_SHORT);
+        toast.setView(layout);
+
+        toast.show();
+    }
+
 }
