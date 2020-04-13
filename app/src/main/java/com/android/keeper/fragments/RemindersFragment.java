@@ -164,6 +164,10 @@ public class RemindersFragment extends Fragment {
         CustomToast("Reminder Added",R.drawable.ic_done_white_24dp);
     }
 
+    public void FilterReminder(String text){
+        remindersRecAdapter.getFilter().filter(text);
+    }
+
     private void CustomToast(String text,int imageResource){
         LayoutInflater inflater=getLayoutInflater();
 

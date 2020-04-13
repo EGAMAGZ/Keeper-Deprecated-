@@ -5,6 +5,8 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Filter;
+import android.widget.Filterable;
 import android.widget.TextView;
 
 import com.android.keeper.R;
@@ -13,7 +15,7 @@ import com.android.keeper.view_holders.RemindersViewHolder;
 
 import java.util.ArrayList;
 
-public class RemindersAdapter extends RecyclerView.Adapter<RemindersViewHolder>{
+public class RemindersAdapter extends RecyclerView.Adapter<RemindersViewHolder> implements Filterable {
 
     private ArrayList<ReminderItem> remindersList;
     private ArrayList<ReminderItem> remindersListFull;
@@ -66,6 +68,42 @@ public class RemindersAdapter extends RecyclerView.Adapter<RemindersViewHolder>{
         //Length of items that will be added to the recyclerview
         return remindersList.size();
     }
+
+    @Override
+    public Filter getFilter() {
+        return reminderListFilter;
+    }
+
+    private Filter reminderListFilter=new Filter(){
+        @Override
+        protected FilterResults performFiltering(CharSequence charSequence) {
+            ArrayList<ReminderItem> filteredList=new ArrayList<ReminderItem>();
+
+            if(charSequence == null || charSequence.length() == 0){
+                filteredList.addAll(remindersListFull);
+            }else{
+                String filterpattern= charSequence.toString().toLowerCase().trim();
+
+                for(ReminderItem item: remindersListFull){
+                    if(item.getReminderTitle().toLowerCase().contains(filterpattern)){
+                        filteredList.add(item);
+                    }
+                }
+            }
+
+            FilterResults results=new FilterResults();
+            results.values= filteredList;
+
+            return results;
+        }
+
+        @Override
+        protected void publishResults(CharSequence charSequence, FilterResults filterResults) {
+            remindersList.clear();
+            remindersList.addAll((ArrayList)filterResults.values);
+            notifyDataSetChanged();
+        }
+    };
 
     public void removeItem(int position){
         remindersListFull.remove(position);

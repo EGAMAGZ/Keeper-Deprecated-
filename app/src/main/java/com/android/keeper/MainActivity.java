@@ -40,6 +40,7 @@ import com.android.keeper.localdb.SQLiteConnection;
 
 public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
     private TasksFragment tasksFragment;
+    private RemindersFragment remindersFragment;
     private DrawerLayout drawer;
     private Toolbar toolbar;
     private Toast backToast;
@@ -62,6 +63,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         navigationView.setNavigationItemSelectedListener(this); //Sets Item Listener to Navigation View
 
         tasksFragment=new TasksFragment();
+        remindersFragment=new RemindersFragment();
 
         toolbar=findViewById(R.id.toolbar); //Gets Toolbar
         setSupportActionBar(toolbar);
@@ -80,7 +82,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 switch(fragmentValue){
                     case "tasks":
                         setLastFragment("tasks");
-                        getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new TasksFragment(), "tasks_fragment").commit();
+                        getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, tasksFragment, "tasks_fragment").commit();
                         navigationView.setCheckedItem(R.id.nav_tasks);
                         break;
                     default:
@@ -128,7 +130,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 break;
             case R.id.nav_reminders:
                 setLastFragment("reminders");
-                getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container,new RemindersFragment(),"reminders_fragment").commit();
+                getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container,remindersFragment,"reminders_fragment").commit();
                 break;
             case R.id.nav_tasks:
                 setLastFragment("tasks");
@@ -167,8 +169,13 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             public boolean onQueryTextChange(String newText) {
                 FragmentManager fragmentManager=getSupportFragmentManager();
                 Fragment currentFragment=fragmentManager.findFragmentById(R.id.fragment_container);
-                if(currentFragment.getTag().equals("tasks_fragment")){
-                    tasksFragment.FilterTask(newText);
+                switch(currentFragment.getTag()){
+                    case "reminders_fragment":
+                        remindersFragment.FilterReminder(newText);
+                        break;
+                    case "tasks_fragment":
+                        tasksFragment.FilterTask(newText);
+                        break;
                 }
                 return false;
             }
@@ -194,7 +201,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 navigationView.setCheckedItem(R.id.nav_notes);
                 break;
             case "reminders":
-                getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new RemindersFragment(), "reminders_fragment").commit();
+                getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, remindersFragment, "reminders_fragment").commit();
                 navigationView.setCheckedItem(R.id.nav_reminders);
                 break;
             case "tasks":
