@@ -116,7 +116,7 @@ public class AddNewTaskBottomSheet extends BottomSheetDialogFragment {
             public void onClick(View view) {
                 DatePickerDialogFragment datePicker = new DatePickerDialogFragment();
                 datePicker.setCallBack(onDateSetListener);
-                datePicker.setOnDismissListener(onDateDismissListener);//TODO: ADD ONDISMISSLISTENER
+                datePicker.setOnDismissListener(onDateDismissListener);
                 datePicker.show(getFragmentManager(),"date picker");
 
             }
@@ -172,7 +172,7 @@ public class AddNewTaskBottomSheet extends BottomSheetDialogFragment {
     }
 
     public void setTaskDate(){
-        if(selected_year==0 && selected_month==0 && selected_dayOfMonth==0){
+        if(selected_year==0 || selected_month==0 || selected_dayOfMonth==0){
             return ;
         }else{
 
@@ -181,13 +181,12 @@ public class AddNewTaskBottomSheet extends BottomSheetDialogFragment {
             }
 
             calendar= Calendar.getInstance();
-            calendar.set(Calendar.YEAR,selected_year);
-            calendar.set(Calendar.MONTH,selected_month);
-            calendar.set(Calendar.DAY_OF_MONTH,selected_dayOfMonth);
+            calendar.set(selected_year,selected_month,selected_dayOfMonth,selected_hourOfDay,selected_minute);
 
             String date= DateFormat.getDateInstance(DateFormat.FULL).format(calendar.getTime());
+            String time=DateFormat.getTimeInstance(DateFormat.SHORT).format(calendar.getTime());
             changeTaskDateButton.setText(date);
-            changeTaskTimeButton.setText(selected_hourOfDay+":"+selected_minute);//TODO:ADD A FORMAT FOR TIME
+            changeTaskTimeButton.setText(time);
             bottomSheetListener.onTaskDateSelected();
         }
     }

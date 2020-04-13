@@ -5,11 +5,11 @@ public class RemindersUtilities {
 
     public static final String COLUMN_REMINDER_ID="reminder_id";
     public static final String COLUMN_REMINDER_TITLE="reminder_title";
-    public static final String COLUMN_REMINDER_YEAR="task_year";
-    public static final String COLUMN_REMINDER_MONTH="task_month";
-    public static final String COLUMN_REMINDER_DAY="task_day";
-    public static final String COLUMN_REMINDER_HOUR="task_hour";
-    public static final String COLUMN_REMINDER_MINUTE="task_minute";
+    public static final String COLUMN_REMINDER_YEAR="reminder_year";
+    public static final String COLUMN_REMINDER_MONTH="reminder_month";
+    public static final String COLUMN_REMINDER_DAY="reminder_day";
+    public static final String COLUMN_REMINDER_HOUR="reminder_hour";
+    public static final String COLUMN_REMINDER_MINUTE="reminder_minute";
     public static final String COLUMN_REMINDER_DONE="reminder_done";
 
     public static final String CREATE_REMINDER_TABLE="CREATE TABLE "+TABLE_NAME+"("+COLUMN_REMINDER_ID+" INTEGER PRIMARY KEY AUTOINCREMENT NULL,"+

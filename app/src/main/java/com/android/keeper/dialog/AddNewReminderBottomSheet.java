@@ -1,7 +1,10 @@
 package com.android.keeper.dialog;
 
+import android.app.DatePickerDialog;
 import android.app.Dialog;
+import android.app.TimePickerDialog;
 import android.content.ContentValues;
+import android.content.DialogInterface;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -10,23 +13,38 @@ import android.support.design.widget.BottomSheetDialogFragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.ImageButton;
+import android.widget.LinearLayout;
+import android.widget.TextView;
+import android.widget.TimePicker;
 
 import com.android.keeper.R;
 import com.android.keeper.localdb.SQLiteConnection;
 import com.android.keeper.localdb.utilities.RemindersUtilities;
 
+import java.text.DateFormat;
+import java.util.Calendar;
+
 public class AddNewReminderBottomSheet extends BottomSheetDialogFragment {
 
-    private View fragmentView;
     public AddNewReminderBottomSheetListener bottomSheetListener;
+    private View fragmentView;
     private SQLiteConnection sqLiteConnection;
-    private ImageButton saveReminderButton;
+    private ImageButton saveReminderButton,addDateButton,deleteDateButton;
     private EditText titleEditText;
+    private TextView dateTextView, timeTextView;
+    private LinearLayout dateLayoutContainer,timeLayoutContainer;
 
     private String reminder_title;
     private int reminder_id;
+    private int selected_year=0;
+    private int selected_month=0;
+    private int selected_dayOfMonth=0;
+    private int selected_hourOfDay=0;
+    private int selected_minute=0;
+    private Calendar calendar;
 
     @Nullable
     @Override
@@ -34,9 +52,35 @@ public class AddNewReminderBottomSheet extends BottomSheetDialogFragment {
         fragmentView=inflater.inflate(R.layout.bottom_sheet_add_new_reminder,container,false);
         sqLiteConnection=new SQLiteConnection(getContext(),"keeper_db",null,1);
 
+        dateLayoutContainer=fragmentView.findViewById(R.id.reminder_date_container);
+        timeLayoutContainer=fragmentView.findViewById(R.id.reminder_time_container);
+
         saveReminderButton=fragmentView.findViewById(R.id.reminder_save);
+        addDateButton=fragmentView.findViewById(R.id.reminder_add_date);
+        deleteDateButton=fragmentView.findViewById(R.id.reminder_delete_date);
 
         titleEditText=fragmentView.findViewById(R.id.reminder_title);
+
+        dateTextView=fragmentView.findViewById(R.id.reminder_date);
+        timeTextView=fragmentView.findViewById(R.id.reminder_time);
+
+        dateTextView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                DatePickerDialogFragment datePicker = new DatePickerDialogFragment();
+                datePicker.setCallBack(onChangeDateListener);
+                datePicker.show(getFragmentManager(),"date_picker");
+            }
+        });
+
+        timeTextView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                TimePickerDialogFragment timePicker=new TimePickerDialogFragment();
+                timePicker.setCallBack(onChangeTimeListener);
+                timePicker.show(getFragmentManager(),"time_picker");
+            }
+        });
 
         saveReminderButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -45,11 +89,27 @@ public class AddNewReminderBottomSheet extends BottomSheetDialogFragment {
                 if(reminder_title.isEmpty()){
                     bottomSheetListener.onEmptyReminderTitle();
                 }else{
-                    //reminder_id=saveReminder();
-                    reminder_id=0;
+                    reminder_id=saveReminder();
                     bottomSheetListener.onAddTask(reminder_id,reminder_title);
                     dismiss();
                 }
+            }
+        });
+
+        addDateButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                DatePickerDialogFragment datePicker = new DatePickerDialogFragment();
+                datePicker.setCallBack(onDateSetListener);
+                datePicker.setOnDismissListener(onDateDismissListener);
+                datePicker.show(getFragmentManager(),"date_picker");
+            }
+        });
+
+        deleteDateButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                deleteDateFields();
             }
         });
 
@@ -65,10 +125,112 @@ public class AddNewReminderBottomSheet extends BottomSheetDialogFragment {
 
         values.put(RemindersUtilities.COLUMN_REMINDER_TITLE,reminder_title);
 
+        values.put(RemindersUtilities.COLUMN_REMINDER_YEAR,selected_year);
+        values.put(RemindersUtilities.COLUMN_REMINDER_MONTH,selected_month);
+        values.put(RemindersUtilities.COLUMN_REMINDER_DAY,selected_dayOfMonth);
+
+        values.put(RemindersUtilities.COLUMN_REMINDER_HOUR,selected_hourOfDay);
+        values.put(RemindersUtilities.COLUMN_REMINDER_MINUTE,selected_minute);
+
         returnedId=database.insert(RemindersUtilities.TABLE_NAME,RemindersUtilities.COLUMN_REMINDER_ID,values);
         id=(int) returnedId;
         return id;
     }
+
+    private void setReminderDate(){
+        if(selected_year==0 || selected_month==0 || selected_dayOfMonth==0){
+            return;
+        }else{
+            if(dateLayoutContainer.getVisibility()==View.GONE || timeLayoutContainer.getVisibility()==View.GONE){
+                showDateFields();
+            }
+            Calendar calendar= Calendar.getInstance();
+            calendar.set(selected_year,selected_month,selected_dayOfMonth,selected_hourOfDay,selected_minute);
+            String date= DateFormat.getDateInstance(DateFormat.LONG).format(calendar.getTime());
+            //Will change automatically between 12 and 24 format
+            String time=DateFormat.getTimeInstance(DateFormat.SHORT).format(calendar.getTime());
+            dateTextView.setText(date);
+            timeTextView.setText(time);
+        }
+    }
+
+    private void showDateFields(){
+        dateLayoutContainer.setVisibility(View.VISIBLE);
+        timeLayoutContainer.setVisibility(View.VISIBLE);
+    }
+
+    private void deleteDateFields(){
+        dateLayoutContainer.setVisibility(View.GONE);
+        timeLayoutContainer.setVisibility(View.GONE);
+        selected_year=0;selected_month=0;selected_dayOfMonth=0;selected_hourOfDay=0;selected_minute=0;
+    }
+
+    private DatePickerDialog.OnDateSetListener onDateSetListener=new DatePickerDialog.OnDateSetListener() {
+        @Override
+        public void onDateSet(DatePicker datePicker, int year, int month, int dayOfMonth) {
+            selected_year=year;
+            selected_month=month;
+            selected_dayOfMonth=dayOfMonth;
+
+            TimePickerDialogFragment timePicker = new TimePickerDialogFragment();
+            timePicker.setCallBack(onTimeSetListener);
+            timePicker.setOnDismissListener(onTimeDismissListener);
+            timePicker.show(getFragmentManager(),"time_picker");
+        }
+    };
+    /* ----- Lsiteners when time and date are set ----- */
+    private DialogInterface.OnDismissListener onDateDismissListener=new DialogInterface.OnDismissListener() {
+        @Override
+        public void onDismiss(DialogInterface dialogInterface) {
+            /* In case of dismiss, the variables related with date will set a value
+            * of 0 and will not continue with the next step (display Time Picker Dialog and set time)
+            * */
+            selected_year=0;selected_month=0;selected_dayOfMonth=0;
+        }
+    };
+
+    private TimePickerDialog.OnTimeSetListener onTimeSetListener=new TimePickerDialog.OnTimeSetListener() {
+        @Override
+        public void onTimeSet(TimePicker timePicker, int hourOfDay, int minute) {
+            selected_hourOfDay=hourOfDay;
+            selected_minute=minute;
+
+            setReminderDate();
+        }
+    };
+
+    private DialogInterface.OnDismissListener onTimeDismissListener=new DialogInterface.OnDismissListener() {
+        @Override
+        public void onDismiss(DialogInterface dialogInterface) {
+            /* In case of dismiss, the variables related with date and time will set a value
+             * of 0 and will not continue with the next step (display date and time)
+             * */
+            selected_year=0;selected_month=0;selected_dayOfMonth=0;selected_minute=0;selected_hourOfDay=0;
+        }
+    };
+
+    /* ----- Lsiteners when time or date are changed ----- */
+
+    private DatePickerDialog.OnDateSetListener onChangeDateListener=new DatePickerDialog.OnDateSetListener() {
+        @Override
+        public void onDateSet(DatePicker datePicker, int year, int month, int dayOfMonth) {
+            selected_year=year;
+            selected_month=month;
+            selected_dayOfMonth=dayOfMonth;
+
+            setReminderDate();
+        }
+    };
+
+    private TimePickerDialog.OnTimeSetListener onChangeTimeListener=new TimePickerDialog.OnTimeSetListener() {
+        @Override
+        public void onTimeSet(TimePicker timePicker, int hourOfDay, int minute) {
+            selected_hourOfDay=hourOfDay;
+            selected_minute=minute;
+
+            setReminderDate();
+        }
+    };
 
     public interface AddNewReminderBottomSheetListener{
         void onAddTask(int reminder_id,String reminder_title);
