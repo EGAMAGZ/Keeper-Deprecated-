@@ -54,6 +54,11 @@ public class RemindersAdapter extends RecyclerView.Adapter<RemindersViewHolder>{
          * */
         ReminderItem currentItem=remindersList.get(i);
         remindersViewHolder.reminderTitleTextView.setText(currentItem.getReminderTitle());
+        if(currentItem.getReminderDate().isEmpty() || currentItem.getReminderTime().isEmpty()){
+            remindersViewHolder.reminderDateTextView.setText("No Date Assigned");
+        }else{
+            remindersViewHolder.reminderDateTextView.setText(currentItem.getReminderDate()+" "+currentItem.getReminderTime());
+        }
     }
 
     @Override

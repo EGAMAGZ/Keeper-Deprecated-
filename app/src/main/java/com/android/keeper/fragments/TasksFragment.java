@@ -169,7 +169,7 @@ public class TasksFragment extends Fragment {
 
         try {
             Cursor cursor = database.query(TasksUtilities.TABLE_NAME, columns, selection, null, null, null,
-                    TasksUtilities.COLUMN_TASK_ID+" DESC, "+TasksUtilities.COLUMN_TASK_ID+" ASC", null);
+                    TasksUtilities.COLUMN_TASK_ID+" DESC", null);
             while(cursor.moveToNext()){
                 if(cursor.getInt(3)==0){
                     tasksList.add(new TaskItem(R.drawable.ic_check_box_outline_blank_black_24dp,cursor.getInt(0),cursor.getString(1),cursor.getString(2),false));
@@ -297,7 +297,8 @@ public class TasksFragment extends Fragment {
 
     private void addTask(int task_id,String task_title, String task_details){
         //The SQL PART IS AUTO EXECUTED ON ADDNEWTASKBOTTOMSHEET
-
+        /** It is important to add a new item in the adapter and in the array list because if it is not added it will throw
+         * an IndexOutOfBoundsException when is notified to the adapter that a new item is inserted */
         //It is related with the adapter for the elements that are shown
         tasksList.add(0,new TaskItem(R.drawable.ic_check_box_outline_blank_black_24dp,task_id,task_title,task_details,false));
 

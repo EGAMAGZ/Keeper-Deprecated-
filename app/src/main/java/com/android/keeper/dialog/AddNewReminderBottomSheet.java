@@ -44,7 +44,6 @@ public class AddNewReminderBottomSheet extends BottomSheetDialogFragment {
     private int selected_dayOfMonth=0;
     private int selected_hourOfDay=0;
     private int selected_minute=0;
-    private Calendar calendar;
 
     @Nullable
     @Override
@@ -90,7 +89,8 @@ public class AddNewReminderBottomSheet extends BottomSheetDialogFragment {
                     bottomSheetListener.onEmptyReminderTitle();
                 }else{
                     reminder_id=saveReminder();
-                    bottomSheetListener.onAddTask(reminder_id,reminder_title);
+                    bottomSheetListener.onAddReminder(reminder_id,reminder_title,selected_year,selected_month,
+                            selected_dayOfMonth,selected_hourOfDay,selected_minute);
                     dismiss();
                 }
             }
@@ -117,7 +117,6 @@ public class AddNewReminderBottomSheet extends BottomSheetDialogFragment {
     }
 
     private int saveReminder(){
-        //TODO: ADD TIME AND DATE PICKER
         int id;
         long returnedId;
         SQLiteDatabase database=sqLiteConnection.getWritableDatabase();
@@ -233,7 +232,7 @@ public class AddNewReminderBottomSheet extends BottomSheetDialogFragment {
     };
 
     public interface AddNewReminderBottomSheetListener{
-        void onAddTask(int reminder_id,String reminder_title);
+        void onAddReminder(int reminder_id,String reminder_title,int year,int month,int day,int hour,int minute);
         void onEmptyReminderTitle();
         void onReminderDateSelected();
     }

@@ -9,7 +9,6 @@ import com.android.keeper.R;
 import com.android.keeper.adapters.RemindersAdapter;
 
 public class RemindersViewHolder extends RecyclerView.ViewHolder {
-    //TODO: PASS THIS CLASS TO AN INDEPENDENT CLASS
 
     public TextView reminderTitleTextView,reminderDateTextView;
 

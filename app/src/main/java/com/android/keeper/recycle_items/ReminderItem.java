@@ -4,11 +4,15 @@ public class ReminderItem {
 
     private int reminderId;
     private String reminderTitle;
+    private String reminderDate;
+    private String reminderTime;
     private boolean reminderDone;
 
-    public ReminderItem(int reminderId, String reminderTitle, boolean reminderDone) {
+    public ReminderItem(int reminderId, String reminderTitle, String reminderDate, String reminderTime, boolean reminderDone) {
         this.reminderId = reminderId;
         this.reminderTitle = reminderTitle;
+        this.reminderDate = reminderDate;
+        this.reminderTime = reminderTime;
         this.reminderDone = reminderDone;
     }
 
@@ -22,6 +26,22 @@ public class ReminderItem {
 
     public void setReminderTitle(String reminderTitle) {
         this.reminderTitle = reminderTitle;
+    }
+
+    public String getReminderDate() {
+        return reminderDate;
+    }
+
+    public void setReminderDate(String reminderDate) {
+        this.reminderDate = reminderDate;
+    }
+
+    public String getReminderTime() {
+        return reminderTime;
+    }
+
+    public void setReminderTime(String reminderTime) {
+        this.reminderTime = reminderTime;
     }
 
     public boolean isReminderDone() {
