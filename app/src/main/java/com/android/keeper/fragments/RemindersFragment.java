@@ -13,6 +13,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.ScrollView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -35,6 +36,7 @@ public class RemindersFragment extends Fragment {
     private RemindersAdapter remindersRecAdapter;
     private RecyclerView.LayoutManager remindersLayoutManager;
     private FloatingActionButton addReminderBtn;
+    private ScrollView scrollView;
     private AddNewReminderBottomSheet addNewReminderBottomSheet;
 
     private ArrayList<ReminderItem> remindersList;
@@ -42,6 +44,7 @@ public class RemindersFragment extends Fragment {
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+        //TODO: REDUCE THE AMOUNT OF CODE
         fragmentView=inflater.inflate(R.layout.fragment_reminders,container,false);
         sqLiteConnection=new SQLiteConnection(getContext(),"keeper_db",null,1);
         remindersList=new ArrayList<ReminderItem>();
@@ -50,6 +53,8 @@ public class RemindersFragment extends Fragment {
 
         remindersRecyclerView=fragmentView.findViewById(R.id.reminders_recyclerview);
         remindersLayoutManager=new LinearLayoutManager(getContext());
+
+        scrollView=fragmentView.findViewById(R.id.reminder_scrollview);
 
         addReminderBtn.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -72,6 +77,19 @@ public class RemindersFragment extends Fragment {
                     }
                 });
                 addNewReminderBottomSheet.show(getFragmentManager(),"addReminderBottomSheet");
+            }
+        });
+
+        scrollView.setOnScrollChangeListener(new View.OnScrollChangeListener() {
+            @Override
+            public void onScrollChange(View view, int scrollX, int scrollY, int oldScrollX, int oldScrollY) {
+                if(scrollY<=oldScrollY){
+                    //scrollView up
+                    addReminderBtn.show();
+                }else{
+                    //ScrollView down
+                    addReminderBtn.hide();
+                }
             }
         });
 
