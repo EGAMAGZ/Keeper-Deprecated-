@@ -295,30 +295,6 @@ public class TasksFragment extends Fragment {
     *   Functions related with the interaction with tasks
     * */
 
-    private void addTask(int task_id,String task_title, String task_details){
-        //The SQL PART IS AUTO EXECUTED ON ADDNEWTASKBOTTOMSHEET
-        /** It is important to add a new item in the adapter and in the array list because if it is not added it will throw
-         * an IndexOutOfBoundsException when is notified to the adapter that a new item is inserted */
-        //It is related with the adapter for the elements that are shown
-        tasksList.add(0,new TaskItem(R.drawable.ic_check_box_outline_blank_black_24dp,task_id,task_title,task_details,false));
-
-        //It is related with the adapter with the elements for filter
-        tasksRecAdapter.addItem(0,new TaskItem(R.drawable.ic_check_box_outline_blank_black_24dp,task_id,task_title,task_details,false));
-    }
-
-    private void deleteTask(int task_position){
-
-        tasksList.remove(task_position); //It is related with the adapter for the elements that are shown
-        tasksRecAdapter.removeItem(task_position);//It is related with the adapter with the elements for filter
-        //Here was a for before
-    }
-    private void editTask(int task_position,String task_title,String task_details){
-        //It is related with the adapter for the elements that are shown
-        tasksList.get(task_position).setTaskTitle(task_title);
-        tasksList.get(task_position).setTaskDetails(task_details);
-
-        tasksRecAdapter.editItem(task_position,task_title,task_details);//It is related with the adapter with the elements for filter
-    }
     private void setTaskDone(int task_id,int task_position){
         SQLiteDatabase database=conn.getWritableDatabase();
 
@@ -368,21 +344,29 @@ public class TasksFragment extends Fragment {
     * */
 
     private void AddTask(int task_id,String task_title, String task_details){
-        addTask(task_id, task_title, task_details);
-        tasksRecAdapter.notifyItemInserted(0);
+        //The SQL PART IS AUTO EXECUTED ON ADDNEWTASKBOTTOMSHEET
+        /** It is important to add a new item in the adapter and in the array list because if it is not added it will throw
+         * an IndexOutOfBoundsException when is notified to the adapter that a new item is inserted */
+        //It is related with the adapter for the elements that are shown
+        tasksList.add(0,new TaskItem(R.drawable.ic_check_box_outline_blank_black_24dp,task_id,task_title,task_details,false));
+
+        //It is related with the adapter with the elements for filter
+        tasksRecAdapter.addItem(0,new TaskItem(R.drawable.ic_check_box_outline_blank_black_24dp,task_id,task_title,task_details,false));
         CustomToast("Task added",R.drawable.ic_done_white_24dp);
         percentageTasks();
     }
 
     private void SaveEditedTask(int task_position,String task_title,String task_details){
-        editTask(task_position,task_title,task_details);
-        tasksRecAdapter.notifyItemChanged(task_position);
+        //It is related with the adapter for the elements that are shown
+        tasksList.get(task_position).setTaskTitle(task_title);
+        tasksList.get(task_position).setTaskDetails(task_details);
+        tasksRecAdapter.editItem(task_position,task_title,task_details);//It is related with the adapter with the elements for filter
         CustomToast("Task saved",R.drawable.ic_done_white_24dp);
     }
 
     private void DeleteSavedTask(int task_position){
-        deleteTask(task_position);
-        tasksRecAdapter.notifyDataSetChanged();
+        tasksList.remove(task_position); //It is related with the adapter for the elements that are shown
+        tasksRecAdapter.removeItem(task_position);//It is related with the adapter with the elements for filter
         CustomToast("Task deleted",R.drawable.ic_done_white_24dp);
         percentageTasks();
     }

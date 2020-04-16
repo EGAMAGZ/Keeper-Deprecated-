@@ -110,9 +110,11 @@ public class RemindersAdapter extends RecyclerView.Adapter<RemindersViewHolder> 
     }
     public void addItem(int index,ReminderItem reminderItem){
         remindersListFull.add(index,reminderItem);
+        notifyItemInserted(index);
     }
 
     public void editItem(int reminder_position,String reminder_title){
         remindersListFull.get(reminder_position).setReminderTitle(reminder_title);
+        notifyItemChanged(reminder_position);
     }
 }

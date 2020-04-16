@@ -160,7 +160,6 @@ public class RemindersFragment extends Fragment {
         remindersList.add(0,new ReminderItem(0,reminder_title,date,time,false));
         remindersRecAdapter.addItem(0,new ReminderItem(reminder_id,reminder_title,date,time,false));
 
-        remindersRecAdapter.notifyItemInserted(0);
         CustomToast("Reminder Added",R.drawable.ic_done_white_24dp);
     }
 

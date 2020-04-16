@@ -104,11 +104,12 @@ public class TasksAdapter extends RecyclerView.Adapter<TasksViewHolder>  impleme
 
     public void removeItem(int position){
         taskListFull.remove(position);
-        //notifyDataSetChanged();
+        notifyDataSetChanged();
     }
 
     public void addItem(int index,TaskItem taskItem){
         taskListFull.add(index,taskItem);
+        notifyItemInserted(index);
     }
 
     public void editItem(int task_position,String task_title,String task_details){
@@ -116,5 +117,6 @@ public class TasksAdapter extends RecyclerView.Adapter<TasksViewHolder>  impleme
         taskListFull.get(task_position).setTaskTitle(task_title);
         taskListFull.get(task_position).setTaskDetails(task_details);
         //Here was a for before to change searching by id
+        notifyItemChanged(task_position);
     }
 }
