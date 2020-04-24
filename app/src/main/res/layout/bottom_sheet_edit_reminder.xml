@@ -18,8 +18,6 @@
         android:singleLine="true"
         android:textSize="20sp"
         android:textStyle="bold"
-        android:textColor="@android:color/black"
-        android:textColorHint="@android:color/darker_gray"
         android:inputType="textCapSentences" />
 
     <LinearLayout
@@ -50,8 +48,7 @@
             android:textColor="@color/thirdColor"
             android:background="@android:color/transparent"
             android:src="@drawable/ic_close_white_24dp"
-            android:layout_gravity="center"
-            android:visibility="visible"/>
+            android:layout_gravity="center"/>
     </LinearLayout>
 
     <LinearLayout

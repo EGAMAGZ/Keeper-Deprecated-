@@ -17,6 +17,8 @@
         android:singleLine="true"
         android:textSize="20sp"
         android:textStyle="bold"
+        android:textColor="@android:color/black"
+        android:textColorHint="@android:color/darker_gray"
         android:background="@android:color/transparent"
         android:inputType="textCapSentences"/>
 
@@ -28,6 +30,8 @@
         android:layout_marginRight="15dp"
         android:layout_marginTop="0dp"
         android:layout_marginBottom="15dp"
+        android:textColor="@android:color/black"
+        android:textColorHint="@android:color/darker_gray"
         android:hint="Add Details"
         android:background="@android:color/transparent"
         android:visibility="visible"
