@@ -1,0 +1,24 @@
+package com.android.keeper.dialog;
+
+import android.os.Bundle;
+import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
+import android.support.design.widget.BottomSheetDialogFragment;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
+
+import com.android.keeper.R;
+
+public class MessageBottomSheet extends BottomSheetDialogFragment {
+
+    private View bottomSheetView;
+
+    @Nullable
+    @Override
+    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+        bottomSheetView=inflater.inflate(R.layout.bottom_sheet_message,container,false);
+
+        return bottomSheetView;
+    }
+}

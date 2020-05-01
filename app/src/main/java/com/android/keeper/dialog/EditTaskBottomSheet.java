@@ -107,7 +107,7 @@ public class EditTaskBottomSheet extends BottomSheetDialogFragment {
             public void onClick(View view) {
                 DatePickerDialogFragment datePicker = new DatePickerDialogFragment();
                 datePicker.setCallBack(onDateSetListener);
-                datePicker.setOnDismissListener(onDateDismissListener);//TODO: ADD ONDISMISSLISTENER
+                datePicker.setOnDismissListener(onDateDismissListener);
                 datePicker.show(getFragmentManager(),"date picker");
 
             }
@@ -175,13 +175,12 @@ public class EditTaskBottomSheet extends BottomSheetDialogFragment {
         if(selected_year!=0 && selected_month!=0 && selected_dayOfMonth!=0){
 
             Calendar calendar= Calendar.getInstance();
-            calendar.set(Calendar.YEAR,selected_year);
-            calendar.set(Calendar.MONTH,selected_month);
-            calendar.set(Calendar.DAY_OF_MONTH,selected_dayOfMonth);
+            calendar.set(selected_year,selected_month,selected_dayOfMonth,selected_hourOfDay,selected_minute);
 
             String date= DateFormat.getDateInstance(DateFormat.FULL).format(calendar.getTime());
+            String time=DateFormat.getTimeInstance(DateFormat.SHORT).format(calendar.getTime());
             changeTaskDateButton.setText(date);
-            changeTaskTimeButton.setText(selected_hourOfDay+":"+selected_minute);//TODO:ADD A FORMAT FOR TIME
+            changeTaskTimeButton.setText(time);
         }
     }
 
@@ -232,7 +231,7 @@ public class EditTaskBottomSheet extends BottomSheetDialogFragment {
 
             TimePickerDialogFragment timePicker=new TimePickerDialogFragment();
             timePicker.setCallBack(onTimeSetListener);
-            timePicker.setOnDismissListener(onTimeDismissListener);//TODO: ADD ONDISMISSLISTENER
+            timePicker.setOnDismissListener(onTimeDismissListener);
             timePicker.show(getFragmentManager(),"time picker");
         }
     };

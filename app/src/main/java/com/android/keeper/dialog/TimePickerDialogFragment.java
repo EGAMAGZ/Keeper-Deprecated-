@@ -29,7 +29,6 @@ public class TimePickerDialogFragment extends DialogFragment {
     }
 
     public void setOnDismissListener(DialogInterface.OnDismissListener ondismiss){
-        //TODO: CHECK IF THIS METHOD WORKS
         onDismissListener=ondismiss;
     }
 

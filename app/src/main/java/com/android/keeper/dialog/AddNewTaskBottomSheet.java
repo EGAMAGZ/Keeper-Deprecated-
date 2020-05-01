@@ -172,15 +172,11 @@ public class AddNewTaskBottomSheet extends BottomSheetDialogFragment {
     }
 
     public void setTaskDate(){
-        if(selected_year==0 || selected_month==0 || selected_dayOfMonth==0){
-            return ;
-        }else{
-
+        if(selected_year!=0 && selected_month!=0 && selected_dayOfMonth!=0){
             if(deleteTaskDateButton.getVisibility()==View.GONE || changeTaskDateButton.getVisibility()==View.GONE){
                 showDateFields();
             }
-
-            calendar= Calendar.getInstance();
+            Calendar calendar=Calendar.getInstance();
             calendar.set(selected_year,selected_month,selected_dayOfMonth,selected_hourOfDay,selected_minute);
 
             String date= DateFormat.getDateInstance(DateFormat.FULL).format(calendar.getTime());
@@ -194,7 +190,6 @@ public class AddNewTaskBottomSheet extends BottomSheetDialogFragment {
     private void setNotificationAlarm(Notification notification,int task_id){
         //TODO:FIX ERROR THAT SHOW THE SAME CONTENT TO EVERY NOTIFICATION(SOMETIMES)
         //TODO:ADD METHOD TO DELETE/CANCEL NOTIFICAION
-        //TODO:ADD ARRAYLIST TO STORE DATE(YEAR;MOTH;DAY;HOUR;MINUTE)
         if(selected_year==0 && selected_month==0 && selected_dayOfMonth==0){
             return ;
         }else{
@@ -250,7 +245,7 @@ public class AddNewTaskBottomSheet extends BottomSheetDialogFragment {
 
             TimePickerDialogFragment timePicker=new TimePickerDialogFragment();
             timePicker.setCallBack(onTimeSetListener);
-            timePicker.setOnDismissListener(onTimeDismissListener);//TODO: ADD ONDISMISSLISTENER
+            timePicker.setOnDismissListener(onTimeDismissListener);
             timePicker.show(getFragmentManager(),"time picker");
         }
     };
