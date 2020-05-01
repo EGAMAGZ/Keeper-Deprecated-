@@ -376,6 +376,7 @@ public class TasksFragment extends Fragment {
     }
 
     private void CustomToast(String text,int imageResource){
+        //TODO: DELETE ME, AND MY FRIEND ON THE OTHER FRAGMENT
         LayoutInflater inflater=getLayoutInflater();
 
         View layout = inflater.inflate(R.layout.toast_layout, (ViewGroup) fragmentView.findViewById(R.id.toast_root));
