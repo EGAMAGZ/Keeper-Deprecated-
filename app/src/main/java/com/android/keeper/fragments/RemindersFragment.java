@@ -68,7 +68,7 @@ public class RemindersFragment extends Fragment {
 
                     @Override
                     public void onEmptyReminderTitle() {
-                        CustomToast("Reminder Title Empty",R.drawable.ic_close_white_24dp);
+                        Toast.makeText(getContext(),"Reminder Title Empty",Toast.LENGTH_SHORT).show();
                     }
 
                     @Override
@@ -160,29 +160,11 @@ public class RemindersFragment extends Fragment {
         remindersList.add(0,new ReminderItem(0,reminder_title,date,time,false));
         remindersRecAdapter.addItem(0,new ReminderItem(reminder_id,reminder_title,date,time,false));
 
-        CustomToast("Reminder Added",R.drawable.ic_done_white_24dp);
+        Toast.makeText(getContext(),"ReminderAdded",Toast.LENGTH_SHORT).show();
     }
 
     public void FilterReminder(String text){
         remindersRecAdapter.getFilter().filter(text);
-    }
-
-    private void CustomToast(String text,int imageResource){
-        LayoutInflater inflater=getLayoutInflater();
-
-        View layout = inflater.inflate(R.layout.toast_layout, (ViewGroup) fragmentView.findViewById(R.id.toast_root));
-
-        TextView toastText = layout.findViewById(R.id.toast_text);
-        ImageView toastImage = layout.findViewById(R.id.toast_image);
-
-        toastText.setText(text);
-        toastImage.setImageResource(imageResource);
-
-        Toast toast = new Toast(getContext());
-        toast.setDuration(Toast.LENGTH_SHORT);
-        toast.setView(layout);
-
-        toast.show();
     }
 
 }

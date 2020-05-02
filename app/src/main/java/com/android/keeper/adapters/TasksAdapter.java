@@ -8,13 +8,10 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Filter;
 import android.widget.Filterable;
-import android.widget.TextView;
-import android.widget.ImageView;
-import android.widget.Toast;
 
 import com.android.keeper.R;
 import com.android.keeper.recycle_items.TaskItem;
-import com.android.keeper.view_holders.TasksViewHolder;
+import com.android.keeper.viewholders.TasksViewHolder;
 
 public class TasksAdapter extends RecyclerView.Adapter<TasksViewHolder>  implements Filterable {
 

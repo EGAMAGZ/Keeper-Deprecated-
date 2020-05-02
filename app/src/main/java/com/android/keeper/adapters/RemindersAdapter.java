@@ -7,11 +7,10 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Filter;
 import android.widget.Filterable;
-import android.widget.TextView;
 
 import com.android.keeper.R;
 import com.android.keeper.recycle_items.ReminderItem;
-import com.android.keeper.view_holders.RemindersViewHolder;
+import com.android.keeper.viewholders.RemindersViewHolder;
 
 import java.util.ArrayList;
 

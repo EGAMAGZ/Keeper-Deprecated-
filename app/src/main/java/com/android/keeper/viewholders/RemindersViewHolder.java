@@ -1,4 +1,4 @@
-package com.android.keeper.view_holders;
+package com.android.keeper.viewholders;
 
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;

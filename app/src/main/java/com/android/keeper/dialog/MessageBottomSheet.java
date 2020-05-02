@@ -8,6 +8,7 @@ import android.support.design.widget.BottomSheetDialogFragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -18,6 +19,10 @@ public class MessageBottomSheet extends BottomSheetDialogFragment {
     private View bottomSheetView;
     private TextView messageTitleTextView,messageSubtitleTextView;
     private ImageView messageImageView;
+    private ImageButton messageCloseImageButton;
+
+    private String messageTitle,messageSubtitle,messageTitleColor;
+    private int resource;
 
     @Nullable
     @Override
@@ -29,21 +34,37 @@ public class MessageBottomSheet extends BottomSheetDialogFragment {
         messageTitleTextView=bottomSheetView.findViewById(R.id.message_title);
         messageSubtitleTextView=bottomSheetView.findViewById(R.id.message_subtitle);
 
+        messageCloseImageButton=bottomSheetView.findViewById(R.id.message_close_btn);
+
+        messageCloseImageButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                dismiss();
+            }
+        });
+
+        setContent();
+
         return bottomSheetView;
     }
 
-    public void setTitle(String text, String hexColor){
-        messageTitleTextView.setText(text);
-        messageTitleTextView.setTextColor(Color.parseColor(hexColor));
+    private void setContent(){
+        messageTitleTextView.setText(messageTitle);
+        messageTitleTextView.setTextColor(Color.parseColor(messageTitleColor));
+        messageSubtitleTextView.setText(messageSubtitle);
     }
 
-    public void setSubtitle(String text, String hexColor){
-        messageSubtitleTextView.setText(text);
-        messageSubtitleTextView.setTextColor(Color.parseColor(hexColor));
+    public void setTitle(String text, String hexColor){
+        messageTitle=text;
+        messageTitleColor=hexColor;
+    }
+
+    public void setSubtitle(String text){
+        messageSubtitle=text;
     }
 
     public void setImage(int resource){
-        messageImageView.setImageResource(resource);
+        this.resource=resource;
     }
 
 }

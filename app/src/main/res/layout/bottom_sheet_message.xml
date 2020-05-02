@@ -4,6 +4,7 @@
     android:layout_height="match_parent">
 
     <ImageButton
+        android:id="@+id/message_close_btn"
         android:layout_width="36dp"
         android:layout_height="36dp"
         android:layout_alignParentTop="true"
@@ -16,30 +17,36 @@
     <LinearLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:orientation="vertical"
-        android:layout_centerVertical="true"
+        android:layout_below="@+id/message_close_btn"
         android:layout_centerHorizontal="true"
-        android:gravity="center">
+        android:layout_marginTop="54dp"
+        android:layout_marginBottom="108dp"
+        android:gravity="center"
+        android:orientation="vertical">
 
         <ImageView
             android:id="@+id/message_image"
             android:layout_width="144dp"
             android:layout_height="144dp"
-            android:src="@drawable/ic_close_black_24dp"/>
+            android:src="@drawable/ic_close_black_24dp" />
 
         <TextView
             android:id="@+id/message_title"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Message Sample"
-            android:textSize="35sp"/>
+            android:textColor="@android:color/black"
+            android:textSize="35sp"
+            android:textStyle="bold" />
 
         <TextView
             android:id="@+id/message_subtitle"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Subtitle"
-            android:textSize="20sp"/>
+            android:textColor="@android:color/black"
+            android:textSize="20sp"
+            android:textAlignment="center"/>
 
     </LinearLayout>
 
