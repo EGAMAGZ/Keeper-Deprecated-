@@ -230,7 +230,7 @@ public class TasksFragment extends Fragment {
 
                 @Override
                 public void OnTaskDoneClick(int position) {
-                    /*Example of why the position returned by the interface of the Adadpter (getAdapterPosition())
+                    /*Example of why the position returned by the interface of the Adapter (getAdapterPosition())
                     * is the same position for the arraylist*/
                     //TODO: Show snackbar with undo action for the both status that the task could have(EX: setTaskDone -> setTaskUndone)
                     if(tasksList.get(position).isTaskDone()){

@@ -23,6 +23,8 @@ import com.android.keeper.dialog.AddNewReminderBottomSheet;
 import com.android.keeper.localdb.SQLiteConnection;
 import com.android.keeper.localdb.utilities.RemindersUtilities;
 import com.android.keeper.recycle_items.ReminderItem;
+import com.android.keeper.util.CalendarUtil;
+import com.android.keeper.util.CursorUtil;
 
 import java.text.DateFormat;
 import java.util.ArrayList;
@@ -62,7 +64,7 @@ public class RemindersFragment extends Fragment {
                 addNewReminderBottomSheet=new AddNewReminderBottomSheet();
                 addNewReminderBottomSheet.setBottomSheetListener(new AddNewReminderBottomSheet.AddNewReminderBottomSheetListener(){
                     @Override
-                    public void onAddReminder(int reminder_id, String reminder_title,int year,int month,int day,int hour,int minute) {
+                    public void onAddReminder(int reminder_id, String reminder_title,Integer year,Integer month,Integer day,Integer hour,Integer minute) {
                         AddReminder(reminder_id,reminder_title,year,month,day,hour,minute);
                     }
 
@@ -104,26 +106,21 @@ public class RemindersFragment extends Fragment {
         RemindersUtilities.COLUMN_REMINDER_DAY,RemindersUtilities.COLUMN_REMINDER_HOUR,
         RemindersUtilities.COLUMN_REMINDER_MINUTE};
 
+
+
         SQLiteDatabase database=sqLiteConnection.getReadableDatabase();
         try{
             Cursor cursor=database.query(RemindersUtilities.TABLE_NAME,columns,null,null,null,null,
                     RemindersUtilities.COLUMN_REMINDER_ID+" DESC",null);
             while(cursor.moveToNext()){
-                String date,time;
+                String title=cursor.getString(1);
                 int id=cursor.getInt(0);
 
-                Calendar calendar=Calendar.getInstance();
-                calendar.set(cursor.getInt(2),cursor.getInt(3),cursor.getInt(4),cursor.getInt(5),cursor.getInt(6));
-
-                String title=cursor.getString(1);
-                if(cursor.getInt(2)==0 || cursor.getInt(3)==0 || cursor.getInt(4)==0){
-                    date="";
-                    time="";
-                }else{
-                    date= DateFormat.getDateInstance(DateFormat.LONG).format(calendar.getTime());
-                    //Will change automatically between 12 and 24 format
-                    time=DateFormat.getTimeInstance(DateFormat.SHORT).format(calendar.getTime());
-                }
+                CalendarUtil calendarUtil=new CalendarUtil(CursorUtil.checkNullInteger(2,cursor), CursorUtil.checkNullInteger(3,cursor),
+                        CursorUtil.checkNullInteger(4,cursor), CursorUtil.checkNullInteger(5,cursor),
+                        CursorUtil.checkNullInteger(6,cursor));
+                String date=calendarUtil.getDateFormat(DateFormat.LONG);
+                String time=calendarUtil.getTimeFormat(DateFormat.SHORT);
                 remindersList.add(new ReminderItem(id,title,date,time,false));
             }
         }catch(Exception e){}
@@ -141,23 +138,16 @@ public class RemindersFragment extends Fragment {
         database.close();
     }
 
-    private void AddReminder(int reminder_id, String reminder_title,int year,int month,int day,int hour,int minute){
+    private void AddReminder(int reminder_id, String reminder_title,Integer year,Integer month,Integer day,Integer hour,Integer minute){
         //The SQL PART IS AUTO EXECUTED ON AddNewReminderBottomSheet
         String date,time;
-        Calendar calendar=Calendar.getInstance();
-        calendar.set(year,month,day,hour,minute);
-        if(year==0 || month==0 || day==0){
-            date="";
-            time="";
-        }else{
-            date= DateFormat.getDateInstance(DateFormat.LONG).format(calendar.getTime());
 
-            //Will change automatically between 12 and 24 format
-            time=DateFormat.getTimeInstance(DateFormat.SHORT).format(calendar.getTime());
-        }
+        CalendarUtil calendarUtil=new CalendarUtil(year,month,day,hour,minute);
+        date=calendarUtil.getDateFormat(DateFormat.LONG);
+        time=calendarUtil.getTimeFormat(DateFormat.SHORT);
         /** It is important to add a new item in the adapter and in the array list because if it is not added it will throw
          * an IndexOutOfBoundsException when is notified to the adapter that a new item is inserted */
-        remindersList.add(0,new ReminderItem(0,reminder_title,date,time,false));
+        remindersList.add(0,new ReminderItem(reminder_id,reminder_title,date,time,false));
         remindersRecAdapter.addItem(0,new ReminderItem(reminder_id,reminder_title,date,time,false));
 
         Toast.makeText(getContext(),"ReminderAdded",Toast.LENGTH_SHORT).show();

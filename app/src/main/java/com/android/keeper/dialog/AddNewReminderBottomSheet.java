@@ -39,11 +39,7 @@ public class AddNewReminderBottomSheet extends BottomSheetDialogFragment {
 
     private String reminder_title;
     private int reminder_id;
-    private int selected_year=0;
-    private int selected_month=0;
-    private int selected_dayOfMonth=0;
-    private int selected_hourOfDay=0;
-    private int selected_minute=0;
+    private Integer selected_year,selected_month,selected_dayOfMonth,selected_hourOfDay,selected_minute;
 
     @Nullable
     @Override
@@ -137,9 +133,7 @@ public class AddNewReminderBottomSheet extends BottomSheetDialogFragment {
     }
 
     private void setReminderDate(){
-        if(selected_year==0 || selected_month==0 || selected_dayOfMonth==0){
-            return;
-        }else{
+        if(selected_year!=null && selected_month!=null && selected_dayOfMonth!=null){
             if(dateLayoutContainer.getVisibility()==View.GONE || timeLayoutContainer.getVisibility()==View.GONE){
                 showDateFields();
             }
@@ -161,7 +155,11 @@ public class AddNewReminderBottomSheet extends BottomSheetDialogFragment {
     private void deleteDateFields(){
         dateLayoutContainer.setVisibility(View.GONE);
         timeLayoutContainer.setVisibility(View.GONE);
-        selected_year=0;selected_month=0;selected_dayOfMonth=0;selected_hourOfDay=0;selected_minute=0;
+        selected_year=null;
+        selected_month=null;
+        selected_dayOfMonth=null;
+        selected_hourOfDay=null;
+        selected_minute=null;
     }
 
     private DatePickerDialog.OnDateSetListener onDateSetListener=new DatePickerDialog.OnDateSetListener() {
@@ -184,7 +182,9 @@ public class AddNewReminderBottomSheet extends BottomSheetDialogFragment {
             /* In case of dismiss, the variables related with date will set a value
             * of 0 and will not continue with the next step (display Time Picker Dialog and set time)
             * */
-            selected_year=0;selected_month=0;selected_dayOfMonth=0;
+            selected_year=null;
+            selected_month=null;
+            selected_dayOfMonth=null;
         }
     };
 
@@ -204,7 +204,11 @@ public class AddNewReminderBottomSheet extends BottomSheetDialogFragment {
             /* In case of dismiss, the variables related with date and time will set a value
              * of 0 and will not continue with the next step (display date and time)
              * */
-            selected_year=0;selected_month=0;selected_dayOfMonth=0;selected_minute=0;selected_hourOfDay=0;
+            selected_year=null;
+            selected_month=null;
+            selected_dayOfMonth=null;
+            selected_minute=null;
+            selected_hourOfDay=null;
         }
     };
 
@@ -232,7 +236,7 @@ public class AddNewReminderBottomSheet extends BottomSheetDialogFragment {
     };
 
     public interface AddNewReminderBottomSheetListener{
-        void onAddReminder(int reminder_id,String reminder_title,int year,int month,int day,int hour,int minute);
+        void onAddReminder(int reminder_id,String reminder_title,Integer year,Integer month,Integer day,Integer hour,Integer minute);
         void onEmptyReminderTitle();
         void onReminderDateSelected();
     }
