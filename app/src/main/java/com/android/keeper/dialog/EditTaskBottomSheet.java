@@ -30,6 +30,8 @@ import com.android.keeper.R;
 import com.android.keeper.localdb.SQLiteConnection;
 import com.android.keeper.localdb.utilities.TasksUtilities;
 import com.android.keeper.notifications.AlertReceiver;
+import com.android.keeper.util.CalendarUtil;
+import com.android.keeper.util.CursorUtil;
 
 import java.text.DateFormat;
 import java.util.Calendar;
@@ -44,7 +46,8 @@ public class EditTaskBottomSheet extends BottomSheetDialogFragment {
     private SQLiteConnection conn;
 
     private String old_task_title,old_task_details;
-    private int old_task_id,old_task_position,selected_year,selected_month,selected_dayOfMonth,selected_hourOfDay,selected_minute;;
+    private int old_task_id,old_task_position;
+    private Integer selected_year,selected_month,selected_dayOfMonth,selected_hourOfDay,selected_minute;;
 
     @Nullable
     @Override
@@ -72,7 +75,7 @@ public class EditTaskBottomSheet extends BottomSheetDialogFragment {
         changeTaskDateButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if(selected_year!=0 && selected_month!=0 && selected_dayOfMonth!=0){
+                if(selected_year!=null && selected_month!=null && selected_dayOfMonth!=null){
 
                     DatePickerDialogFragment datePicker = new DatePickerDialogFragment();
                     datePicker.setCallBack(onChangeDateListener);
@@ -116,11 +119,11 @@ public class EditTaskBottomSheet extends BottomSheetDialogFragment {
         deleteTaskDateButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                selected_year=0;
-                selected_month=0;
-                selected_dayOfMonth=0;
-                selected_hourOfDay=0;
-                selected_minute=0;
+                selected_year=null;
+                selected_month=null;
+                selected_dayOfMonth=null;
+                selected_hourOfDay=null;
+                selected_minute=null;
                 changeTaskDateButton.setText("FECHAS");
                 changeTaskTimeButton.setText("00:00");
             }
@@ -162,23 +165,20 @@ public class EditTaskBottomSheet extends BottomSheetDialogFragment {
         Cursor cursor=database.query(TasksUtilities.TABLE_NAME,columns,TasksUtilities.COLUMN_TASK_ID+" = "+task_id,null,null,null,null);
         cursor.moveToFirst();//TODO: CHECK WHY IS NEEDED TO CALL THIS METHOD TO READ THE ELEMENTS FROM QUERY, AND HOW TO DELETE IT
 
-        selected_year=cursor.getInt(0);
-        selected_month=cursor.getInt(1);
-        selected_dayOfMonth=cursor.getInt(2);
-        selected_hourOfDay=cursor.getInt(3);
-        selected_minute=cursor.getInt(4);
+        selected_year=CursorUtil.checkNullInteger(0,cursor);
+        selected_month=CursorUtil.checkNullInteger(1,cursor);
+        selected_dayOfMonth=CursorUtil.checkNullInteger(2,cursor);
+        selected_hourOfDay=CursorUtil.checkNullInteger(3,cursor);
+        selected_minute=CursorUtil.checkNullInteger(4,cursor);
 
         database.close();
     }
 
     private void setTaskDate(){
-        if(selected_year!=0 && selected_month!=0 && selected_dayOfMonth!=0){
-
-            Calendar calendar= Calendar.getInstance();
-            calendar.set(selected_year,selected_month,selected_dayOfMonth,selected_hourOfDay,selected_minute);
-
-            String date= DateFormat.getDateInstance(DateFormat.FULL).format(calendar.getTime());
-            String time=DateFormat.getTimeInstance(DateFormat.SHORT).format(calendar.getTime());
+        if(selected_year!=null && selected_month!=null && selected_dayOfMonth!=null){
+            CalendarUtil calendarUtil=new CalendarUtil(selected_year,selected_month,selected_dayOfMonth,selected_hourOfDay,selected_minute);
+            String date=calendarUtil.getDateFormat(DateFormat.FULL);
+            String time=calendarUtil.getTimeFormat(DateFormat.SHORT);
             changeTaskDateButton.setText(date);
             changeTaskTimeButton.setText(time);
         }
@@ -239,7 +239,9 @@ public class EditTaskBottomSheet extends BottomSheetDialogFragment {
     private DialogInterface.OnDismissListener onDateDismissListener=new DialogInterface.OnDismissListener() {
         @Override
         public void onDismiss(DialogInterface dialogInterface) {
-            selected_year=0;selected_month=0;selected_dayOfMonth=0;
+            selected_year=null;
+            selected_month=null;
+            selected_dayOfMonth=null;
         }
     };
 
@@ -255,7 +257,11 @@ public class EditTaskBottomSheet extends BottomSheetDialogFragment {
     private DialogInterface.OnDismissListener onTimeDismissListener=new DialogInterface.OnDismissListener() {
         @Override
         public void onDismiss(DialogInterface dialogInterface) {
-            selected_year=0;selected_month=0;selected_dayOfMonth=0;selected_minute=0;selected_hourOfDay=0;
+            selected_year=null;
+            selected_month=null;
+            selected_dayOfMonth=null;
+            selected_minute=null;
+            selected_hourOfDay=null;
         }
     };
 

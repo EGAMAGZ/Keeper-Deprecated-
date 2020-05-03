@@ -33,6 +33,7 @@ import com.android.keeper.localdb.SQLiteConnection;
 import com.android.keeper.localdb.utilities.TasksUtilities;
 import com.android.keeper.notifications.AlertReceiver;
 import com.android.keeper.notifications.NotificationHelper;
+import com.android.keeper.util.CalendarUtil;
 
 import java.text.DateFormat;
 import java.util.Calendar;
@@ -50,11 +51,7 @@ public class AddNewTaskBottomSheet extends BottomSheetDialogFragment {
 
     private String task_title,task_details;
     private int task_id;
-    private int selected_year=0;
-    private int selected_month=0;
-    private int selected_dayOfMonth=0;
-    private int selected_hourOfDay=0;
-    private int selected_minute=0;
+    private Integer selected_year,selected_month,selected_dayOfMonth,selected_hourOfDay,selected_minute;
     private Calendar calendar;
 
     @Nullable
@@ -172,15 +169,14 @@ public class AddNewTaskBottomSheet extends BottomSheetDialogFragment {
     }
 
     public void setTaskDate(){
-        if(selected_year!=0 && selected_month!=0 && selected_dayOfMonth!=0){
+        if(selected_year!=null && selected_month!=null && selected_dayOfMonth!=null){
             if(deleteTaskDateButton.getVisibility()==View.GONE || changeTaskDateButton.getVisibility()==View.GONE){
                 showDateFields();
             }
-            Calendar calendar=Calendar.getInstance();
-            calendar.set(selected_year,selected_month,selected_dayOfMonth,selected_hourOfDay,selected_minute);
 
-            String date= DateFormat.getDateInstance(DateFormat.FULL).format(calendar.getTime());
-            String time=DateFormat.getTimeInstance(DateFormat.SHORT).format(calendar.getTime());
+            CalendarUtil calendarUtil=new CalendarUtil(selected_year,selected_month,selected_dayOfMonth,selected_hourOfDay,selected_minute);
+            String date= calendarUtil.getDateFormat(DateFormat.FULL);
+            String time=calendarUtil.getTimeFormat(DateFormat.SHORT);
             changeTaskDateButton.setText(date);
             changeTaskTimeButton.setText(time);
             bottomSheetListener.onTaskDateSelected();
@@ -190,7 +186,7 @@ public class AddNewTaskBottomSheet extends BottomSheetDialogFragment {
     private void setNotificationAlarm(Notification notification,int task_id){
         //TODO:FIX ERROR THAT SHOW THE SAME CONTENT TO EVERY NOTIFICATION(SOMETIMES)
         //TODO:ADD METHOD TO DELETE/CANCEL NOTIFICAION
-        if(selected_year==0 && selected_month==0 && selected_dayOfMonth==0){
+        if(selected_year==null && selected_month==null && selected_dayOfMonth==null){
             return ;
         }else{
             calendar=Calendar.getInstance();
@@ -253,7 +249,9 @@ public class AddNewTaskBottomSheet extends BottomSheetDialogFragment {
     private DialogInterface.OnDismissListener onDateDismissListener=new DialogInterface.OnDismissListener() {
         @Override
         public void onDismiss(DialogInterface dialogInterface) {
-            selected_year=0;selected_month=0;selected_dayOfMonth=0;
+            selected_year=null;
+            selected_month=null;
+            selected_dayOfMonth=null;
         }
     };
 
@@ -269,7 +267,11 @@ public class AddNewTaskBottomSheet extends BottomSheetDialogFragment {
     private DialogInterface.OnDismissListener onTimeDismissListener=new DialogInterface.OnDismissListener() {
         @Override
         public void onDismiss(DialogInterface dialogInterface) {
-            selected_year=0;selected_month=0;selected_dayOfMonth=0;selected_minute=0;selected_hourOfDay=0;
+            selected_year=null;
+            selected_month=null;
+            selected_dayOfMonth=null;
+            selected_minute=null;
+            selected_hourOfDay=null;
         }
     };
 
