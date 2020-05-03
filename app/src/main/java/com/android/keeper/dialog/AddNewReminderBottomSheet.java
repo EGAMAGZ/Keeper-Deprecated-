@@ -23,6 +23,7 @@ import android.widget.TimePicker;
 import com.android.keeper.R;
 import com.android.keeper.localdb.SQLiteConnection;
 import com.android.keeper.localdb.utilities.RemindersUtilities;
+import com.android.keeper.util.CalendarUtil;
 
 import java.text.DateFormat;
 import java.util.Calendar;
@@ -137,11 +138,10 @@ public class AddNewReminderBottomSheet extends BottomSheetDialogFragment {
             if(dateLayoutContainer.getVisibility()==View.GONE || timeLayoutContainer.getVisibility()==View.GONE){
                 showDateFields();
             }
-            Calendar calendar= Calendar.getInstance();
-            calendar.set(selected_year,selected_month,selected_dayOfMonth,selected_hourOfDay,selected_minute);
-            String date= DateFormat.getDateInstance(DateFormat.LONG).format(calendar.getTime());
+            CalendarUtil calendarUtil=new CalendarUtil(getContext(),selected_year,selected_month,selected_dayOfMonth,selected_hourOfDay,selected_minute);
+            String date= calendarUtil.getDateFormat(DateFormat.LONG);
             //Will change automatically between 12 and 24 format
-            String time=DateFormat.getTimeInstance(DateFormat.SHORT).format(calendar.getTime());
+            String time=calendarUtil.getTimeFormat(DateFormat.SHORT);
             dateTextView.setText(date);
             timeTextView.setText(time);
         }

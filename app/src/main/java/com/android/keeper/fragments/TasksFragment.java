@@ -232,7 +232,6 @@ public class TasksFragment extends Fragment {
                 public void OnTaskDoneClick(int position) {
                     /*Example of why the position returned by the interface of the Adapter (getAdapterPosition())
                     * is the same position for the arraylist*/
-                    //TODO: Show snackbar with undo action for the both status that the task could have(EX: setTaskDone -> setTaskUndone)
                     if(tasksList.get(position).isTaskDone()){
                         setTaskUndone(tasksList.get(position).getTaskId(),position);
                         tasksRecAdapter.notifyItemChanged(position);

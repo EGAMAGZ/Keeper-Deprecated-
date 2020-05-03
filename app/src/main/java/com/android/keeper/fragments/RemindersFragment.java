@@ -106,8 +106,6 @@ public class RemindersFragment extends Fragment {
         RemindersUtilities.COLUMN_REMINDER_DAY,RemindersUtilities.COLUMN_REMINDER_HOUR,
         RemindersUtilities.COLUMN_REMINDER_MINUTE};
 
-
-
         SQLiteDatabase database=sqLiteConnection.getReadableDatabase();
         try{
             Cursor cursor=database.query(RemindersUtilities.TABLE_NAME,columns,null,null,null,null,
@@ -116,7 +114,7 @@ public class RemindersFragment extends Fragment {
                 String title=cursor.getString(1);
                 int id=cursor.getInt(0);
 
-                CalendarUtil calendarUtil=new CalendarUtil(CursorUtil.checkNullInteger(2,cursor), CursorUtil.checkNullInteger(3,cursor),
+                CalendarUtil calendarUtil=new CalendarUtil(getContext(),CursorUtil.checkNullInteger(2,cursor), CursorUtil.checkNullInteger(3,cursor),
                         CursorUtil.checkNullInteger(4,cursor), CursorUtil.checkNullInteger(5,cursor),
                         CursorUtil.checkNullInteger(6,cursor));
                 String date=calendarUtil.getDateFormat(DateFormat.LONG);
@@ -142,7 +140,7 @@ public class RemindersFragment extends Fragment {
         //The SQL PART IS AUTO EXECUTED ON AddNewReminderBottomSheet
         String date,time;
 
-        CalendarUtil calendarUtil=new CalendarUtil(year,month,day,hour,minute);
+        CalendarUtil calendarUtil=new CalendarUtil(getContext(),year,month,day,hour,minute);
         date=calendarUtil.getDateFormat(DateFormat.LONG);
         time=calendarUtil.getTimeFormat(DateFormat.SHORT);
         /** It is important to add a new item in the adapter and in the array list because if it is not added it will throw

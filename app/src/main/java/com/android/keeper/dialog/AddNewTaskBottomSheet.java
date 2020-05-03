@@ -174,7 +174,7 @@ public class AddNewTaskBottomSheet extends BottomSheetDialogFragment {
                 showDateFields();
             }
 
-            CalendarUtil calendarUtil=new CalendarUtil(selected_year,selected_month,selected_dayOfMonth,selected_hourOfDay,selected_minute);
+            CalendarUtil calendarUtil=new CalendarUtil(getContext(),selected_year,selected_month,selected_dayOfMonth,selected_hourOfDay,selected_minute);
             String date= calendarUtil.getDateFormat(DateFormat.FULL);
             String time=calendarUtil.getTimeFormat(DateFormat.SHORT);
             changeTaskDateButton.setText(date);
