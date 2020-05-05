@@ -1,7 +1,6 @@
 package com.android.keeper.dialog;
 
 import android.app.DatePickerDialog;
-import android.app.Dialog;
 import android.app.TimePickerDialog;
 import android.content.ContentValues;
 import android.content.DialogInterface;
@@ -26,12 +25,11 @@ import com.android.keeper.localdb.utilities.RemindersUtilities;
 import com.android.keeper.util.CalendarUtil;
 
 import java.text.DateFormat;
-import java.util.Calendar;
 
 public class AddNewReminderBottomSheet extends BottomSheetDialogFragment {
 
     public AddNewReminderBottomSheetListener bottomSheetListener;
-    private View fragmentView;
+    private View bottomSheetView;
     private SQLiteConnection sqLiteConnection;
     private ImageButton saveReminderButton,addDateButton,deleteDateButton;
     private EditText titleEditText;
@@ -45,20 +43,20 @@ public class AddNewReminderBottomSheet extends BottomSheetDialogFragment {
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        fragmentView=inflater.inflate(R.layout.bottom_sheet_add_new_reminder,container,false);
+        bottomSheetView =inflater.inflate(R.layout.bottom_sheet_add_new_reminder,container,false);
         sqLiteConnection=new SQLiteConnection(getContext(),"keeper_db",null,1);
 
-        dateLayoutContainer=fragmentView.findViewById(R.id.reminder_date_container);
-        timeLayoutContainer=fragmentView.findViewById(R.id.reminder_time_container);
+        dateLayoutContainer= bottomSheetView.findViewById(R.id.reminder_date_container);
+        timeLayoutContainer= bottomSheetView.findViewById(R.id.reminder_time_container);
 
-        saveReminderButton=fragmentView.findViewById(R.id.reminder_save);
-        addDateButton=fragmentView.findViewById(R.id.reminder_add_date);
-        deleteDateButton=fragmentView.findViewById(R.id.reminder_delete_date);
+        saveReminderButton= bottomSheetView.findViewById(R.id.reminder_save);
+        addDateButton= bottomSheetView.findViewById(R.id.reminder_add_date);
+        deleteDateButton= bottomSheetView.findViewById(R.id.reminder_delete_date);
 
-        titleEditText=fragmentView.findViewById(R.id.reminder_title);
+        titleEditText= bottomSheetView.findViewById(R.id.reminder_title);
 
-        dateTextView=fragmentView.findViewById(R.id.reminder_date);
-        timeTextView=fragmentView.findViewById(R.id.reminder_time);
+        dateTextView= bottomSheetView.findViewById(R.id.reminder_date);
+        timeTextView= bottomSheetView.findViewById(R.id.reminder_time);
 
         dateTextView.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -110,7 +108,7 @@ public class AddNewReminderBottomSheet extends BottomSheetDialogFragment {
             }
         });
 
-        return fragmentView;
+        return bottomSheetView;
     }
 
     private int saveReminder(){

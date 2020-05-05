@@ -64,7 +64,6 @@ public class CalendarUtil {
                     time=DateFormat.getTimeInstance(timeStyle).format(calendar.getTime());
                     break;
             }
-            //time= DateFormat.getTimeInstance(timeStyle).format(calendar.getTime());
         }
         return time;
     }

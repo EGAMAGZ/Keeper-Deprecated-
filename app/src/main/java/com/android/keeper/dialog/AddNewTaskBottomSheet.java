@@ -2,7 +2,6 @@ package com.android.keeper.dialog;
 
 import android.app.AlarmManager;
 import android.app.DatePickerDialog;
-import android.app.Dialog;
 import android.app.Notification;
 import android.app.PendingIntent;
 import android.app.TimePickerDialog;
@@ -14,9 +13,7 @@ import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
-import android.support.design.widget.BottomSheetDialog;
 import android.support.design.widget.BottomSheetDialogFragment;
-import android.support.v4.app.DialogFragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -26,7 +23,6 @@ import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.RelativeLayout;
 import android.widget.TimePicker;
-import android.widget.Toast;
 
 import com.android.keeper.R;
 import com.android.keeper.localdb.SQLiteConnection;
@@ -41,7 +37,7 @@ import java.util.Calendar;
 public class AddNewTaskBottomSheet extends BottomSheetDialogFragment {
 
     public AddNewTaskBottomSheetListener bottomSheetListener;
-    private View fragmentView;
+    private View bottomSheetView;
     private ImageButton addDetailsButton,addDateButton,saveTaskButton,deleteTaskDateButton;
     private Button changeTaskDateButton,changeTaskTimeButton;
     private EditText titleEditText,descriptionEditText;
@@ -57,22 +53,22 @@ public class AddNewTaskBottomSheet extends BottomSheetDialogFragment {
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        fragmentView = inflater.inflate(R.layout.bottom_sheet_add_new_task, container, false);
+        bottomSheetView = inflater.inflate(R.layout.bottom_sheet_add_new_task, container, false);
         conn = new SQLiteConnection(getContext(), "keeper_db", null, 1);
         notificationHelper=new NotificationHelper(getContext());
 
-        addDetailsButton= fragmentView.findViewById(R.id.task_add_details);
-        addDateButton= fragmentView.findViewById(R.id.task_add_date);
-        saveTaskButton= fragmentView.findViewById(R.id.task_save);
+        addDetailsButton= bottomSheetView.findViewById(R.id.task_add_details);
+        addDateButton= bottomSheetView.findViewById(R.id.task_add_date);
+        saveTaskButton= bottomSheetView.findViewById(R.id.task_save);
 
-        deleteTaskDateButton= fragmentView.findViewById(R.id.task_delete_date);
-        changeTaskDateButton= fragmentView.findViewById(R.id.task_date);
-        changeTaskTimeButton= fragmentView.findViewById(R.id.task_time);
+        deleteTaskDateButton= bottomSheetView.findViewById(R.id.task_delete_date);
+        changeTaskDateButton= bottomSheetView.findViewById(R.id.task_date);
+        changeTaskTimeButton= bottomSheetView.findViewById(R.id.task_time);
         //EditTexts
-        descriptionEditText= fragmentView.findViewById(R.id.task_details);
-        titleEditText= fragmentView.findViewById(R.id.task_title);
+        descriptionEditText= bottomSheetView.findViewById(R.id.task_details);
+        titleEditText= bottomSheetView.findViewById(R.id.task_title);
         //Layouts
-        taskDateContainer=fragmentView.findViewById(R.id.task_date_container);
+        taskDateContainer= bottomSheetView.findViewById(R.id.task_date_container);
 
         changeTaskDateButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -144,7 +140,7 @@ public class AddNewTaskBottomSheet extends BottomSheetDialogFragment {
             }
         });
 
-        return fragmentView;
+        return bottomSheetView;
     }
 
     private int saveTask(){
@@ -197,7 +193,7 @@ public class AddNewTaskBottomSheet extends BottomSheetDialogFragment {
             calendar.set(Calendar.MINUTE,selected_minute);
             calendar.set(Calendar.SECOND,0);
 
-            AlarmManager alarmManager=(AlarmManager) fragmentView.getContext().getSystemService(Context.ALARM_SERVICE);
+            AlarmManager alarmManager=(AlarmManager) bottomSheetView.getContext().getSystemService(Context.ALARM_SERVICE);
 
             String channelTaskID=NotificationHelper.channelTaskID;
             String channelTaskName=NotificationHelper.channelTasksName;

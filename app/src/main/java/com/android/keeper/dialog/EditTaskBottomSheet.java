@@ -39,7 +39,7 @@ import java.util.Calendar;
 public class EditTaskBottomSheet extends BottomSheetDialogFragment {
 
     private EditTaskBottomSheetListener bottomSheetListener;
-    private View fragmentView;
+    private View bottomSheetView;
     private EditText taskTitleEditText,taskDetailsEditText;
     private ImageButton saveTaskButton,deleteTaskButton, addTaskDateButton,deleteTaskDateButton;
     private Button changeTaskDateButton,changeTaskTimeButton;
@@ -52,18 +52,18 @@ public class EditTaskBottomSheet extends BottomSheetDialogFragment {
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        fragmentView=inflater.inflate(R.layout.bottom_sheet_edit_task,container,false);
+        bottomSheetView=inflater.inflate(R.layout.bottom_sheet_edit_task,container,false);
         conn = new SQLiteConnection(getContext(), "keeper_db", null, 1);
 
-        changeTaskDateButton=fragmentView.findViewById(R.id.task_date);
-        changeTaskTimeButton=fragmentView.findViewById(R.id.task_time);
-        addTaskDateButton = fragmentView.findViewById(R.id.task_add_date);
-        deleteTaskDateButton=fragmentView.findViewById(R.id.task_delete_date);
+        changeTaskDateButton=bottomSheetView.findViewById(R.id.task_date);
+        changeTaskTimeButton=bottomSheetView.findViewById(R.id.task_time);
+        addTaskDateButton = bottomSheetView.findViewById(R.id.task_add_date);
+        deleteTaskDateButton=bottomSheetView.findViewById(R.id.task_delete_date);
 
-        taskTitleEditText=fragmentView.findViewById(R.id.task_title);
-        taskDetailsEditText=fragmentView.findViewById(R.id.task_details);
-        saveTaskButton=fragmentView.findViewById(R.id.task_save);
-        deleteTaskButton=fragmentView.findViewById(R.id.task_delete);
+        taskTitleEditText=bottomSheetView.findViewById(R.id.task_title);
+        taskDetailsEditText=bottomSheetView.findViewById(R.id.task_details);
+        saveTaskButton=bottomSheetView.findViewById(R.id.task_save);
+        deleteTaskButton=bottomSheetView.findViewById(R.id.task_delete);
 
         loadDate(old_task_id);
         setTaskDate();
@@ -92,7 +92,7 @@ public class EditTaskBottomSheet extends BottomSheetDialogFragment {
         changeTaskTimeButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if(selected_year!=0 && selected_month!=0 && selected_dayOfMonth!=0){
+                if(selected_year!=null && selected_month!=null && selected_dayOfMonth!=null){
                     TimePickerDialogFragment timePicker=new TimePickerDialogFragment();
                     timePicker.setCallBack(onChangeTimeListener);
                     timePicker.show(getFragmentManager(),"time picker");
@@ -112,7 +112,6 @@ public class EditTaskBottomSheet extends BottomSheetDialogFragment {
                 datePicker.setCallBack(onDateSetListener);
                 datePicker.setOnDismissListener(onDateDismissListener);
                 datePicker.show(getFragmentManager(),"date picker");
-
             }
         });
 
@@ -155,7 +154,7 @@ public class EditTaskBottomSheet extends BottomSheetDialogFragment {
                 dismiss();
             }
         });
-        return fragmentView;
+        return bottomSheetView;
     }
 
     private void loadDate(int task_id){

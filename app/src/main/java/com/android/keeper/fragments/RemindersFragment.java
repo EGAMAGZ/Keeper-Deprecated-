@@ -46,7 +46,6 @@ public class RemindersFragment extends Fragment {
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        //TODO: REDUCE THE AMOUNT OF CODE
         fragmentView=inflater.inflate(R.layout.fragment_reminders,container,false);
         sqLiteConnection=new SQLiteConnection(getContext(),"keeper_db",null,1);
         remindersList=new ArrayList<ReminderItem>();
@@ -138,11 +137,10 @@ public class RemindersFragment extends Fragment {
 
     private void AddReminder(int reminder_id, String reminder_title,Integer year,Integer month,Integer day,Integer hour,Integer minute){
         //The SQL PART IS AUTO EXECUTED ON AddNewReminderBottomSheet
-        String date,time;
 
         CalendarUtil calendarUtil=new CalendarUtil(getContext(),year,month,day,hour,minute);
-        date=calendarUtil.getDateFormat(DateFormat.LONG);
-        time=calendarUtil.getTimeFormat(DateFormat.SHORT);
+        String date=calendarUtil.getDateFormat(DateFormat.LONG);
+        String time=calendarUtil.getTimeFormat(DateFormat.SHORT);
         /** It is important to add a new item in the adapter and in the array list because if it is not added it will throw
          * an IndexOutOfBoundsException when is notified to the adapter that a new item is inserted */
         remindersList.add(0,new ReminderItem(reminder_id,reminder_title,date,time,false));

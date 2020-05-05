@@ -8,15 +8,17 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.android.keeper.R;
+
 public class EditReminderBottomSheet extends BottomSheetDialogFragment {
 
-    private View fragmentView;
+    private View bottomSheetView;
 
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        //fragmentView=inflater.inflate(R.l)
+        bottomSheetView=inflater.inflate(R.layout.bottom_sheet_edit_reminder,container,false);
 
-        return super.onCreateView(inflater, container, savedInstanceState);
+        return bottomSheetView;
     }
 }
