@@ -37,6 +37,7 @@ import com.android.keeper.dialog.MessageBottomSheet;
 import com.android.keeper.localdb.SQLiteConnection;
 import com.android.keeper.localdb.utilities.TasksUtilities;
 import com.android.keeper.recycle_items.TaskItem;
+import com.android.keeper.util.CursorUtil;
 
 public class TasksFragment extends Fragment {
 
@@ -263,29 +264,17 @@ public class TasksFragment extends Fragment {
     }
 
     private long numberTasksTotal(SQLiteDatabase database){
-        long count=0;
-        try {
-            Cursor cursor=database.rawQuery("SELECT "+TasksUtilities.COLUMN_TASK_ID+" FROM "+ TasksUtilities.TABLE_NAME,null);
-            count=cursor.getCount();
-        }catch (Exception e){
-            count=0;
-        }
-        finally {
-            return count;
-        }
+        String sql="SELECT "+TasksUtilities.COLUMN_TASK_ID+" FROM "+ TasksUtilities.TABLE_NAME;
+        long count=CursorUtil.getCount(sql,database);
+
+        return count;
     }
 
     private long numberTasksDone(SQLiteDatabase database){
-        long count=0;
-        try{
-            Cursor cursor=database.rawQuery("SELECT "+TasksUtilities.COLUMN_TASK_ID+" FROM "+TasksUtilities.TABLE_NAME+" WHERE "+TasksUtilities.COLUMN_TASK_DONE+" = 1",null);
-            count=cursor.getCount();
-        }catch(Exception e){
-            count=0;
-        }
-        finally {
-            return count;
-        }
+        String sql="SELECT "+TasksUtilities.COLUMN_TASK_ID+" FROM "+TasksUtilities.TABLE_NAME+" WHERE "+TasksUtilities.COLUMN_TASK_DONE+" = 1";
+        long count= CursorUtil.getCount(sql,database);
+
+        return count;
     }
 
     /*
