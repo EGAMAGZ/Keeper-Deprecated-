@@ -38,6 +38,7 @@ import com.android.keeper.localdb.SQLiteConnection;
 import com.android.keeper.localdb.utilities.TasksUtilities;
 import com.android.keeper.recycle_items.TaskItem;
 import com.android.keeper.util.CursorUtil;
+import com.android.keeper.util.Util;
 
 public class TasksFragment extends Fragment {
 
@@ -186,7 +187,6 @@ public class TasksFragment extends Fragment {
             Log.e("Keeper Error Logger","ERROR:",e);
             taskProgressBar.setProgress(0);
             taskPercentage.setText(0+"%");
-            //CustomToast("Internal App Error",R.drawable.ic_close_white_24dp);
         }
         finally {
             /* At cause the adapter is getting the elements from the arraylist, the
@@ -295,12 +295,16 @@ public class TasksFragment extends Fragment {
         sortTaskArrayList();
         database.close();
         percentageTasks();
-        if(percentage==100 && !wasShownBottomSheet){
-            wasShownBottomSheet=true;
-            MessageBottomSheet messageBottomSheet=new MessageBottomSheet();
-            messageBottomSheet.setTitle("Awesome!","#062639");
-            messageBottomSheet.setSubtitle("You completed all your tasks");
-            messageBottomSheet.show(getFragmentManager(),"messageBottomSheet");
+        if(!Util.isInSplitScreen(getContext())){
+            if(percentage==100 && !wasShownBottomSheet){
+                wasShownBottomSheet=true;
+                MessageBottomSheet messageBottomSheet=new MessageBottomSheet();
+                messageBottomSheet.setTitle("Awesome!","#062639");
+                messageBottomSheet.setSubtitle("You completed all your tasks");
+                messageBottomSheet.show(getFragmentManager(),"messageBottomSheet");
+            }
+        }else{
+            Toast.makeText(getContext(),"You completed all your tasks",Toast.LENGTH_SHORT).show();
         }
     }
 
