@@ -214,7 +214,7 @@ public class AddNewReminderBottomSheet extends BottomSheetDialogFragment {
         }
     };
 
-    /* ----- Lsiteners when time or date are changed (individually)----- */
+    /* ----- Listeners when time or date are changed (individually)----- */
 
     private DatePickerDialog.OnDateSetListener onChangeDateListener=new DatePickerDialog.OnDateSetListener() {
         @Override
