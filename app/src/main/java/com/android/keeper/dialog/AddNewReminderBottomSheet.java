@@ -138,7 +138,6 @@ public class AddNewReminderBottomSheet extends BottomSheetDialogFragment {
             }
             CalendarUtil calendarUtil=new CalendarUtil(getContext(),selected_year,selected_month,selected_dayOfMonth,selected_hourOfDay,selected_minute);
             String date= calendarUtil.getDateFormat(DateFormat.LONG);
-            //Will change automatically between 12 and 24 format
             String time=calendarUtil.getTimeFormat(DateFormat.SHORT);
             dateTextView.setText(date);
             timeTextView.setText(time);
@@ -162,6 +161,7 @@ public class AddNewReminderBottomSheet extends BottomSheetDialogFragment {
     }
 
     /* ----- Listeners when time and date are selected ----- */
+
     private DatePickerDialog.OnDateSetListener onDateSetListener=new DatePickerDialog.OnDateSetListener() {
         @Override
         public void onDateSet(DatePicker datePicker, int year, int month, int dayOfMonth) {
@@ -187,6 +187,7 @@ public class AddNewReminderBottomSheet extends BottomSheetDialogFragment {
     };
 
     /* ----- Listeners when time or date in not selected */
+
     private DialogInterface.OnDismissListener onDateDismissListener=new DialogInterface.OnDismissListener() {
         @Override
         public void onDismiss(DialogInterface dialogInterface) {

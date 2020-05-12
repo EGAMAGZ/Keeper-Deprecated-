@@ -75,7 +75,7 @@ public class AddNewTaskBottomSheet extends BottomSheetDialogFragment {
             public void onClick(View view) {
                 DatePickerDialogFragment datePicker = new DatePickerDialogFragment();
                 datePicker.setCallBack(onChangeDateListener);
-                datePicker.show(getFragmentManager(),"date picker");
+                datePicker.show(getFragmentManager(),"date_picker");
             }
         });
 
@@ -84,7 +84,7 @@ public class AddNewTaskBottomSheet extends BottomSheetDialogFragment {
             public void onClick(View view) {
                 TimePickerDialogFragment timePicker=new TimePickerDialogFragment();
                 timePicker.setCallBack(onChangeTimeListener);
-                timePicker.show(getFragmentManager(),"time picker");
+                timePicker.show(getFragmentManager(),"time_picker");
             }
         });
 
@@ -110,7 +110,7 @@ public class AddNewTaskBottomSheet extends BottomSheetDialogFragment {
                 DatePickerDialogFragment datePicker = new DatePickerDialogFragment();
                 datePicker.setCallBack(onDateSetListener);
                 datePicker.setOnDismissListener(onDateDismissListener);
-                datePicker.show(getFragmentManager(),"date picker");
+                datePicker.show(getFragmentManager(),"date_picker");
 
             }
         });
@@ -232,6 +232,8 @@ public class AddNewTaskBottomSheet extends BottomSheetDialogFragment {
         selected_minute=null;
     }
 
+    /* ----- Listeners when time and date are selected ----- */
+
     private DatePickerDialog.OnDateSetListener onDateSetListener=new DatePickerDialog.OnDateSetListener() {
         @Override
         public void onDateSet(DatePicker datePicker, int year, int month, int dayOfMonth) {
@@ -246,15 +248,6 @@ public class AddNewTaskBottomSheet extends BottomSheetDialogFragment {
         }
     };
 
-    private DialogInterface.OnDismissListener onDateDismissListener=new DialogInterface.OnDismissListener() {
-        @Override
-        public void onDismiss(DialogInterface dialogInterface) {
-            selected_year=null;
-            selected_month=null;
-            selected_dayOfMonth=null;
-        }
-    };
-
     private TimePickerDialog.OnTimeSetListener onTimeSetListener=new TimePickerDialog.OnTimeSetListener() {
         @Override
         public void onTimeSet(TimePicker timePicker, int hourOfDay, int minute) {
@@ -265,9 +258,26 @@ public class AddNewTaskBottomSheet extends BottomSheetDialogFragment {
         }
     };
 
+    /* ----- Listeners when time or date in not selected */
+
+    private DialogInterface.OnDismissListener onDateDismissListener=new DialogInterface.OnDismissListener() {
+        @Override
+        public void onDismiss(DialogInterface dialogInterface) {
+            /* In case of dismiss, the variables related with date and time will set a value
+             * of 0 and will not continue with the next step (display date and time)
+             * */
+            selected_year=null;
+            selected_month=null;
+            selected_dayOfMonth=null;
+        }
+    };
+
     private DialogInterface.OnDismissListener onTimeDismissListener=new DialogInterface.OnDismissListener() {
         @Override
         public void onDismiss(DialogInterface dialogInterface) {
+            /* In case of dismiss, the variables related with date and time will set a value
+             * of 0 and will not continue with the next step (display date and time)
+             * */
             selected_year=null;
             selected_month=null;
             selected_dayOfMonth=null;
@@ -275,6 +285,8 @@ public class AddNewTaskBottomSheet extends BottomSheetDialogFragment {
             selected_hourOfDay=null;
         }
     };
+
+    /* ----- Listeners when time or date are changed (individually)----- */
 
     private DatePickerDialog.OnDateSetListener onChangeDateListener=new DatePickerDialog.OnDateSetListener() {
         @Override
@@ -298,7 +310,7 @@ public class AddNewTaskBottomSheet extends BottomSheetDialogFragment {
     };
 
     /*
-    * Methods with the porpouse to create communication
+    * Methods with the purpouse to create communication
     * between fragments
     * */
     public interface AddNewTaskBottomSheetListener{
