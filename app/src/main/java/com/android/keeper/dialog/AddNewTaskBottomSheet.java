@@ -225,7 +225,11 @@ public class AddNewTaskBottomSheet extends BottomSheetDialogFragment {
 
         taskDateContainer.setVisibility(View.GONE);
 
-        selected_year=0;selected_month=0;selected_dayOfMonth=0;selected_hourOfDay=0;selected_minute=0;
+        selected_year=null;
+        selected_month=null;
+        selected_dayOfMonth=null;
+        selected_hourOfDay=null;
+        selected_minute=null;
     }
 
     private DatePickerDialog.OnDateSetListener onDateSetListener=new DatePickerDialog.OnDateSetListener() {
@@ -256,6 +260,7 @@ public class AddNewTaskBottomSheet extends BottomSheetDialogFragment {
         public void onTimeSet(TimePicker timePicker, int hourOfDay, int minute) {
             selected_hourOfDay=hourOfDay;
             selected_minute=minute;
+
             setTaskDate();
         }
     };
@@ -287,6 +292,7 @@ public class AddNewTaskBottomSheet extends BottomSheetDialogFragment {
         public void onTimeSet(TimePicker timePicker, int hourOfDay, int minute) {
             selected_hourOfDay=hourOfDay;
             selected_minute=minute;
+
             setTaskDate();
         }
     };

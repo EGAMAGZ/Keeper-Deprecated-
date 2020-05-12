@@ -278,7 +278,7 @@ public class TasksFragment extends Fragment {
     }
 
     /*
-    *   Functions related with the interaction with tasks
+    *   Methods related with the interaction with tasks
     * */
 
     private void setTaskDone(int task_id,int task_position){

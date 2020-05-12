@@ -74,7 +74,7 @@ public class RemindersFragment extends Fragment {
 
                     @Override
                     public void onReminderDateSelected() {
-
+                        Toast.makeText(getContext(),"Reminder Date Selected",Toast.LENGTH_SHORT).show();
                     }
                 });
                 addNewReminderBottomSheet.show(getFragmentManager(),"addReminderBottomSheet");
@@ -120,6 +120,7 @@ public class RemindersFragment extends Fragment {
                 String time=calendarUtil.getTimeFormat(DateFormat.SHORT);
                 remindersList.add(new ReminderItem(id,title,date,time,false));
             }
+            cursor.close();
         }catch(Exception e){}
         finally {
             remindersRecAdapter=new RemindersAdapter(remindersList);

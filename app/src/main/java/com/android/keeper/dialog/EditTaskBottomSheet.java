@@ -170,6 +170,7 @@ public class EditTaskBottomSheet extends BottomSheetDialogFragment {
         selected_hourOfDay=CursorUtil.checkNullInteger(3,cursor);
         selected_minute=CursorUtil.checkNullInteger(4,cursor);
 
+        cursor.close();
         database.close();
     }
 

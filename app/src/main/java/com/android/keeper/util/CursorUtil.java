@@ -18,6 +18,7 @@ public class CursorUtil {
         try{
             Cursor cursor=database.rawQuery(sql,null);
             count=cursor.getCount();
+            cursor.close();
         }catch (Exception e){
             count=0;
         }finally {

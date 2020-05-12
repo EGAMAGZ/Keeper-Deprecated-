@@ -153,6 +153,7 @@ public class AddNewReminderBottomSheet extends BottomSheetDialogFragment {
     private void deleteDateFields(){
         dateLayoutContainer.setVisibility(View.GONE);
         timeLayoutContainer.setVisibility(View.GONE);
+
         selected_year=null;
         selected_month=null;
         selected_dayOfMonth=null;
@@ -160,6 +161,7 @@ public class AddNewReminderBottomSheet extends BottomSheetDialogFragment {
         selected_minute=null;
     }
 
+    /* ----- Listeners when time and date are selected ----- */
     private DatePickerDialog.OnDateSetListener onDateSetListener=new DatePickerDialog.OnDateSetListener() {
         @Override
         public void onDateSet(DatePicker datePicker, int year, int month, int dayOfMonth) {
@@ -173,7 +175,18 @@ public class AddNewReminderBottomSheet extends BottomSheetDialogFragment {
             timePicker.show(getFragmentManager(),"time_picker");
         }
     };
-    /* ----- Lsiteners when time and date are set ----- */
+
+    private TimePickerDialog.OnTimeSetListener onTimeSetListener=new TimePickerDialog.OnTimeSetListener() {
+        @Override
+        public void onTimeSet(TimePicker timePicker, int hourOfDay, int minute) {
+            selected_hourOfDay=hourOfDay;
+            selected_minute=minute;
+
+            setReminderDate();
+        }
+    };
+
+    /* ----- Listeners when time or date in not selected */
     private DialogInterface.OnDismissListener onDateDismissListener=new DialogInterface.OnDismissListener() {
         @Override
         public void onDismiss(DialogInterface dialogInterface) {
@@ -183,16 +196,6 @@ public class AddNewReminderBottomSheet extends BottomSheetDialogFragment {
             selected_year=null;
             selected_month=null;
             selected_dayOfMonth=null;
-        }
-    };
-
-    private TimePickerDialog.OnTimeSetListener onTimeSetListener=new TimePickerDialog.OnTimeSetListener() {
-        @Override
-        public void onTimeSet(TimePicker timePicker, int hourOfDay, int minute) {
-            selected_hourOfDay=hourOfDay;
-            selected_minute=minute;
-
-            setReminderDate();
         }
     };
 
@@ -210,7 +213,7 @@ public class AddNewReminderBottomSheet extends BottomSheetDialogFragment {
         }
     };
 
-    /* ----- Lsiteners when time or date are changed ----- */
+    /* ----- Lsiteners when time or date are changed (individually)----- */
 
     private DatePickerDialog.OnDateSetListener onChangeDateListener=new DatePickerDialog.OnDateSetListener() {
         @Override
