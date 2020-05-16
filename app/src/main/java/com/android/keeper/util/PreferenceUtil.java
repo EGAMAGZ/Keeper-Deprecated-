@@ -2,7 +2,6 @@ package com.android.keeper.util;
 
 import android.content.Context;
 import android.content.SharedPreferences;
-import android.preference.PreferenceManager;
 import android.support.annotation.NonNull;
 
 public final class PreferenceUtil {

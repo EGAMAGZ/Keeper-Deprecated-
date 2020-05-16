@@ -20,7 +20,6 @@ public class CalendarUtil {
     private Integer year,month,day,hour,minute;
 
     public CalendarUtil(@NonNull final Context context, Integer year, Integer month, Integer day, Integer hour, Integer minute) {
-        sharedPreferences=context.getSharedPreferences("keeper_settings", Context.MODE_PRIVATE);
         calendar= Calendar.getInstance();
         this.context=context;
         this.year = year;
@@ -31,8 +30,7 @@ public class CalendarUtil {
     }
 
     private String getTimeSettings(){
-        String option=sharedPreferences.getString("clock_format","auto");
-        return option;
+        return PreferenceUtil.getInstance(context).getClockFormat();
     }
 
     public String getDateFormat(int timeStyle){
