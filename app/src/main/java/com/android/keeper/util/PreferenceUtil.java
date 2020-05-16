@@ -12,6 +12,7 @@ public final class PreferenceUtil {
     public static String CLOCK_FORMAT = "clock_format";
     public static String CHANGE_LAST_FRAGMENT="change_last_fragment";
     public static String KEEP_SCREEN_ON = "keep_screen_on";
+    public static String LAST_FRAGMENT = "last_fragment";
 
     private static PreferenceUtil sInstance;
     private final SharedPreferences mSharedPreferences;
@@ -54,5 +55,15 @@ public final class PreferenceUtil {
     }
     public boolean getKeepScreenOn(){
         return mSharedPreferences.getBoolean(KEEP_SCREEN_ON,false);
+    }
+
+    public void setLastFragment(String keyword){
+        final SharedPreferences.Editor editor = mSharedPreferences.edit();
+        editor.putString(LAST_FRAGMENT,keyword);
+        editor.apply();
+    }
+
+    public String getLastFragment() {
+        return mSharedPreferences.getString(LAST_FRAGMENT,"notes");
     }
 }

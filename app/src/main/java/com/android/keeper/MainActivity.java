@@ -83,7 +83,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             if (fragmentValue != null) {
                 switch(fragmentValue){
                     case "tasks":
-                        setLastFragment("tasks");
+                        PreferenceUtil.getInstance(getApplicationContext()).setLastFragment("tasks");
                         getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, tasksFragment, "tasks_fragment").commit();
                         navigationView.setCheckedItem(R.id.nav_tasks);
                         break;
@@ -93,12 +93,12 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                         break;
                 }
             } else {
-                if(sharedPreferences.getBoolean("change_last_fragment",false))
+                if(PreferenceUtil.getInstance(getApplicationContext()).getChangeLastFragment())
                     changeLastFragment();
                 else{
+                    PreferenceUtil.getInstance(getApplicationContext()).setLastFragment("notes");
                     getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new NotesFragment(), "notes_fragment").commit();
                     navigationView.setCheckedItem(R.id.nav_notes);
-                    setLastFragment("notes");
                 }
             }
         getWindow().setStatusBarColor(ContextCompat.getColor(this,R.color.thirdColor));
@@ -134,19 +134,19 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         NavigationMenuItemView navigationMenuItemView;
         switch(menuItem.getItemId()){
             case R.id.nav_notes:
-                setLastFragment("notes");
+                PreferenceUtil.getInstance(getApplicationContext()).setLastFragment("notes");
                 getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container,new NotesFragment(),"notes_fragment").commit();
                 break;
             case R.id.nav_reminders:
-                setLastFragment("reminders");
+                PreferenceUtil.getInstance(getApplicationContext()).setLastFragment("reminders");
                 getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container,remindersFragment,"reminders_fragment").commit();
                 break;
             case R.id.nav_tasks:
-                setLastFragment("tasks");
+                PreferenceUtil.getInstance(getApplicationContext()).setLastFragment("tasks");
                 getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container,tasksFragment,"tasks_fragment").commit();
                 break;
             case R.id.nav_schedule:
-                setLastFragment("schedules");
+                PreferenceUtil.getInstance(getApplicationContext()).setLastFragment("schedules");
                 getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container,new ScheduleFragment(),"schedules_fragment").commit();
                 break;
             case R.id.nav_settings:
@@ -203,8 +203,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     }
 
     private void changeLastFragment(){
-        String fragment=sharedPreferences.getString("last_fragment","notes");
-        switch(fragment){
+        switch(PreferenceUtil.getInstance(getApplicationContext()).getLastFragment()){
             case "notes":
                 getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new NotesFragment(), "notes_fragment").commit();
                 navigationView.setCheckedItem(R.id.nav_notes);
@@ -223,10 +222,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 break;
         }
     }
-    private void setLastFragment(String keyword){
-        sharedPreEditor.putString("last_fragment",keyword);
-        sharedPreEditor.commit();
-    }
+
     private void setKeepScreenOn(){
         if(PreferenceUtil.getInstance(getApplicationContext()).getKeepScreenOn()){
             getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
