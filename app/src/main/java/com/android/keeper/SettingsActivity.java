@@ -7,6 +7,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
+import android.view.WindowManager;
 import android.widget.Adapter;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -18,7 +19,7 @@ import android.widget.Toast;
 public class SettingsActivity extends AppCompatActivity {
 
     private Spinner clockFormatSpinner;
-    private Switch lastFragmentSwitch;
+    private Switch lastFragmentSwitch,screenOnSwitch;
     private SharedPreferences sharedPreferences;
     private SharedPreferences.Editor sharedPreEditor;
 
@@ -31,6 +32,7 @@ public class SettingsActivity extends AppCompatActivity {
 
         clockFormatSpinner=(Spinner) findViewById(R.id.settings_clock_format_spinner);
         lastFragmentSwitch=(Switch) findViewById(R.id.settings_last_fragment_switch);
+        screenOnSwitch=(Switch)findViewById(R.id.settings_keep_on_switch);
 
         Toolbar toolbar=findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
@@ -64,10 +66,24 @@ public class SettingsActivity extends AppCompatActivity {
 
             }
         });
+
         lastFragmentSwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton compoundButton, boolean isChecked) {
                 sharedPreEditor.putBoolean("change_last_fragment",isChecked);
+                sharedPreEditor.commit();
+            }
+        });
+
+        screenOnSwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton compoundButton, boolean isChecked) {
+                if(isChecked){
+                    getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
+                }else{
+                    getWindow().clearFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
+                }
+                sharedPreEditor.putBoolean("keep_screen_on",isChecked);
                 sharedPreEditor.commit();
             }
         });
@@ -88,5 +104,6 @@ public class SettingsActivity extends AppCompatActivity {
                 break;
         }
         lastFragmentSwitch.setChecked(sharedPreferences.getBoolean("change_last_fragment",false));
+        screenOnSwitch.setChecked(sharedPreferences.getBoolean("keep_screen_on",false));
     }
 }
