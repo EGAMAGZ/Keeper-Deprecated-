@@ -16,19 +16,17 @@ import android.widget.Spinner;
 import android.widget.Switch;
 import android.widget.Toast;
 
+import com.android.keeper.util.PreferenceUtil;
+
 public class SettingsActivity extends AppCompatActivity {
 
     private Spinner clockFormatSpinner;
     private Switch lastFragmentSwitch,screenOnSwitch;
-    private SharedPreferences sharedPreferences;
-    private SharedPreferences.Editor sharedPreEditor;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_settings);
-        sharedPreferences=getSharedPreferences("keeper_settings", Context.MODE_PRIVATE);
-        sharedPreEditor=sharedPreferences.edit();
 
         clockFormatSpinner=(Spinner) findViewById(R.id.settings_clock_format_spinner);
         lastFragmentSwitch=(Switch) findViewById(R.id.settings_last_fragment_switch);
@@ -47,18 +45,19 @@ public class SettingsActivity extends AppCompatActivity {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                 String option=parent.getItemAtPosition(position).toString();
+                String format=null;
                 switch(option){
                     case "Automatic":
-                        sharedPreEditor.putString("clock_format","auto");
+                        format="auto";
                         break;
                     case "24 Hours":
-                        sharedPreEditor.putString("clock_format","24hr");
+                        format="24hr";
                         break;
                     case "12 Hours":
-                        sharedPreEditor.putString("clock_format","12hr");
+                        format="12hr";
                         break;
                 }
-                sharedPreEditor.commit();
+                PreferenceUtil.getInstance(getApplicationContext()).setClockFormat(format);
             }
 
             @Override
@@ -70,8 +69,7 @@ public class SettingsActivity extends AppCompatActivity {
         lastFragmentSwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton compoundButton, boolean isChecked) {
-                sharedPreEditor.putBoolean("change_last_fragment",isChecked);
-                sharedPreEditor.commit();
+                PreferenceUtil.getInstance(getApplicationContext()).setChangeLastFragment(isChecked);
             }
         });
 
@@ -83,8 +81,7 @@ public class SettingsActivity extends AppCompatActivity {
                 }else{
                     getWindow().clearFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
                 }
-                sharedPreEditor.putBoolean("keep_screen_on",isChecked);
-                sharedPreEditor.commit();
+                PreferenceUtil.getInstance(getApplicationContext()).setKeepScreenOn(isChecked);
             }
         });
     }
@@ -92,7 +89,7 @@ public class SettingsActivity extends AppCompatActivity {
         ArrayAdapter<CharSequence> adapter=ArrayAdapter.createFromResource(getApplicationContext(),R.array.clock_format_options,R.layout.item_spinner);
         clockFormatSpinner.setAdapter(adapter);
 
-        switch(sharedPreferences.getString("clock_format","auto")){
+        switch(PreferenceUtil.getInstance(getApplicationContext()).getClockFormat()){
             case "auto":
                 clockFormatSpinner.setSelection(0);
                 break;
@@ -103,7 +100,7 @@ public class SettingsActivity extends AppCompatActivity {
                 clockFormatSpinner.setSelection(2);
                 break;
         }
-        lastFragmentSwitch.setChecked(sharedPreferences.getBoolean("change_last_fragment",false));
-        screenOnSwitch.setChecked(sharedPreferences.getBoolean("keep_screen_on",false));
+        lastFragmentSwitch.setChecked(PreferenceUtil.getInstance(getApplicationContext()).getChangeLastFragment());
+        screenOnSwitch.setChecked(PreferenceUtil.getInstance(getApplicationContext()).getKeepScreenOn());
     }
 }
