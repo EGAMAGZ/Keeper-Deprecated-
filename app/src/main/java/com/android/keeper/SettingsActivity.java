@@ -28,33 +28,33 @@ public class SettingsActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_settings);
 
-        clockFormatSpinner=(Spinner) findViewById(R.id.settings_clock_format_spinner);
-        lastFragmentSwitch=(Switch) findViewById(R.id.settings_last_fragment_switch);
-        screenOnSwitch=(Switch)findViewById(R.id.settings_keep_on_switch);
+        clockFormatSpinner = (Spinner) findViewById(R.id.settings_clock_format_spinner);
+        lastFragmentSwitch = (Switch) findViewById(R.id.settings_last_fragment_switch);
+        screenOnSwitch = (Switch) findViewById(R.id.settings_keep_on_switch);
 
-        Toolbar toolbar=findViewById(R.id.toolbar);
+        Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         getSupportActionBar().setTitle("Settings");
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
-        getWindow().setStatusBarColor(ContextCompat.getColor(this,R.color.thirdColor));
+        getWindow().setStatusBarColor(ContextCompat.getColor(this, R.color.thirdColor));
 
         setSettingsOptions();
 
         clockFormatSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                String option=parent.getItemAtPosition(position).toString();
-                String format=null;
-                switch(option){
+                String option = parent.getItemAtPosition(position).toString();
+                String format = null;
+                switch (option) {
                     case "Automatic":
-                        format="auto";
+                        format = "auto";
                         break;
                     case "24 Hours":
-                        format="24hr";
+                        format = "24hr";
                         break;
                     case "12 Hours":
-                        format="12hr";
+                        format = "12hr";
                         break;
                 }
                 PreferenceUtil.getInstance(getApplicationContext()).setClockFormat(format);
@@ -76,15 +76,14 @@ public class SettingsActivity extends AppCompatActivity {
         screenOnSwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton compoundButton, boolean isChecked) {
-                if(isChecked){
-                    getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
-                }else{
-                    getWindow().clearFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
-                }
                 PreferenceUtil.getInstance(getApplicationContext()).setKeepScreenOn(isChecked);
+                setKeepScreenOn();
             }
         });
+
+        setKeepScreenOn();
     }
+
     private void setSettingsOptions(){
         ArrayAdapter<CharSequence> adapter=ArrayAdapter.createFromResource(getApplicationContext(),R.array.clock_format_options,R.layout.item_spinner);
         clockFormatSpinner.setAdapter(adapter);
@@ -102,5 +101,13 @@ public class SettingsActivity extends AppCompatActivity {
         }
         lastFragmentSwitch.setChecked(PreferenceUtil.getInstance(getApplicationContext()).getChangeLastFragment());
         screenOnSwitch.setChecked(PreferenceUtil.getInstance(getApplicationContext()).getKeepScreenOn());
+    }
+
+    private void setKeepScreenOn(){
+        if(PreferenceUtil.getInstance(getApplicationContext()).getKeepScreenOn()){
+            getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
+        }else{
+            getWindow().clearFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
+        }
     }
 }

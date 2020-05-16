@@ -22,6 +22,7 @@ import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.WindowManager;
 import android.view.inputmethod.EditorInfo;
 import android.widget.DatePicker;
 import android.widget.TimePicker;
@@ -37,6 +38,7 @@ import com.android.keeper.fragments.RemindersFragment;
 import com.android.keeper.fragments.ScheduleFragment;
 import com.android.keeper.fragments.TasksFragment;
 import com.android.keeper.localdb.SQLiteConnection;
+import com.android.keeper.util.PreferenceUtil;
 
 public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
     private TasksFragment tasksFragment;
@@ -100,6 +102,13 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 }
             }
         getWindow().setStatusBarColor(ContextCompat.getColor(this,R.color.thirdColor));
+        setKeepScreenOn();
+    }
+
+    @Override
+    protected void onRestart() {
+        super.onRestart();
+        setKeepScreenOn();
     }
 
     @Override
@@ -217,5 +226,12 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     private void setLastFragment(String keyword){
         sharedPreEditor.putString("last_fragment",keyword);
         sharedPreEditor.commit();
+    }
+    private void setKeepScreenOn(){
+        if(PreferenceUtil.getInstance(getApplicationContext()).getKeepScreenOn()){
+            getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
+        }else{
+            getWindow().clearFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
+        }
     }
 }
