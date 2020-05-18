@@ -11,9 +11,7 @@ import java.util.Calendar;
 public class CalendarUtil {
 
     private Calendar calendar;
-    private int timeStyle;
     private Context context;
-    private SharedPreferences sharedPreferences;
 
     /** Here is use Integer instead of int because with it you can set is as null(also default value).
      * The default of int is 0*/

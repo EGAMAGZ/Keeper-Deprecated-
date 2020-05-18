@@ -47,8 +47,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     private Toolbar toolbar;
     private Toast backToast;
     private NavigationView navigationView;
-    private SharedPreferences sharedPreferences;
-    private SharedPreferences.Editor sharedPreEditor;
 
     private long backPressedTime;
 
@@ -58,8 +56,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         setContentView(R.layout.activity_main);
 
         SQLiteConnection conn=new SQLiteConnection(this,"keeper_db",null,1);//Creation of Database(SQLite)
-        sharedPreferences=getSharedPreferences("keeper_settings", Context.MODE_PRIVATE);
-        sharedPreEditor=sharedPreferences.edit();
 
         navigationView=findViewById(R.id.nav_view); //Gets Navigation View (Lateral Menu)
         navigationView.setNavigationItemSelectedListener(this); //Sets Item Listener to Navigation View

@@ -16,7 +16,7 @@ public final class PreferenceUtil {
     private static PreferenceUtil sInstance;
     private final SharedPreferences mSharedPreferences;
 
-    public PreferenceUtil(@NonNull final Context context) {
+    private PreferenceUtil(@NonNull final Context context) {
         mSharedPreferences= context.getSharedPreferences(KEEPER_SETTINGS,Context.MODE_PRIVATE);
     }
 
