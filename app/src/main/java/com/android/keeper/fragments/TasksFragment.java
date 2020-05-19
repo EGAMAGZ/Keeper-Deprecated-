@@ -31,6 +31,7 @@ import android.widget.Toast;
 
 import com.android.keeper.R;
 import com.android.keeper.adapters.TasksAdapter;
+import com.android.keeper.customelements.IconToast;
 import com.android.keeper.dialog.AddNewTaskBottomSheet;
 import com.android.keeper.dialog.EditTaskBottomSheet;
 import com.android.keeper.dialog.MessageBottomSheet;
@@ -215,7 +216,7 @@ public class TasksFragment extends Fragment {
 
                         @Override
                         public void onDeleteSavedTask(int task_position) {
-                            /*Here isn't not needed the id,beacuse whe are only deleting an element
+                            /*Here isn't not needed the id,because whe are only deleting an element
                             * from the array and the adapter using the same position, and it is deleted
                             * from db in the bottomsheet (where it is needed the id)*/
                             DeleteSavedTask(task_position);
@@ -223,7 +224,7 @@ public class TasksFragment extends Fragment {
 
                         @Override
                         public void onEmptyTaskTitle() {
-                            Toast.makeText(getContext(),"Task Title Empty",Toast.LENGTH_SHORT).show();
+                            IconToast.makeContent(getContext(),"Task's Title Empty",Toast.LENGTH_SHORT,R.drawable.ic_done_veish_24dp).show();
                         }
                     });
                     editTaskBottomSheet.show(getFragmentManager(),"ediTaskBottomSheet");
@@ -348,7 +349,8 @@ public class TasksFragment extends Fragment {
 
         //It is related with the adapter with the elements for filter
         tasksRecAdapter.addItem(0,new TaskItem(R.drawable.ic_check_box_outline_blank_black_24dp,task_id,task_title,task_details,false));
-        Toast.makeText(getContext(),"Task added",Toast.LENGTH_SHORT).show();
+
+        IconToast.makeContent(getContext(),"Task added",Toast.LENGTH_SHORT,R.drawable.ic_done_veish_24dp).show();
         percentageTasks();
     }
 
@@ -357,13 +359,15 @@ public class TasksFragment extends Fragment {
         tasksList.get(task_position).setTaskTitle(task_title);
         tasksList.get(task_position).setTaskDetails(task_details);
         tasksRecAdapter.editItem(task_position,task_title,task_details);//It is related with the adapter with the elements for filter
-        Toast.makeText(getContext(),"Task saved",Toast.LENGTH_SHORT).show();
+
+        IconToast.makeContent(getContext(),"Task saved",Toast.LENGTH_SHORT,R.drawable.ic_done_veish_24dp).show();
     }
 
     private void DeleteSavedTask(int task_position){
         tasksList.remove(task_position); //It is related with the adapter for the elements that are shown
         tasksRecAdapter.removeItem(task_position);//It is related with the adapter with the elements for filter
-        Toast.makeText(getContext(),"Task deleted",Toast.LENGTH_SHORT).show();
+
+        IconToast.makeContent(getContext(),"Task deleted",Toast.LENGTH_SHORT,R.drawable.ic_done_veish_24dp).show();
         percentageTasks();
     }
 
