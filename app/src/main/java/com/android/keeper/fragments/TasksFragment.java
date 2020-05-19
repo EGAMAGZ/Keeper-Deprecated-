@@ -90,7 +90,6 @@ public class TasksFragment extends Fragment {
             @SuppressLint("RestrictedApi")
             @Override
             public void onScrollChange(View view, int scrollX, int scrollY, int oldScrollX, int oldScrollY) {
-                //if(scrollY<=oldScrollY){
                 if(scrollY<=oldScrollY){
                     //scrollView up
                     risefrombottom.setAnimationListener(new Animation.AnimationListener() {
@@ -150,12 +149,12 @@ public class TasksFragment extends Fragment {
 
                     @Override
                     public void onEmptyTaskTitle() {
-                        Toast.makeText(getContext(),"Task Title Empty",Toast.LENGTH_SHORT).show();
+                        IconToast.makeContent(getContext(),"Task's Title Empty",Toast.LENGTH_SHORT,R.drawable.ic_close_veish_24dp).show();
                     }
 
                     @Override
                     public void onTaskDateSelected() {
-                        Toast.makeText(getContext(),"Task Date Selected",Toast.LENGTH_SHORT).show();
+                        IconToast.makeContent(getContext(),"Task's Date Selected",Toast.LENGTH_SHORT,R.drawable.ic_done_veish_24dp).show();
                     }
                 });
                 addNewTaskBottomSheet.show(getFragmentManager(),"addNewTaskBottomSheet");
@@ -183,6 +182,7 @@ public class TasksFragment extends Fragment {
                     tasksList.add(new TaskItem(R.drawable.ic_check_box_black_24dp,cursor.getInt(0),cursor.getString(1),cursor.getString(2),true));
                 }
             }
+            cursor.close();
         }
         catch(Exception e){
             Log.e("Keeper Error Logger","ERROR:",e);
@@ -224,7 +224,7 @@ public class TasksFragment extends Fragment {
 
                         @Override
                         public void onEmptyTaskTitle() {
-                            IconToast.makeContent(getContext(),"Task's Title Empty",Toast.LENGTH_SHORT,R.drawable.ic_done_veish_24dp).show();
+                            IconToast.makeContent(getContext(),"Task's Title Empty",Toast.LENGTH_SHORT,R.drawable.ic_close_veish_24dp).show();
                         }
                     });
                     editTaskBottomSheet.show(getFragmentManager(),"ediTaskBottomSheet");
@@ -236,11 +236,10 @@ public class TasksFragment extends Fragment {
                     * is the same position for the arraylist*/
                     if(tasksList.get(position).isTaskDone()){
                         setTaskUndone(tasksList.get(position).getTaskId(),position);
-                        tasksRecAdapter.notifyItemChanged(position);
                     }else{
                         setTaskDone(tasksList.get(position).getTaskId(),position);
-                        tasksRecAdapter.notifyItemChanged(position);
                     }
+                    tasksRecAdapter.notifyItemChanged(position);
                 }
             });
             percentageTasks();
@@ -293,9 +292,6 @@ public class TasksFragment extends Fragment {
         tasksList.get(task_position).setImageResource(R.drawable.ic_check_box_black_24dp);
         tasksList.get(task_position).setTaskDone(true);
         //Here was a for before
-        sortTaskArrayList();
-        database.close();
-        percentageTasks();
         if(!Util.isInSplitScreen(getContext())){
             if(percentage==100 && !wasShownBottomSheet){
                 wasShownBottomSheet=true;
@@ -305,8 +301,12 @@ public class TasksFragment extends Fragment {
                 messageBottomSheet.show(getFragmentManager(),"messageBottomSheet");
             }
         }else{
-            Toast.makeText(getContext(),"You completed all your tasks",Toast.LENGTH_SHORT).show();
+            //TODO: Change icon of this toast with a hornet
+            IconToast.makeContent(getContext(),"Task's Title Empty",Toast.LENGTH_SHORT,R.drawable.ic_done_veish_24dp).show();
         }
+        sortTaskArrayList();
+        database.close();
+        percentageTasks();
     }
 
     private void setTaskUndone(int task_id,int task_position){
@@ -320,8 +320,8 @@ public class TasksFragment extends Fragment {
         tasksList.get(task_position).setImageResource(R.drawable.ic_check_box_outline_blank_black_24dp);
         tasksList.get(task_position).setTaskDone(false);
         sortTaskArrayList();
-        database.close();
         percentageTasks();
+        database.close();
     }
 
     private void sortTaskArrayList(){

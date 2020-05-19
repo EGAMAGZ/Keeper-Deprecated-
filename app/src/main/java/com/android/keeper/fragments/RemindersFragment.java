@@ -19,6 +19,7 @@ import android.widget.Toast;
 
 import com.android.keeper.R;
 import com.android.keeper.adapters.RemindersAdapter;
+import com.android.keeper.customelements.IconToast;
 import com.android.keeper.dialog.AddNewReminderBottomSheet;
 import com.android.keeper.localdb.SQLiteConnection;
 import com.android.keeper.localdb.utilities.RemindersUtilities;
@@ -69,12 +70,12 @@ public class RemindersFragment extends Fragment {
 
                     @Override
                     public void onEmptyReminderTitle() {
-                        Toast.makeText(getContext(),"Reminder Title Empty",Toast.LENGTH_SHORT).show();
+                        IconToast.makeContent(getContext(),"Reminder's title can't be empty",Toast.LENGTH_SHORT,R.drawable.ic_close_veish_24dp).show();
                     }
 
                     @Override
                     public void onReminderDateSelected() {
-                        Toast.makeText(getContext(),"Reminder Date Selected",Toast.LENGTH_SHORT).show();
+                        IconToast.makeContent(getContext(),"Reminder's Date Selected",Toast.LENGTH_SHORT,R.drawable.ic_done_veish_24dp).show();
                     }
                 });
                 addNewReminderBottomSheet.show(getFragmentManager(),"addReminderBottomSheet");
@@ -147,7 +148,7 @@ public class RemindersFragment extends Fragment {
         remindersList.add(0,new ReminderItem(reminder_id,reminder_title,date,time,false));
         remindersRecAdapter.addItem(0,new ReminderItem(reminder_id,reminder_title,date,time,false));
 
-        Toast.makeText(getContext(),"ReminderAdded",Toast.LENGTH_SHORT).show();
+        IconToast.makeContent(getContext(),"Reminder Added",Toast.LENGTH_SHORT,R.drawable.ic_done_veish_24dp).show();
     }
 
     public void FilterReminder(String text){
