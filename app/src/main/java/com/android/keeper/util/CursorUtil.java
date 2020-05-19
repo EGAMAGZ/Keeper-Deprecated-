@@ -22,7 +22,7 @@ public class CursorUtil {
         }catch (Exception e){
             count=0;
         }finally {
-           return  count;
+           return count;
         }
     }
 }

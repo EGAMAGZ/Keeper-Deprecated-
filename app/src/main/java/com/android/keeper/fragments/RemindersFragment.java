@@ -70,7 +70,7 @@ public class RemindersFragment extends Fragment {
 
                     @Override
                     public void onEmptyReminderTitle() {
-                        IconToast.makeContent(getContext(),"Reminder's title can't be empty",Toast.LENGTH_SHORT,R.drawable.ic_close_veish_24dp).show();
+                        IconToast.makeContent(getContext(),"You need to add a title",Toast.LENGTH_SHORT,R.drawable.ic_close_veish_24dp).show();
                     }
 
                     @Override

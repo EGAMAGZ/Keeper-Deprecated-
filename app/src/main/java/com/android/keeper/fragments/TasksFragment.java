@@ -149,7 +149,7 @@ public class TasksFragment extends Fragment {
 
                     @Override
                     public void onEmptyTaskTitle() {
-                        IconToast.makeContent(getContext(),"Task's Title Empty",Toast.LENGTH_SHORT,R.drawable.ic_close_veish_24dp).show();
+                        IconToast.makeContent(getContext(),"You need to add a title",Toast.LENGTH_SHORT,R.drawable.ic_close_veish_24dp).show();
                     }
 
                     @Override
@@ -224,7 +224,7 @@ public class TasksFragment extends Fragment {
 
                         @Override
                         public void onEmptyTaskTitle() {
-                            IconToast.makeContent(getContext(),"Task's Title Empty",Toast.LENGTH_SHORT,R.drawable.ic_close_veish_24dp).show();
+                            IconToast.makeContent(getContext(),"You need to add a title",Toast.LENGTH_SHORT,R.drawable.ic_close_veish_24dp).show();
                         }
                     });
                     editTaskBottomSheet.show(getFragmentManager(),"ediTaskBottomSheet");
@@ -291,7 +291,9 @@ public class TasksFragment extends Fragment {
 
         tasksList.get(task_position).setImageResource(R.drawable.ic_check_box_black_24dp);
         tasksList.get(task_position).setTaskDone(true);
-        //Here was a for before
+
+        percentageTasks();
+
         if(!Util.isInSplitScreen(getContext())){
             if(percentage==100 && !wasShownBottomSheet){
                 wasShownBottomSheet=true;
@@ -302,11 +304,10 @@ public class TasksFragment extends Fragment {
             }
         }else{
             //TODO: Change icon of this toast with a hornet
-            IconToast.makeContent(getContext(),"Task's Title Empty",Toast.LENGTH_SHORT,R.drawable.ic_done_veish_24dp).show();
+            IconToast.makeContent(getContext(),"You completed all your tasks",Toast.LENGTH_SHORT,R.drawable.ic_done_veish_24dp).show();
         }
         sortTaskArrayList();
         database.close();
-        percentageTasks();
     }
 
     private void setTaskUndone(int task_id,int task_position){
