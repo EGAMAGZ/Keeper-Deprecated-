@@ -5,10 +5,10 @@ import android.database.sqlite.SQLiteDatabase;
 
 public class CursorUtil {
 
-    public static Integer checkNullInteger(int pos, Cursor cursor){
+    public static Integer checkNullInteger(String column, Cursor cursor){
         Integer value=null;
-        if(!cursor.isNull(pos)){
-            value=cursor.getInt(pos);
+        if(!cursor.isNull(cursor.getColumnIndex(column))){
+            value=cursor.getInt(cursor.getColumnIndex(column));
         }
         return value;
     }

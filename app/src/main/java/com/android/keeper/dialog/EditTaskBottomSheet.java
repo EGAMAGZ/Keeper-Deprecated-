@@ -28,6 +28,7 @@ import android.widget.TimePicker;
 
 import com.android.keeper.R;
 import com.android.keeper.localdb.SQLiteConnection;
+import com.android.keeper.localdb.utilities.RemindersUtilities;
 import com.android.keeper.localdb.utilities.TasksUtilities;
 import com.android.keeper.notifications.AlertReceiver;
 import com.android.keeper.util.CalendarUtil;
@@ -164,11 +165,11 @@ public class EditTaskBottomSheet extends BottomSheetDialogFragment {
         Cursor cursor=database.query(TasksUtilities.TABLE_NAME,columns,TasksUtilities.COLUMN_TASK_ID+" = "+task_id,null,null,null,null);
         cursor.moveToFirst();//TODO: CHECK WHY IS NEEDED TO CALL THIS METHOD TO READ THE ELEMENTS FROM QUERY, AND HOW TO DELETE IT
 
-        selected_year=CursorUtil.checkNullInteger(0,cursor);
-        selected_month=CursorUtil.checkNullInteger(1,cursor);
-        selected_dayOfMonth=CursorUtil.checkNullInteger(2,cursor);
-        selected_hourOfDay=CursorUtil.checkNullInteger(3,cursor);
-        selected_minute=CursorUtil.checkNullInteger(4,cursor);
+        selected_year=CursorUtil.checkNullInteger(RemindersUtilities.COLUMN_REMINDER_YEAR,cursor);
+        selected_month=CursorUtil.checkNullInteger(RemindersUtilities.COLUMN_REMINDER_MONTH,cursor);
+        selected_dayOfMonth=CursorUtil.checkNullInteger(RemindersUtilities.COLUMN_REMINDER_DAY,cursor);
+        selected_hourOfDay=CursorUtil.checkNullInteger(RemindersUtilities.COLUMN_REMINDER_HOUR,cursor);
+        selected_minute=CursorUtil.checkNullInteger(RemindersUtilities.COLUMN_REMINDER_MINUTE,cursor);
 
         cursor.close();
         database.close();
