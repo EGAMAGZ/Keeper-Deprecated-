@@ -111,14 +111,15 @@ public class RemindersFragment extends Fragment {
             Cursor cursor=database.query(RemindersUtilities.TABLE_NAME,columns,null,null,null,null,
                     RemindersUtilities.COLUMN_REMINDER_ID+" DESC",null);
             while(cursor.moveToNext()){
-                String title=cursor.getString(1);
-                int id=cursor.getInt(0);
+                CursorUtil cursorUtil=new CursorUtil(cursor);
+                int id=cursorUtil.getInt(RemindersUtilities.COLUMN_REMINDER_ID);
+                String title=cursorUtil.getString(RemindersUtilities.COLUMN_REMINDER_TITLE);
 
-                CalendarUtil calendarUtil=new CalendarUtil(getContext(),CursorUtil.checkNullInteger(RemindersUtilities.COLUMN_REMINDER_YEAR,cursor),
-                        CursorUtil.checkNullInteger(RemindersUtilities.COLUMN_REMINDER_MONTH,cursor),
-                        CursorUtil.checkNullInteger(RemindersUtilities.COLUMN_REMINDER_DAY,cursor),
-                        CursorUtil.checkNullInteger(RemindersUtilities.COLUMN_REMINDER_HOUR,cursor),
-                        CursorUtil.checkNullInteger(RemindersUtilities.COLUMN_REMINDER_MINUTE,cursor));
+                CalendarUtil calendarUtil=new CalendarUtil(getContext(),cursorUtil.checkNullInteger(RemindersUtilities.COLUMN_REMINDER_YEAR),
+                        cursorUtil.checkNullInteger(RemindersUtilities.COLUMN_REMINDER_MONTH),
+                        cursorUtil.checkNullInteger(RemindersUtilities.COLUMN_REMINDER_DAY),
+                        cursorUtil.checkNullInteger(RemindersUtilities.COLUMN_REMINDER_HOUR),
+                        cursorUtil.checkNullInteger(RemindersUtilities.COLUMN_REMINDER_MINUTE));
                 String date=calendarUtil.getDateFormat(DateFormat.LONG);
                 String time=calendarUtil.getTimeFormat(DateFormat.SHORT);
                 remindersList.add(new ReminderItem(id,title,date,time,false));

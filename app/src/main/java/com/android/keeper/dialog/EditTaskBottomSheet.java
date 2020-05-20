@@ -165,11 +165,13 @@ public class EditTaskBottomSheet extends BottomSheetDialogFragment {
         Cursor cursor=database.query(TasksUtilities.TABLE_NAME,columns,TasksUtilities.COLUMN_TASK_ID+" = "+task_id,null,null,null,null);
         cursor.moveToFirst();//TODO: CHECK WHY IS NEEDED TO CALL THIS METHOD TO READ THE ELEMENTS FROM QUERY, AND HOW TO DELETE IT
 
-        selected_year=CursorUtil.checkNullInteger(RemindersUtilities.COLUMN_REMINDER_YEAR,cursor);
-        selected_month=CursorUtil.checkNullInteger(RemindersUtilities.COLUMN_REMINDER_MONTH,cursor);
-        selected_dayOfMonth=CursorUtil.checkNullInteger(RemindersUtilities.COLUMN_REMINDER_DAY,cursor);
-        selected_hourOfDay=CursorUtil.checkNullInteger(RemindersUtilities.COLUMN_REMINDER_HOUR,cursor);
-        selected_minute=CursorUtil.checkNullInteger(RemindersUtilities.COLUMN_REMINDER_MINUTE,cursor);
+        CursorUtil cursorUtil=new CursorUtil(cursor);
+
+        selected_year=cursorUtil.checkNullInteger(TasksUtilities.COLUMN_TASK_YEAR);
+        selected_month=cursorUtil.checkNullInteger(TasksUtilities.COLUMN_TASK_MONTH);
+        selected_dayOfMonth=cursorUtil.checkNullInteger(TasksUtilities.COLUMN_TASK_DAY);
+        selected_hourOfDay=cursorUtil.checkNullInteger(TasksUtilities.COLUMN_TASK_HOUR);
+        selected_minute=cursorUtil.checkNullInteger(TasksUtilities.COLUMN_TASK_MINUTE);
 
         cursor.close();
         database.close();
