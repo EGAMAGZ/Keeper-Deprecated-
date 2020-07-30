@@ -318,9 +318,7 @@ public class AddNewTaskBottomSheet extends BottomSheetDialogFragment {
     private void setNotificationAlarm(Notification notification,int task_id){
         //TODO:FIX ERROR THAT SHOW THE SAME CONTENT TO EVERY NOTIFICATION(SOMETIMES)
         //TODO:ADD METHOD TO DELETE/CANCEL NOTIFICAION
-        if(selected_year==null && selected_month==null && selected_dayOfMonth==null){
-            return ;
-        }else{
+        if(selected_year!=null && selected_month!=null && selected_dayOfMonth!=null){
             calendar=Calendar.getInstance();
             calendar.set(Calendar.YEAR,selected_year);
             calendar.set(Calendar.MONTH,selected_month);
