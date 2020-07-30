@@ -48,7 +48,7 @@ public class AddNewReminderBottomSheet extends BottomSheetDialogFragment {
     public interface AddNewReminderBottomSheetListener{
         /**
          * Adds new reminder to the list
-         * @param reminder_id Id of the reminder when it's created
+         * @param reminder_id Id of the reminder when it's stored
          * @param reminder_title Title of reminder
          * @param year Year of the reminder
          * @param month Month of the reminder
@@ -61,11 +61,14 @@ public class AddNewReminderBottomSheet extends BottomSheetDialogFragment {
          * Advices to the user when the title of reminder is empty
          * */
         void onEmptyReminderTitle();
+        /**
+         * Advices the user when date and time is selected
+         * */
         void onReminderDateSelected();
     }
 
     /**
-     * Sets interface for this bottomsheet
+     * Sets interface for this bottom sheet
      * @param listener Interface of AddNewReminderBottomSheet
      * */
     public void setBottomSheetListener(AddNewReminderBottomSheetListener listener){
@@ -99,7 +102,7 @@ public class AddNewReminderBottomSheet extends BottomSheetDialogFragment {
         public void onTimeSet(TimePicker timePicker, int hourOfDay, int minute) {
             selected_hourOfDay=hourOfDay;
             selected_minute=minute;
-            /* Once the user selects the time, date and time will be display in the views related with them*/
+            /* Once the user selects the time, date and time will be displayed in the views related with them*/
             setReminderDate();
         }
     };
@@ -239,9 +242,8 @@ public class AddNewReminderBottomSheet extends BottomSheetDialogFragment {
     }
 
     /**
-     * Stores the date and time in the database
+     * Stores the title,date and time in the database
      * */
-
     private int saveReminder(){
         int id;
         long returnedId;
@@ -259,6 +261,8 @@ public class AddNewReminderBottomSheet extends BottomSheetDialogFragment {
 
         returnedId=database.insert(RemindersUtilities.TABLE_NAME,RemindersUtilities.COLUMN_REMINDER_ID,values);
         id=(int) returnedId; // Gets id
+
+        database.close();
         return id;
     }
 
@@ -277,6 +281,7 @@ public class AddNewReminderBottomSheet extends BottomSheetDialogFragment {
             // Sets time and date
             dateTextView.setText(date);
             timeTextView.setText(time);
+            bottomSheetListener.onReminderDateSelected();
         }
     }
     /**
@@ -288,7 +293,7 @@ public class AddNewReminderBottomSheet extends BottomSheetDialogFragment {
     }
 
     /**
-     * Sets views related with time and date invisible
+     * Sets views related with time and date gone
      * */
     private void deleteDateFields(){
         dateLayoutContainer.setVisibility(View.GONE);

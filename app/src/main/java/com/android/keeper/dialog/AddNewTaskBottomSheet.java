@@ -50,6 +50,129 @@ public class AddNewTaskBottomSheet extends BottomSheetDialogFragment {
     private Integer selected_year,selected_month,selected_dayOfMonth,selected_hourOfDay,selected_minute;
     private Calendar calendar;
 
+    public interface AddNewTaskBottomSheetListener{
+        /**
+         * Adds new task to the list
+         * @param task_id Id of the task when it's stored
+         * @param task_title Title of the task
+         * @param task_details Details of the task
+         * */
+        void onAddTask(int task_id,String task_title,String task_details);
+        /**
+         * Advices the user when the title of the task is empty
+         * */
+        void onEmptyTaskTitle();
+        /**
+         * Advices the user when the date of the task is selected
+         * */
+        void onTaskDateSelected();
+    }
+
+    /**
+     * Sets interface for the bottom sheet
+     * @param listener Interface of AddNewTaskBottomSheet
+     * */
+    public void setBottomSheetListener(AddNewTaskBottomSheetListener listener){
+        bottomSheetListener=listener;
+    }
+
+
+    /* ----- Listeners when time and date are selected ----- */
+
+    /**
+     * Listener when the user selects a date to the task
+     * */
+    private DatePickerDialog.OnDateSetListener onDateSetListener=new DatePickerDialog.OnDateSetListener() {
+        @Override
+        public void onDateSet(DatePicker datePicker, int year, int month, int dayOfMonth) {
+            selected_year=year;
+            selected_month=month;
+            selected_dayOfMonth=dayOfMonth;
+            /* Once the user selects date, will display the time picker dialog */
+            TimePickerDialogFragment timePicker=new TimePickerDialogFragment();
+            timePicker.setCallBack(onTimeSetListener);
+            timePicker.setOnDismissListener(onTimeDismissListener);
+            timePicker.show(getFragmentManager(),"time_picker");
+        }
+    };
+
+    /**
+     * Listener when the user selects the time to the task
+     * */
+
+    private TimePickerDialog.OnTimeSetListener onTimeSetListener=new TimePickerDialog.OnTimeSetListener() {
+        @Override
+        public void onTimeSet(TimePicker timePicker, int hourOfDay, int minute) {
+            selected_hourOfDay=hourOfDay;
+            selected_minute=minute;
+            /* Once the user selects the time, date and time will be displayed in the views related with them */
+            setTaskDate();
+        }
+    };
+
+    /* ----- Listeners when time or date in not selected */
+
+    /**
+     * Listener when the user dismiss the date picker
+     * */
+    private DialogInterface.OnDismissListener onDateDismissListener=new DialogInterface.OnDismissListener() {
+        @Override
+        public void onDismiss(DialogInterface dialogInterface) {
+            /* In case of dismiss, the variables related with date and time will set a value
+             * of 0 and will not continue with the next step (display date and time)
+             * */
+            selected_year=null;
+            selected_month=null;
+            selected_dayOfMonth=null;
+        }
+    };
+
+    /**
+     * Listener when the user dismiss the time picker
+     * */
+    private DialogInterface.OnDismissListener onTimeDismissListener=new DialogInterface.OnDismissListener() {
+        @Override
+        public void onDismiss(DialogInterface dialogInterface) {
+            /* In case of dismiss, the variables related with date and time will set a value
+             * of 0 and will not continue with the next step (display date and time)
+             * */
+            selected_year=null;
+            selected_month=null;
+            selected_dayOfMonth=null;
+            selected_minute=null;
+            selected_hourOfDay=null;
+        }
+    };
+
+    /* ----- Listeners when time or date are changed (individually)----- */
+
+    /**
+     * Listener when the user updates the date
+     * */
+    private DatePickerDialog.OnDateSetListener onChangeDateListener=new DatePickerDialog.OnDateSetListener() {
+        @Override
+        public void onDateSet(DatePicker datePicker, int year, int month, int dayOfMonth) {
+            selected_year=year;
+            selected_month=month;
+            selected_dayOfMonth=dayOfMonth;
+
+            setTaskDate();
+        }
+    };
+
+    /**
+     * Listener when the user updates the time
+     * */
+    private TimePickerDialog.OnTimeSetListener onChangeTimeListener=new TimePickerDialog.OnTimeSetListener() {
+        @Override
+        public void onTimeSet(TimePicker timePicker, int hourOfDay, int minute) {
+            selected_hourOfDay=hourOfDay;
+            selected_minute=minute;
+
+            setTaskDate();
+        }
+    };
+
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -57,6 +180,9 @@ public class AddNewTaskBottomSheet extends BottomSheetDialogFragment {
         conn = new SQLiteConnection(getContext(), "keeper_db", null, 1);
         notificationHelper=new NotificationHelper(getContext());
 
+        // ----- Layouts ------
+        taskDateContainer= bottomSheetView.findViewById(R.id.task_date_container);
+        // ----- Buttons -----
         addDetailsButton= bottomSheetView.findViewById(R.id.task_add_details);
         addDateButton= bottomSheetView.findViewById(R.id.task_add_date);
         saveTaskButton= bottomSheetView.findViewById(R.id.task_save);
@@ -64,12 +190,10 @@ public class AddNewTaskBottomSheet extends BottomSheetDialogFragment {
         deleteTaskDateButton= bottomSheetView.findViewById(R.id.task_delete_date);
         changeTaskDateButton= bottomSheetView.findViewById(R.id.task_date);
         changeTaskTimeButton= bottomSheetView.findViewById(R.id.task_time);
-        //EditTexts
+        // ----- EditTexts ------
         descriptionEditText= bottomSheetView.findViewById(R.id.task_details);
         titleEditText= bottomSheetView.findViewById(R.id.task_title);
-        //Layouts
-        taskDateContainer= bottomSheetView.findViewById(R.id.task_date_container);
-
+        // ----- setListeners -----
         changeTaskDateButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -114,6 +238,7 @@ public class AddNewTaskBottomSheet extends BottomSheetDialogFragment {
 
             }
         });
+
         saveTaskButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -133,6 +258,7 @@ public class AddNewTaskBottomSheet extends BottomSheetDialogFragment {
                 }
             }
         });
+
         deleteTaskDateButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -143,6 +269,9 @@ public class AddNewTaskBottomSheet extends BottomSheetDialogFragment {
         return bottomSheetView;
     }
 
+    /**
+     * Stores the title,details,date and time in the database
+     * */
     private int saveTask(){
         int id;
         long returnedId;
@@ -151,28 +280,35 @@ public class AddNewTaskBottomSheet extends BottomSheetDialogFragment {
 
         values.put(TasksUtilities.COLUMN_TASK_TITLE,task_title);
         values.put(TasksUtilities.COLUMN_TASK_DETAILS,task_details);
+        // DATE
         values.put(TasksUtilities.COLUMN_TASK_YEAR,selected_year);
         values.put(TasksUtilities.COLUMN_TASK_MONTH,selected_month);
         values.put(TasksUtilities.COLUMN_TASK_DAY,selected_dayOfMonth);
+        //TIME
         values.put(TasksUtilities.COLUMN_TASK_HOUR,selected_hourOfDay);
         values.put(TasksUtilities.COLUMN_TASK_MINUTE,selected_minute);
 
         returnedId=database.insert(TasksUtilities.TABLE_NAME,TasksUtilities.COLUMN_TASK_ID,values);
-        id=(int) returnedId;
+        id=(int) returnedId; // Gets id
 
         database.close();
         return id;
     }
 
+    /**
+     * Sets time and date of the reminder in the bottom sheet
+     * */
     public void setTaskDate(){
         if(selected_year!=null && selected_month!=null && selected_dayOfMonth!=null){
             if(deleteTaskDateButton.getVisibility()==View.GONE || changeTaskDateButton.getVisibility()==View.GONE){
+                // Checks if the views related with date and time are hidden
                 showDateFields();
             }
 
             CalendarUtil calendarUtil=new CalendarUtil(getContext(),selected_year,selected_month,selected_dayOfMonth,selected_hourOfDay,selected_minute);
             String date= calendarUtil.getDateFormat(DateFormat.FULL);
             String time=calendarUtil.getTimeFormat(DateFormat.SHORT);
+            //Sets time and date
             changeTaskDateButton.setText(date);
             changeTaskTimeButton.setText(time);
             bottomSheetListener.onTaskDateSelected();
@@ -209,6 +345,9 @@ public class AddNewTaskBottomSheet extends BottomSheetDialogFragment {
         }
     }
 
+    /**
+     * Sets views related with time and date visible
+     * */
     private void showDateFields(){
         deleteTaskDateButton.setVisibility(View.VISIBLE);
         changeTaskDateButton.setVisibility(View.VISIBLE);
@@ -216,9 +355,10 @@ public class AddNewTaskBottomSheet extends BottomSheetDialogFragment {
             taskDateContainer.setVisibility(View.VISIBLE);
     }
 
+    /**
+     * Sets views related with time and date gone
+     * */
     private void deleteDateFields(){
-        changeTaskDateButton.setText("");
-        changeTaskTimeButton.setText("");
         deleteTaskDateButton.setVisibility(View.GONE);
         changeTaskDateButton.setVisibility(View.GONE);
         changeTaskTimeButton.setVisibility(View.GONE);
@@ -232,94 +372,4 @@ public class AddNewTaskBottomSheet extends BottomSheetDialogFragment {
         selected_minute=null;
     }
 
-    /* ----- Listeners when time and date are selected ----- */
-
-    private DatePickerDialog.OnDateSetListener onDateSetListener=new DatePickerDialog.OnDateSetListener() {
-        @Override
-        public void onDateSet(DatePicker datePicker, int year, int month, int dayOfMonth) {
-            selected_year=year;
-            selected_month=month;
-            selected_dayOfMonth=dayOfMonth;
-
-            TimePickerDialogFragment timePicker=new TimePickerDialogFragment();
-            timePicker.setCallBack(onTimeSetListener);
-            timePicker.setOnDismissListener(onTimeDismissListener);
-            timePicker.show(getFragmentManager(),"time picker");
-        }
-    };
-
-    private TimePickerDialog.OnTimeSetListener onTimeSetListener=new TimePickerDialog.OnTimeSetListener() {
-        @Override
-        public void onTimeSet(TimePicker timePicker, int hourOfDay, int minute) {
-            selected_hourOfDay=hourOfDay;
-            selected_minute=minute;
-
-            setTaskDate();
-        }
-    };
-
-    /* ----- Listeners when time or date in not selected */
-
-    private DialogInterface.OnDismissListener onDateDismissListener=new DialogInterface.OnDismissListener() {
-        @Override
-        public void onDismiss(DialogInterface dialogInterface) {
-            /* In case of dismiss, the variables related with date and time will set a value
-             * of 0 and will not continue with the next step (display date and time)
-             * */
-            selected_year=null;
-            selected_month=null;
-            selected_dayOfMonth=null;
-        }
-    };
-
-    private DialogInterface.OnDismissListener onTimeDismissListener=new DialogInterface.OnDismissListener() {
-        @Override
-        public void onDismiss(DialogInterface dialogInterface) {
-            /* In case of dismiss, the variables related with date and time will set a value
-             * of 0 and will not continue with the next step (display date and time)
-             * */
-            selected_year=null;
-            selected_month=null;
-            selected_dayOfMonth=null;
-            selected_minute=null;
-            selected_hourOfDay=null;
-        }
-    };
-
-    /* ----- Listeners when time or date are changed (individually)----- */
-
-    private DatePickerDialog.OnDateSetListener onChangeDateListener=new DatePickerDialog.OnDateSetListener() {
-        @Override
-        public void onDateSet(DatePicker datePicker, int year, int month, int dayOfMonth) {
-            selected_year=year;
-            selected_month=month;
-            selected_dayOfMonth=dayOfMonth;
-
-            setTaskDate();
-        }
-    };
-
-    private TimePickerDialog.OnTimeSetListener onChangeTimeListener=new TimePickerDialog.OnTimeSetListener() {
-        @Override
-        public void onTimeSet(TimePicker timePicker, int hourOfDay, int minute) {
-            selected_hourOfDay=hourOfDay;
-            selected_minute=minute;
-
-            setTaskDate();
-        }
-    };
-
-    /*
-    * Methods with the purpouse to create communication
-    * between fragments
-    * */
-    public interface AddNewTaskBottomSheetListener{
-        void onAddTask(int task_id,String task_title,String task_details);
-        void onEmptyTaskTitle();
-        void onTaskDateSelected();
-    }
-
-    public void setBottomSheetListener(AddNewTaskBottomSheetListener listener){
-        bottomSheetListener=listener;
-    }
 }
