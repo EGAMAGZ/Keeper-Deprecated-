@@ -37,6 +37,9 @@ import com.android.keeper.util.CursorUtil;
 import java.text.DateFormat;
 import java.util.Calendar;
 
+/**
+ * Represents a bottom sheet to edit a task
+ * */
 public class EditTaskBottomSheet extends BottomSheetDialogFragment {
 
     private EditTaskBottomSheetListener bottomSheetListener;

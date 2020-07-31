@@ -48,21 +48,37 @@ public class MessageBottomSheet extends BottomSheetDialogFragment {
         return bottomSheetView;
     }
 
+    /**
+     * Sets the content when the Bottom Sheet View is created.
+     * */
     private void setContent(){
         messageTitleTextView.setText(messageTitle);
         messageTitleTextView.setTextColor(Color.parseColor(messageTitleColor));
         messageSubtitleTextView.setText(messageSubtitle);
     }
 
+    /**
+     * Sets title and color to the title
+     * @param text Text to be display in the title
+     * @param hexColor Color in hexadecimal that will have the title (Sample: "#FF0000")
+     * */
     public void setTitle(String text, String hexColor){
         messageTitle=text;
         messageTitleColor=hexColor;
     }
 
+    /**
+     * Sets the text of the subtitle
+     * @param text Text that will be display in the subtitle
+     * */
     public void setSubtitle(String text){
         messageSubtitle=text;
     }
 
+    /**
+     * Sets custom image to the bottom sheet
+     * @param resource Image resource to be used
+     * */
     public void setImage(int resource){
         this.resource=resource;
     }
