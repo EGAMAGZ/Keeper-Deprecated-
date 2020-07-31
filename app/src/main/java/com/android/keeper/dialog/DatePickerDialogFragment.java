@@ -10,6 +10,11 @@ import android.support.v4.app.DialogFragment;
 
 import java.util.Calendar;
 
+/**
+ * Represents date picker dialog fragment
+ *
+ * @author Gamaliel Garcia
+ * */
 public class DatePickerDialogFragment extends DialogFragment {
 
     DatePickerDialog.OnDateSetListener onDateSetListener;
@@ -17,10 +22,18 @@ public class DatePickerDialogFragment extends DialogFragment {
 
     public DatePickerDialogFragment() {}
 
+    /**
+     * Sets callback when the date is selected by the user
+     * */
     public void setCallBack(DatePickerDialog.OnDateSetListener ondate) {
         onDateSetListener = ondate;
     }
+
+    /**
+     * Sets callback when the user dismiss date picker dialog
+     * */
     public void setOnDismissListener(DialogInterface.OnDismissListener ondismiss){
+        //TODO: Check if this is executed
         onDismissListener=ondismiss;
     }
 

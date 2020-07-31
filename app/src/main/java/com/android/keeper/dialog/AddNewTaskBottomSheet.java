@@ -34,6 +34,12 @@ import com.android.keeper.util.CalendarUtil;
 import java.text.DateFormat;
 import java.util.Calendar;
 
+/**
+ * Represents a Bottom Sheet that will be displayed when a new task will be added
+ *
+ * @author Gamaliel Garcia
+ * */
+
 public class AddNewTaskBottomSheet extends BottomSheetDialogFragment {
 
     public AddNewTaskBottomSheetListener bottomSheetListener;

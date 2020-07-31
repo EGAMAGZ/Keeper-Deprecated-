@@ -27,7 +27,7 @@ import com.android.keeper.util.CalendarUtil;
 import java.text.DateFormat;
 
 /**
- * Represents a BottomSheet that will be display when a new reminder will be added
+ * Represents a BottomSheet that will be displayed when a new reminder will be added
  *
  * @author Gamaliel Garcia
  * */
