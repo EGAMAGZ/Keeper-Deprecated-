@@ -15,6 +15,9 @@ import com.android.keeper.util.PreferenceUtil;
 import java.text.DateFormat;
 import java.util.Calendar;
 
+/**
+ * Represents time picker dialog fragment
+ * */
 public class TimePickerDialogFragment extends DialogFragment {
 
     private TimePickerDialog timePickerDialog;
