@@ -23,10 +23,16 @@ public class TimePickerDialogFragment extends DialogFragment {
 
     public TimePickerDialogFragment() {}
 
+    /**
+     * Sets callback when the time is selected by the user
+     * */
     public void setCallBack(TimePickerDialog.OnTimeSetListener onTimeSet){
         onTimeSetListener=onTimeSet;
     }
 
+    /**
+     * Sets callback when the user dismiss time picker dialog
+     * */
     public void setOnDismissListener(DialogInterface.OnDismissListener ondismiss){
         onDismissListener=ondismiss;
     }
